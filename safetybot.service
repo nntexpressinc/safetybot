@@ -1,0 +1,15 @@
+[Unit]
+Description=SafetyBot - GoMotive to Telegram Monitor
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/path/to/safetybot
+Environment=PATH=/path/to/safetybot/venv/bin
+ExecStart=/path/to/safetybot/venv/bin/python /path/to/safetybot/safetybot.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

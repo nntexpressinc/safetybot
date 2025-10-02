@@ -1,0 +1,55 @@
+2025-10-02 09:17:41,857 - __main__ - INFO - SafetyBot initialized successfully
+2025-10-02 09:17:41,858 - __main__ - INFO - [START] Starting SafetyBot v2.0 with enhanced monitoring...
+2025-10-02 09:17:41,860 - __main__ - INFO - 🔍 Testing all connections...
+2025-10-02 09:17:42,335 - __main__ - INFO - 📱 Telegram connection test: ✅ SUCCESS
+2025-10-02 09:17:42,336 - __main__ - INFO - 🌐 Testing API connections...
+2025-10-02 09:17:42,337 - __main__ - INFO - Fetching speeding events from: https://api.gomotive.com/v1/speeding_events (attempt 1/3)
+2025-10-02 09:18:12,026 - __main__ - INFO - Successfully fetched 25 speeding events from API
+2025-10-02 09:18:12,026 - __main__ - INFO - Fetching hard_brake events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:15,196 - __main__ - INFO - Successfully found 25 hard_brake events
+2025-10-02 09:18:16,197 - __main__ - INFO - Fetching crash events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:16,629 - __main__ - INFO - Successfully found 1 crash events
+2025-10-02 09:18:17,630 - __main__ - INFO - Fetching seat_belt_violation events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:20,241 - __main__ - INFO - Successfully found 25 seat_belt_violation events
+2025-10-02 09:18:21,243 - __main__ - INFO - Fetching stop_sign_violation events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:24,088 - __main__ - INFO - Successfully found 25 stop_sign_violation events
+2025-10-02 09:18:25,089 - __main__ - INFO - Fetching distraction events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:25,554 - __main__ - INFO - Successfully found 1 distraction events
+2025-10-02 09:18:26,556 - __main__ - INFO - Fetching unsafe_lane_change events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:29,511 - __main__ - INFO - Successfully found 25 unsafe_lane_change events
+2025-10-02 09:18:30,512 - __main__ - INFO - Successfully fetched total of 102 performance events from all event types
+2025-10-02 09:18:30,513 - __main__ - INFO - 🌐 API connection test: ✅ SUCCESS - Fetched 25 speeding events and 102 performance events
+2025-10-02 09:18:30,516 - __main__ - INFO - [SCHEDULE] Scheduled to check APIs every 300 seconds (5.0 minutes)
+2025-10-02 09:18:30,516 - __main__ - INFO - [HEALTH] Scheduled health checks every hour
+2025-10-02 09:18:30,517 - __main__ - INFO - [SEARCH] Running initial event check...
+2025-10-02 09:18:30,518 - __main__ - INFO - [SEARCH] Starting comprehensive check for new events from both APIs...
+2025-10-02 09:18:30,518 - __main__ - INFO - [STATS] Fetching speeding events...
+2025-10-02 09:18:30,518 - __main__ - INFO - Fetching speeding events from: https://api.gomotive.com/v1/speeding_events (attempt 1/3)
+2025-10-02 09:18:30,938 - __main__ - INFO - Successfully fetched 25 speeding events from API
+2025-10-02 09:18:30,938 - __main__ - INFO - Found 0 new speeding events with allowed severity (last processed ID: 2050367245)
+2025-10-02 09:18:30,940 - __main__ - INFO - [OK] No new speeding events with qualifying severity found
+2025-10-02 09:18:30,940 - __main__ - INFO - [TARGET] Fetching driver performance events...
+2025-10-02 09:18:30,940 - __main__ - INFO - Fetching hard_brake events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:33,757 - __main__ - INFO - Successfully found 25 hard_brake events
+2025-10-02 09:18:34,758 - __main__ - INFO - Fetching crash events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:35,194 - __main__ - INFO - Successfully found 1 crash events
+2025-10-02 09:18:36,195 - __main__ - INFO - Fetching seat_belt_violation events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:39,322 - __main__ - INFO - Successfully found 25 seat_belt_violation events
+2025-10-02 09:18:40,324 - __main__ - INFO - Fetching stop_sign_violation events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:44,164 - __main__ - INFO - Successfully found 25 stop_sign_violation events
+2025-10-02 09:18:45,165 - __main__ - INFO - Fetching distraction events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:45,605 - __main__ - INFO - Successfully found 1 distraction events
+2025-10-02 09:18:46,606 - __main__ - INFO - Fetching unsafe_lane_change events from: https://api.gomotive.com/v2/driver_performance_events (attempt 1/3)
+2025-10-02 09:18:49,426 - __main__ - INFO - Successfully found 25 unsafe_lane_change events
+2025-10-02 09:18:50,427 - __main__ - INFO - Successfully fetched total of 102 performance events from all event types
+2025-10-02 09:18:50,429 - __main__ - INFO - Found 0 new hard_brake events with allowed severity (last processed ID: 1389109894)
+2025-10-02 09:18:50,432 - __main__ - INFO - Found 0 new crash events with allowed severity (last processed ID: 1390292205)
+2025-10-02 09:18:50,433 - __main__ - INFO - Found 0 new seat_belt_violation events with allowed severity (last processed ID: 1389928772)
+2025-10-02 09:18:50,434 - __main__ - INFO - Found 0 new stop_sign_violation events with allowed severity (last processed ID: 1388840141)
+2025-10-02 09:18:50,436 - __main__ - INFO - Found 0 new distraction events with allowed severity (last processed ID: 1393564571)
+2025-10-02 09:18:50,436 - __main__ - INFO - Found 0 new unsafe_lane_change events with allowed severity (last processed ID: 1388046240)
+2025-10-02 09:18:50,437 - __main__ - INFO - Total: 0 new performance events with allowed severity across all types
+2025-10-02 09:18:50,437 - __main__ - INFO - [OK] No new performance events with qualifying severity found
+2025-10-02 09:18:50,438 - __main__ - INFO - [REPORT] Check completed in 19.9s - Processed: 0 speeding, 0 performance events. Errors: 0
+2025-10-02 09:18:50,441 - __main__ - INFO - [REFRESH] Starting monitoring loop - Bot is now actively monitoring!
+2025-10-02 09:19:56,672 - __main__ - INFO - [STOPPED] Bot stopped by user
