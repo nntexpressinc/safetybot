@@ -657,20 +657,20 @@ Severity: {severity}"""
                     front_facing_url = downloadable_videos.get('front_facing_plain_url')
                     driver_facing_url = downloadable_videos.get('driver_facing_plain_url')
                     
-                    log_safe('info', f"[VIDEO] Event {event_id} video URLs - Front: {bool(front_facing_url)}, Driver: {bool(driver_facing_url)}")
+                    log_safe('info', f"[VIDEO] Event {event_id} - Front URL: {bool(front_facing_url)}, Driver URL: {bool(driver_facing_url)}")
                     
                     temp_files = []
-                    videos_to_send = []
+                    videos_for_group = []
                     
                     try:
-                        # Try to download videos - simplified approach
+                        # Download both videos if available
                         if front_facing_url:
                             log_safe('info', f"[VIDEO] Downloading front-facing video for event {event_id}")
                             front_file_path = await self.download_video_to_temp_file(front_facing_url, "front_facing")
                             if front_file_path:
                                 temp_files.append(front_file_path)
-                                videos_to_send.append(('front_facing', front_file_path))
-                                log_safe('info', f"[OK] Front-facing video ready for event {event_id}")
+                                videos_for_group.append(('Front Facing', front_file_path))
+                                log_safe('info', f"[OK] Front-facing video downloaded for event {event_id}")
                             else:
                                 log_safe('warning', f"[WARNING] Front-facing video download failed for event {event_id}")
                         
@@ -679,41 +679,54 @@ Severity: {severity}"""
                             driver_file_path = await self.download_video_to_temp_file(driver_facing_url, "driver_facing")
                             if driver_file_path:
                                 temp_files.append(driver_file_path)
-                                videos_to_send.append(('driver_facing', driver_file_path))
-                                log_safe('info', f"[OK] Driver-facing video ready for event {event_id}")
+                                videos_for_group.append(('Driver Facing', driver_file_path))
+                                log_safe('info', f"[OK] Driver-facing video downloaded for event {event_id}")
                             else:
                                 log_safe('warning', f"[WARNING] Driver-facing video download failed for event {event_id}")
                         
-                        # Send videos if we have any
-                        if videos_to_send:
-                            if len(videos_to_send) == 1:
-                                # Send single video
-                                video_type, video_path = videos_to_send[0]
-                                try:
+                        # Send videos as media group if we have any
+                        if videos_for_group:
+                            try:
+                                media_group = []
+                                video_names = [name for name, _ in videos_for_group]
+                                
+                                for i, (video_name, video_path) in enumerate(videos_for_group):
                                     with open(video_path, 'rb') as video_file:
-                                        await self.telegram_bot.send_video(
-                                            chat_id=self.chat_id,
-                                            video=video_file,
-                                            caption=f"{message}\n\n[VIDEO] {video_type.replace('_', ' ').title()}",
-                                            parse_mode='Markdown',
-                                            read_timeout=180,
-                                            write_timeout=180
-                                        )
-                                    log_safe('info', f"[OK] Single video sent for {event_type} event {event_id}")
-                                except Exception as send_error:
-                                    log_safe('error', f"[ERROR] Failed to send single video: {send_error}")
-                                    # Fallback to text message
-                                    await self.telegram_bot.send_message(
-                                        chat_id=self.chat_id,
-                                        text=f"{message}\n\n[WARNING] Video upload failed",
+                                        video_data = video_file.read()
+                                    
+                                    # First video gets full caption with event info
+                                    if i == 0:
+                                        caption = f"{message}\n\n📹 Videos: {', '.join(video_names)}"
+                                    else:
+                                        caption = f"📹 {video_name}"
+                                    
+                                    media_group.append(InputMediaVideo(
+                                        media=video_data,
+                                        caption=caption,
                                         parse_mode='Markdown'
-                                    )
-                            else:
-                                # Send multiple videos one by one (more reliable than media group)
-                                for i, (video_type, video_path) in enumerate(videos_to_send):
+                                    ))
+                                
+                                # Send as media group
+                                await self.telegram_bot.send_media_group(
+                                    chat_id=self.chat_id,
+                                    media=media_group,
+                                    read_timeout=240,
+                                    write_timeout=240
+                                )
+                                log_safe('info', f"[OK] Media group with {len(videos_for_group)} videos sent for event {event_id}")
+                                
+                            except Exception as media_group_error:
+                                log_safe('error', f"[ERROR] Media group failed, trying individual videos: {media_group_error}")
+                                
+                                # Fallback: send videos individually
+                                for i, (video_name, video_path) in enumerate(videos_for_group):
                                     try:
                                         with open(video_path, 'rb') as video_file:
-                                            caption = f"{message}\n\n[VIDEO] {video_type.replace('_', ' ').title()}" if i == 0 else f"[VIDEO] {video_type.replace('_', ' ').title()}"
+                                            if i == 0:
+                                                caption = f"{message}\n\n📹 {video_name}"
+                                            else:
+                                                caption = f"📹 {video_name}"
+                                            
                                             await self.telegram_bot.send_video(
                                                 chat_id=self.chat_id,
                                                 video=video_file,
@@ -722,12 +735,18 @@ Severity: {severity}"""
                                                 read_timeout=180,
                                                 write_timeout=180
                                             )
-                                        log_safe('info', f"[OK] {video_type} video sent for event {event_id}")
-                                        await asyncio.sleep(2)  # Small delay between videos
-                                    except Exception as send_error:
-                                        log_safe('error', f"[ERROR] Failed to send {video_type} video: {send_error}")
+                                        log_safe('info', f"[OK] Individual {video_name} video sent for event {event_id}")
+                                        await asyncio.sleep(2)  # Delay between videos
+                                    except Exception as individual_error:
+                                        log_safe('error', f"[ERROR] Failed to send {video_name} video: {individual_error}")
                         else:
                             # No videos could be downloaded, send text message
+                            await self.telegram_bot.send_message(
+                                chat_id=self.chat_id,
+                                text=f"{message}\n\n⚠️ Videos could not be downloaded",
+                                parse_mode='Markdown'
+                            )
+                            log_safe('warning', f"[WARNING] No videos downloaded for event {event_id}, sent text only")
                             await self.telegram_bot.send_message(
                                 chat_id=self.chat_id,
                                 text=f"{message}\n\n[WARNING] Videos could not be downloaded",
