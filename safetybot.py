@@ -690,42 +690,57 @@ Severity: {severity}"""
                                 media_group = []
                                 video_names = [name for name, _ in videos_for_group]
                                 
-                                for i, (video_name, video_path) in enumerate(videos_for_group):
-                                    with open(video_path, 'rb') as video_file:
-                                        video_data = video_file.read()
+                                # Create media group with proper file handling
+                                video_files = []
+                                try:
+                                    for i, (video_name, video_path) in enumerate(videos_for_group):
+                                        # Open file for media group
+                                        video_file = open(video_path, 'rb')
+                                        video_files.append(video_file)  # Keep reference for cleanup
+                                        
+                                        # First video gets full caption with event info and all video names
+                                        if i == 0:
+                                            caption = f"{message}\n\nVideos: {', '.join(video_names)}"
+                                        else:
+                                            # Subsequent videos get no caption to avoid duplication
+                                            caption = None
+                                        
+                                        media_group.append(InputMediaVideo(
+                                            media=video_file,
+                                            caption=caption,
+                                            parse_mode='Markdown' if caption else None
+                                        ))
                                     
-                                    # First video gets full caption with event info
-                                    if i == 0:
-                                        caption = f"{message}\n\nVideos: {', '.join(video_names)}"
-                                    else:
-                                        caption = f"Video: {video_name}"
+                                    # Send as media group - this sends all videos as a single message
+                                    await self.telegram_bot.send_media_group(
+                                        chat_id=self.chat_id,
+                                        media=media_group,
+                                        read_timeout=240,
+                                        write_timeout=240
+                                    )
+                                    log_safe('info', f"[OK] Media group with {len(videos_for_group)} videos sent as single message for event {event_id}")
                                     
-                                    media_group.append(InputMediaVideo(
-                                        media=video_data,
-                                        caption=caption,
-                                        parse_mode='Markdown'
-                                    ))
-                                
-                                # Send as media group
-                                await self.telegram_bot.send_media_group(
-                                    chat_id=self.chat_id,
-                                    media=media_group,
-                                    read_timeout=240,
-                                    write_timeout=240
-                                )
-                                log_safe('info', f"[OK] Media group with {len(videos_for_group)} videos sent for event {event_id}")
+                                finally:
+                                    # Close all opened files
+                                    for video_file in video_files:
+                                        try:
+                                            video_file.close()
+                                        except:
+                                            pass
                                 
                             except Exception as media_group_error:
                                 log_safe('error', f"[ERROR] Media group failed, trying individual videos: {media_group_error}")
                                 
-                                # Fallback: send videos individually
+                                # Fallback: send videos individually with combined message
                                 for i, (video_name, video_path) in enumerate(videos_for_group):
                                     try:
                                         with open(video_path, 'rb') as video_file:
                                             if i == 0:
+                                                # First video gets the full event message
                                                 caption = f"{message}\n\nVideo: {video_name}"
                                             else:
-                                                caption = f"Video: {video_name}"
+                                                # Subsequent videos get minimal caption
+                                                caption = f"Additional Video: {video_name}"
                                             
                                             await self.telegram_bot.send_video(
                                                 chat_id=self.chat_id,
@@ -747,12 +762,6 @@ Severity: {severity}"""
                                 parse_mode='Markdown'
                             )
                             log_safe('warning', f"[WARNING] No videos downloaded for event {event_id}, sent text only")
-                            await self.telegram_bot.send_message(
-                                chat_id=self.chat_id,
-                                text=f"{message}\n\n[WARNING] Videos could not be downloaded",
-                                parse_mode='Markdown'
-                            )
-                            log_safe('warning', f"[WARNING] No videos could be downloaded for event {event_id}")
                     
                     finally:
                         # Clean up temporary files
