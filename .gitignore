@@ -1,5 +1,99 @@
-env
-*.pyc
+# Python
 __pycache__/
-.env
+*.py[cod]
+*$py.class
+*.pyc
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+env/
 venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables
+.env
+
+# Event ID Tracking Files (bot runtime data)
+last_*_event_id.txt
+last_event_id.txt
+last_crash_event_id.txt
+last_distraction_event_id.txt
+last_hard_brake_event_id.txt
+last_performance_event_id.txt
+last_seat_belt_violation_event_id.txt
+last_speeding_event_id.txt
+last_stop_sign_violation_event_id.txt
+last_unsafe_lane_change_event_id.txt
+
+# Log Files
+*.log
+safetybot.log
+
+# Response Test Files
+*response*.txt
+1response.txt
+2response.txt
+response_events.txt
+response_speeding.txt
+
+# Backup Files
+*_backup.py
+*_old.py
+safetybot_backup.py
+safetybot_old.py
+
+# Temporary Files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE/Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation (optional)
+ENHANCED_FEATURES.md
+
+# Service Files (system-specific)
+*.service
+
+# Shell Scripts (system-specific)
+*.sh
+start_bot.sh
+
+# Any other runtime data
+run_safetybot.py

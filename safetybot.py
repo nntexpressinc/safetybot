@@ -465,112 +465,96 @@ Severity: {severity}"""
             return f"Error formatting performance event: {str(e)}"
     
     async def verify_video_url(self, video_url: str, video_type: str) -> bool:
-        """Verify that video URL is accessible and valid"""
+        """Simple video URL verification"""
         try:
-            # First, do a HEAD request to check if URL is accessible
-            head_response = self.session.head(video_url, timeout=15)
-            if head_response.status_code != 200:
-                logger.warning(f"{video_type} URL returned status {head_response.status_code}: {video_url}")
-                return False
-            
-            # Check content type
-            content_type = head_response.headers.get('content-type', '')
-            if not any(video_format in content_type.lower() for video_format in ['video', 'mp4', 'avi', 'mov']):
-                logger.warning(f"{video_type} URL does not appear to be a video (content-type: {content_type}): {video_url}")
-                return False
-            
-            # Check content length if available
-            content_length = head_response.headers.get('content-length')
-            if content_length:
-                size_mb = int(content_length) / (1024 * 1024)
-                if size_mb > 50:  # 50MB Telegram limit
-                    logger.warning(f"{video_type} too large ({size_mb:.1f}MB > 50MB): {video_url}")
-                    return False
-                elif size_mb < 0.1:  # Suspiciously small
-                    logger.warning(f"{video_type} suspiciously small ({size_mb:.3f}MB): {video_url}")
-                    return False
-            
-            logger.info(f"{video_type} URL verification passed: {video_url}")
-            return True
-            
+            # Simple HEAD request to check accessibility
+            head_response = self.session.head(video_url, timeout=10)
+            if head_response.status_code == 200:
+                log_safe('info', f"[VIDEO] {video_type} URL accessible: {video_url}")
+                return True
+            else:
+                log_safe('warning', f"[WARNING] {video_type} URL returned status {head_response.status_code}")
+                # Still try to download even if HEAD fails
+                return True
         except Exception as e:
-            logger.error(f"Error verifying {video_type} URL {video_url}: {e}")
-            return False
+            log_safe('warning', f"[WARNING] Error verifying {video_type} URL, but will still try to download: {e}")
+            # Continue anyway - sometimes HEAD requests fail but GET works
+            return True
     
     async def download_video_to_temp_file(self, video_url: str, video_type: str = "video") -> Optional[str]:
-        """Download video from URL with thorough verification and save to temporary file"""
+        """Download video from URL and save to temporary file - simplified and more reliable"""
         temp_file_path = None
         
-        # First verify the URL
-        if not await self.verify_video_url(video_url, video_type):
-            logger.error(f"Video URL verification failed for {video_type}: {video_url}")
-            return None
-        
-        max_retries = 3
+        max_retries = 2
         for attempt in range(max_retries):
             try:
-                logger.info(f"Downloading {video_type} from: {video_url} (attempt {attempt + 1}/{max_retries})")
+                log_safe('info', f"[VIDEO] Downloading {video_type} from: {video_url} (attempt {attempt + 1}/{max_retries})")
                 
-                # Download video with retry
-                response = self.session.get(video_url, timeout=120, stream=True)
+                # Download video with longer timeout
+                response = self.session.get(video_url, timeout=180, stream=True)
                 response.raise_for_status()
                 
-                # Validate response
-                if not response.content:
-                    logger.warning(f"Empty video response for {video_type}")
+                # Read content
+                video_data = response.content
+                
+                if not video_data:
+                    log_safe('warning', f"[WARNING] Empty video data for {video_type}")
                     if attempt < max_retries - 1:
-                        time.sleep(2 ** attempt)
+                        await asyncio.sleep(3)
                         continue
                     return None
                 
-                video_data = response.content
-                
-                # Double-check size after download
+                # Check size (Telegram limit is 50MB)
                 size_mb = len(video_data) / (1024 * 1024)
-                if size_mb > 50:  # 50MB limit for Telegram
-                    logger.warning(f"{video_type} too large after download ({size_mb:.1f}MB), skipping")
+                log_safe('info', f"[VIDEO] {video_type} size: {size_mb:.1f}MB")
+                
+                if size_mb > 50:
+                    log_safe('warning', f"[WARNING] {video_type} too large ({size_mb:.1f}MB), skipping")
                     return None
                 
-                if size_mb < 0.05:  # Less than 50KB is suspicious
-                    logger.warning(f"{video_type} suspiciously small after download ({size_mb:.3f}MB), skipping")
+                if size_mb < 0.01:  # Less than 10KB
+                    log_safe('warning', f"[WARNING] {video_type} too small ({size_mb:.3f}MB), skipping")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                        continue
                     return None
                 
-                # Create a unique filename
+                # Create temporary file
                 temp_filename = f"{video_type}_{uuid.uuid4().hex}.mp4"
                 temp_file_path = os.path.join(tempfile.gettempdir(), temp_filename)
                 
-                # Save video to temporary file
+                # Save video to file
                 with open(temp_file_path, 'wb') as temp_file:
                     temp_file.write(video_data)
                 
-                # Verify file was written correctly
-                if not os.path.exists(temp_file_path) or os.path.getsize(temp_file_path) != len(video_data):
-                    logger.error(f"File verification failed for {video_type}")
+                # Verify file was created correctly
+                if os.path.exists(temp_file_path) and os.path.getsize(temp_file_path) > 0:
+                    log_safe('info', f"[OK] {video_type} ({size_mb:.1f}MB) saved to: {temp_file_path}")
+                    return temp_file_path
+                else:
+                    log_safe('error', f"[ERROR] Failed to create {video_type} file")
                     if attempt < max_retries - 1:
-                        time.sleep(2 ** attempt)
+                        await asyncio.sleep(3)
                         continue
                     return None
                 
-                logger.info(f"{video_type} ({size_mb:.1f}MB) saved successfully to: {temp_file_path}")
-                return temp_file_path
-                
             except requests.exceptions.Timeout as e:
-                logger.warning(f"Timeout downloading {video_type} (attempt {attempt + 1}/{max_retries}): {e}")
+                log_safe('warning', f"[WARNING] Timeout downloading {video_type} (attempt {attempt + 1}): {e}")
                 if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
+                    await asyncio.sleep(5)
                     continue
             except requests.exceptions.RequestException as e:
-                logger.error(f"Request error downloading {video_type} (attempt {attempt + 1}/{max_retries}): {e}")
+                log_safe('error', f"[ERROR] Request error downloading {video_type} (attempt {attempt + 1}): {e}")
                 if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
+                    await asyncio.sleep(5)
                     continue
             except Exception as e:
-                logger.error(f"Unexpected error downloading {video_type} (attempt {attempt + 1}/{max_retries}): {e}")
+                log_safe('error', f"[ERROR] Unexpected error downloading {video_type} (attempt {attempt + 1}): {e}")
                 if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
+                    await asyncio.sleep(5)
                     continue
         
-        logger.error(f"Failed to download {video_type} after {max_retries} attempts: {video_url}")
+        log_safe('error', f"[ERROR] Failed to download {video_type} after {max_retries} attempts: {video_url}")
         return None
         """Download video from URL and send to Telegram with caption, then clean up local file"""
         temp_file_path = None
@@ -665,88 +649,91 @@ Severity: {severity}"""
             try:
                 message = self.format_performance_message(event)
                 
-                # Check for camera media with thorough validation
+                # Check for camera media
                 camera_media = event.get('camera_media', {})
-                if camera_media and camera_media.get('available') and camera_media.get('downloadable_videos'):
+                if camera_media and camera_media.get('available'):
                     downloadable_videos = camera_media.get('downloadable_videos', {})
                     
                     front_facing_url = downloadable_videos.get('front_facing_plain_url')
                     driver_facing_url = downloadable_videos.get('driver_facing_plain_url')
                     
-                    logger.info(f"Event {event_id} has video URLs - Front: {bool(front_facing_url)}, Driver: {bool(driver_facing_url)}")
+                    log_safe('info', f"[VIDEO] Event {event_id} video URLs - Front: {bool(front_facing_url)}, Driver: {bool(driver_facing_url)}")
                     
                     temp_files = []
                     videos_to_send = []
                     
                     try:
-                        # Download and verify videos
+                        # Try to download videos - simplified approach
                         if front_facing_url:
-                            logger.info(f"Attempting to download front-facing video for event {event_id}")
+                            log_safe('info', f"[VIDEO] Downloading front-facing video for event {event_id}")
                             front_file_path = await self.download_video_to_temp_file(front_facing_url, "front_facing")
                             if front_file_path:
                                 temp_files.append(front_file_path)
                                 videos_to_send.append(('front_facing', front_file_path))
-                                logger.info(f"✅ Front-facing video downloaded successfully for event {event_id}")
+                                log_safe('info', f"[OK] Front-facing video ready for event {event_id}")
                             else:
-                                logger.warning(f"⚠️ Failed to download front-facing video for event {event_id}")
+                                log_safe('warning', f"[WARNING] Front-facing video download failed for event {event_id}")
                         
                         if driver_facing_url:
-                            logger.info(f"Attempting to download driver-facing video for event {event_id}")
+                            log_safe('info', f"[VIDEO] Downloading driver-facing video for event {event_id}")
                             driver_file_path = await self.download_video_to_temp_file(driver_facing_url, "driver_facing")
                             if driver_file_path:
                                 temp_files.append(driver_file_path)
                                 videos_to_send.append(('driver_facing', driver_file_path))
-                                logger.info(f"✅ Driver-facing video downloaded successfully for event {event_id}")
+                                log_safe('info', f"[OK] Driver-facing video ready for event {event_id}")
                             else:
-                                logger.warning(f"⚠️ Failed to download driver-facing video for event {event_id}")
+                                log_safe('warning', f"[WARNING] Driver-facing video download failed for event {event_id}")
                         
                         # Send videos if we have any
                         if videos_to_send:
                             if len(videos_to_send) == 1:
                                 # Send single video
                                 video_type, video_path = videos_to_send[0]
-                                with open(video_path, 'rb') as video_file:
-                                    await self.telegram_bot.send_video(
-                                        chat_id=self.chat_id,
-                                        video=video_file,
-                                        caption=f"{message}\n\n📹 {video_type.replace('_', ' ').title()}",
-                                        parse_mode='Markdown',
-                                        read_timeout=120,
-                                        write_timeout=120
-                                    )
-                                logger.info(f"✅ Single video sent for {event_type} event {event_id}")
-                            else:
-                                # Send as media group
-                                media_group = []
-                                for i, (video_type, video_path) in enumerate(videos_to_send):
+                                try:
                                     with open(video_path, 'rb') as video_file:
-                                        video_data = video_file.read()
-                                        
-                                    caption = None
-                                    if i == 0:  # Only first video gets the full caption
-                                        caption = f"{message}\n\n📹 Videos: {', '.join([vt.replace('_', ' ').title() for vt, _ in videos_to_send])}"
-                                    
-                                    media_group.append(InputMediaVideo(
-                                        media=video_data,
-                                        caption=caption,
-                                        parse_mode='Markdown' if caption else None
-                                    ))
-                                
-                                await self.telegram_bot.send_media_group(
-                                    chat_id=self.chat_id,
-                                    media=media_group,
-                                    read_timeout=120,
-                                    write_timeout=120
-                                )
-                                logger.info(f"✅ Media group with {len(videos_to_send)} videos sent for {event_type} event {event_id}")
+                                        await self.telegram_bot.send_video(
+                                            chat_id=self.chat_id,
+                                            video=video_file,
+                                            caption=f"{message}\n\n[VIDEO] {video_type.replace('_', ' ').title()}",
+                                            parse_mode='Markdown',
+                                            read_timeout=180,
+                                            write_timeout=180
+                                        )
+                                    log_safe('info', f"[OK] Single video sent for {event_type} event {event_id}")
+                                except Exception as send_error:
+                                    log_safe('error', f"[ERROR] Failed to send single video: {send_error}")
+                                    # Fallback to text message
+                                    await self.telegram_bot.send_message(
+                                        chat_id=self.chat_id,
+                                        text=f"{message}\n\n[WARNING] Video upload failed",
+                                        parse_mode='Markdown'
+                                    )
+                            else:
+                                # Send multiple videos one by one (more reliable than media group)
+                                for i, (video_type, video_path) in enumerate(videos_to_send):
+                                    try:
+                                        with open(video_path, 'rb') as video_file:
+                                            caption = f"{message}\n\n[VIDEO] {video_type.replace('_', ' ').title()}" if i == 0 else f"[VIDEO] {video_type.replace('_', ' ').title()}"
+                                            await self.telegram_bot.send_video(
+                                                chat_id=self.chat_id,
+                                                video=video_file,
+                                                caption=caption,
+                                                parse_mode='Markdown',
+                                                read_timeout=180,
+                                                write_timeout=180
+                                            )
+                                        log_safe('info', f"[OK] {video_type} video sent for event {event_id}")
+                                        await asyncio.sleep(2)  # Small delay between videos
+                                    except Exception as send_error:
+                                        log_safe('error', f"[ERROR] Failed to send {video_type} video: {send_error}")
                         else:
                             # No videos could be downloaded, send text message
                             await self.telegram_bot.send_message(
                                 chat_id=self.chat_id,
-                                text=f"{message}\n\n⚠️ Videos were not available",
+                                text=f"{message}\n\n[WARNING] Videos could not be downloaded",
                                 parse_mode='Markdown'
                             )
-                            logger.warning(f"⚠️ No videos available for {event_type} event {event_id}, sent text message")
+                            log_safe('warning', f"[WARNING] No videos could be downloaded for event {event_id}")
                     
                     finally:
                         # Clean up temporary files
@@ -754,16 +741,17 @@ Severity: {severity}"""
                             try:
                                 if os.path.exists(temp_file):
                                     os.remove(temp_file)
-                                    logger.debug(f"🗑️ Cleaned up temporary video file: {temp_file}")
+                                    log_safe('debug', f"[DELETE] Cleaned up temp file: {temp_file}")
                             except Exception as cleanup_error:
-                                logger.error(f"❌ Error cleaning up temporary file {temp_file}: {cleanup_error}")
+                                log_safe('error', f"[ERROR] Cleanup failed for {temp_file}: {cleanup_error}")
                 else:
                     # No camera media available, send text message only
                     await self.telegram_bot.send_message(
                         chat_id=self.chat_id,
-                        text=f"{message}\n\n📷 No camera media available",
+                        text=f"{message}\n\n[INFO] No camera media available",
                         parse_mode='Markdown'
                     )
+                    log_safe('info', f"[INFO] No camera media for event {event_id}")
                     logger.info(f"✅ Text-only message sent for {event_type} event {event_id} (no media)")
                 
                 return  # Success, exit retry loop
