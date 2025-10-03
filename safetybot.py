@@ -431,7 +431,7 @@ class SafetyBot:
             severity = event.get('metadata', {}).get('severity', 'unknown')
             
             message = f"""Speeding
-🚚: {vehicle_number}
+Vehicle: {vehicle_number}
 {end_time}
 Vehicle speed range: {min_speed_mph}–{max_speed_mph} mph
 Avg. exceeded: +{avg_exceeded_mph} mph
@@ -454,7 +454,7 @@ Severity: {severity}"""
             severity = event.get('metadata', {}).get('severity', 'unknown')
             
             message = f"""{event_type}
-🚚: {vehicle_number}
+Vehicle: {vehicle_number}
 {end_time}
 Severity: {severity}"""
             
@@ -696,9 +696,9 @@ Severity: {severity}"""
                                     
                                     # First video gets full caption with event info
                                     if i == 0:
-                                        caption = f"{message}\n\n📹 Videos: {', '.join(video_names)}"
+                                        caption = f"{message}\n\nVideos: {', '.join(video_names)}"
                                     else:
-                                        caption = f"📹 {video_name}"
+                                        caption = f"Video: {video_name}"
                                     
                                     media_group.append(InputMediaVideo(
                                         media=video_data,
@@ -723,9 +723,9 @@ Severity: {severity}"""
                                     try:
                                         with open(video_path, 'rb') as video_file:
                                             if i == 0:
-                                                caption = f"{message}\n\n📹 {video_name}"
+                                                caption = f"{message}\n\nVideo: {video_name}"
                                             else:
-                                                caption = f"📹 {video_name}"
+                                                caption = f"Video: {video_name}"
                                             
                                             await self.telegram_bot.send_video(
                                                 chat_id=self.chat_id,
@@ -743,7 +743,7 @@ Severity: {severity}"""
                             # No videos could be downloaded, send text message
                             await self.telegram_bot.send_message(
                                 chat_id=self.chat_id,
-                                text=f"{message}\n\n⚠️ Videos could not be downloaded",
+                                text=f"{message}\n\nWarning: Videos could not be downloaded",
                                 parse_mode='Markdown'
                             )
                             log_safe('warning', f"[WARNING] No videos downloaded for event {event_id}, sent text only")
@@ -767,11 +767,10 @@ Severity: {severity}"""
                     # No camera media available, send text message only
                     await self.telegram_bot.send_message(
                         chat_id=self.chat_id,
-                        text=f"{message}\n\n[INFO] No camera media available",
+                        text=f"{message}\n\nInfo: No camera media available",
                         parse_mode='Markdown'
                     )
                     log_safe('info', f"[INFO] No camera media for event {event_id}")
-                    logger.info(f"✅ Text-only message sent for {event_type} event {event_id} (no media)")
                 
                 return  # Success, exit retry loop
                 
@@ -782,27 +781,27 @@ Severity: {severity}"""
                     continue
             except TelegramError as e:
                 if "file too large" in str(e).lower():
-                    logger.warning(f"⚠️ File too large for {event_type} event {event_id}, sending text only")
+                    log_safe('warning', f"[WARNING] File too large for {event_type} event {event_id}, sending text only")
                     try:
                         message = self.format_performance_message(event)
                         await self.telegram_bot.send_message(
                             chat_id=self.chat_id,
-                            text=f"{message}\n\n⚠️ Videos too large for Telegram",
+                            text=f"{message}\n\nWarning: Videos too large for Telegram",
                             parse_mode='Markdown'
                         )
                         return
                     except Exception as fallback_error:
-                        logger.error(f"❌ Fallback message also failed for {event_type} event {event_id}: {fallback_error}")
+                        log_safe('error', f"[ERROR] Fallback message also failed for {event_type} event {event_id}: {fallback_error}")
                 
-                logger.error(f"❌ Telegram API error sending {event_type} event {event_id}: {e}")
+                log_safe('error', f"[ERROR] Telegram API error sending {event_type} event {event_id}: {e}")
                 break  # Don't retry on API errors
             except Exception as e:
-                logger.error(f"❌ Unexpected error sending {event_type} event {event_id} (attempt {attempt + 1}/{max_retries}): {e}")
+                log_safe('error', f"[ERROR] Unexpected error sending {event_type} event {event_id} (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
                     continue
         
-        logger.error(f"❌ Failed to send {event_type} event {event_id} after {max_retries} attempts")
+        log_safe('error', f"[ERROR] Failed to send {event_type} event {event_id} after {max_retries} attempts")
     
     async def process_new_events(self):
         """Main function to check for and process new events from both APIs with comprehensive monitoring"""
