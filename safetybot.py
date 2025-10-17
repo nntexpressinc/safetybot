@@ -384,7 +384,10 @@ class SafetyBot:
             # Convert to local timezone - pytz automatically handles DST
             dt_local = dt_utc.astimezone(tz_local)
             
-            logger.info(f"[TIME] {time_str} UTC -> {dt_local.strftime('%m/%d/%Y %I:%M %p %Z')} ({tz_local})")
+            # Subtract 1 hour as requested
+            dt_local = dt_local - timedelta(hours=1)
+            
+            logger.info(f"[TIME] {time_str} UTC -> {dt_local.strftime('%m/%d/%Y %I:%M %p %Z')} ({tz_local}) [adjusted -1h]")
             
             # Format as: 10/17/2025 08:31 AM
             formatted = dt_local.strftime('%m/%d/%Y %I:%M %p')
