@@ -347,17 +347,15 @@ class SafetyBot:
     def format_time(self, time_str: str, latitude: Optional[float] = None, longitude: Optional[float] = None) -> str:
         """Format time string to readable format with timezone conversion"""
         try:
+            from datetime import datetime as dt_class
             import pytz
             from timezonefinder import TimezoneFinder
             
-            # Parse UTC time - ensure it's timezone-aware UTC
+            # Parse UTC time string
             dt_utc = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
             
-            # Make sure we have a timezone-aware UTC datetime
-            if dt_utc.tzinfo is None:
-                dt_utc = pytz.UTC.localize(dt_utc)
-            elif dt_utc.tzinfo != pytz.UTC:
-                dt_utc = dt_utc.astimezone(pytz.UTC)
+            # Ensure it's in UTC
+            dt_utc = dt_utc.astimezone(pytz.UTC)
             
             # Try to determine timezone from coordinates if available
             tz_local = None
@@ -371,22 +369,22 @@ class SafetyBot:
                 except Exception as e:
                     logger.debug(f"Could not determine timezone from coordinates: {e}")
             
-            # If timezone detection failed, use UTC
+            # If timezone detection failed, default to US/Pacific (most common for fleet tracking)
             if tz_local is None:
-                tz_local = pytz.UTC
-                logger.debug(f"Using UTC timezone")
+                tz_local = pytz.timezone('US/Pacific')
+                logger.debug(f"Using default US/Pacific timezone")
             
-            # Convert to local timezone using astimezone which respects DST
+            # Convert to local timezone - this respects DST automatically
             dt_local = dt_utc.astimezone(tz_local)
             
-            logger.debug(f"UTC time: {dt_utc} -> Local time: {dt_local} (TZ: {tz_local})")
+            logger.debug(f"Time conversion - UTC: {dt_utc} -> Local ({tz_local}): {dt_local}")
             
-            # Format as: 10/17/2025 06:37 AM (cross-platform compatible)
+            # Format as: 10/17/2025 06:37 AM
             formatted = dt_local.strftime('%m/%d/%Y %I:%M %p')
             return formatted
             
         except Exception as e:
-            logger.error(f"Error formatting time: {e}")
+            logger.error(f"Error formatting time '{time_str}' with coords ({latitude}, {longitude}): {e}")
             import traceback
             logger.error(traceback.format_exc())
             return time_str
