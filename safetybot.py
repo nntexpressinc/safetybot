@@ -402,10 +402,10 @@ class SafetyBot:
             driver = event.get('driver', {})
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
-            # Get coordinates for timezone detection
-            end_lat = event.get('end_lat')
-            end_lon = event.get('end_lon')
-            date_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
+            # Get coordinates for timezone detection - use start time/location
+            start_lat = event.get('start_lat')
+            start_lon = event.get('start_lon')
+            date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
             
             min_speed = event.get('min_vehicle_speed', 0)
             max_speed = event.get('max_vehicle_speed', 0)
