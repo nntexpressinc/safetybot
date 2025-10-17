@@ -347,7 +347,6 @@ class SafetyBot:
     def format_time(self, time_str: str, latitude: Optional[float] = None, longitude: Optional[float] = None) -> str:
         """Format time string to readable format with timezone conversion"""
         try:
-            from datetime import datetime as dt_class
             import pytz
             from timezonefinder import TimezoneFinder
             
@@ -359,32 +358,52 @@ class SafetyBot:
             
             # Try to determine timezone from coordinates if available
             tz_local = None
+            tz_detected = None
             if latitude is not None and longitude is not None:
                 try:
                     tf = TimezoneFinder()
                     tz_name = tf.timezone_at(lat=latitude, lng=longitude)
                     if tz_name:
+                        tz_detected = tz_name
                         tz_local = pytz.timezone(tz_name)
-                        logger.debug(f"Detected timezone: {tz_name} for coords ({latitude}, {longitude})")
+                        logger.info(f"[TZ] Detected timezone: {tz_name} for coords ({latitude}, {longitude})")
                 except Exception as e:
-                    logger.debug(f"Could not determine timezone from coordinates: {e}")
+                    logger.warning(f"[TZ] Could not determine timezone from coordinates: {e}")
             
-            # If timezone detection failed, default to US/Pacific (most common for fleet tracking)
+            # If timezone detection failed, use hardcoded mapping based on coordinates
             if tz_local is None:
-                tz_local = pytz.timezone('US/Pacific')
-                logger.debug(f"Using default US/Pacific timezone")
+                # Determine timezone from longitude (rough approximation)
+                if longitude is not None:
+                    if -125 <= longitude <= -114:  # Pacific Time Zone
+                        tz_local = pytz.timezone('US/Pacific')
+                        logger.info(f"[TZ] Using US/Pacific (longitude {longitude})")
+                    elif -114 <= longitude <= -102:  # Mountain Time Zone
+                        tz_local = pytz.timezone('US/Mountain')
+                        logger.info(f"[TZ] Using US/Mountain (longitude {longitude})")
+                    elif -102 <= longitude <= -90:  # Central Time Zone
+                        tz_local = pytz.timezone('US/Central')
+                        logger.info(f"[TZ] Using US/Central (longitude {longitude})")
+                    elif -90 <= longitude <= -75:  # Eastern Time Zone
+                        tz_local = pytz.timezone('US/Eastern')
+                        logger.info(f"[TZ] Using US/Eastern (longitude {longitude})")
+                    else:
+                        tz_local = pytz.timezone('US/Pacific')
+                        logger.info(f"[TZ] Using default US/Pacific")
+                else:
+                    tz_local = pytz.timezone('US/Pacific')
+                    logger.info(f"[TZ] Using default US/Pacific (no coordinates)")
             
-            # Convert to local timezone - this respects DST automatically
+            # Convert to local timezone
             dt_local = dt_utc.astimezone(tz_local)
             
-            logger.debug(f"Time conversion - UTC: {dt_utc} -> Local ({tz_local}): {dt_local}")
+            logger.info(f"[TIME] UTC: {dt_utc.strftime('%Y-%m-%d %H:%M:%S %Z')} -> Local: {dt_local.strftime('%Y-%m-%d %H:%M:%S %Z')} (TZ: {tz_local})")
             
             # Format as: 10/17/2025 06:37 AM
             formatted = dt_local.strftime('%m/%d/%Y %I:%M %p')
             return formatted
             
         except Exception as e:
-            logger.error(f"Error formatting time '{time_str}' with coords ({latitude}, {longitude}): {e}")
+            logger.error(f"[TZ_ERROR] Error formatting time '{time_str}' with coords ({latitude}, {longitude}): {e}")
             import traceback
             logger.error(traceback.format_exc())
             return time_str
