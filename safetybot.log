@@ -53,3 +53,803 @@
 2025-10-02 09:18:50,438 - __main__ - INFO - [REPORT] Check completed in 19.9s - Processed: 0 speeding, 0 performance events. Errors: 0
 2025-10-02 09:18:50,441 - __main__ - INFO - [REFRESH] Starting monitoring loop - Bot is now actively monitoring!
 2025-10-02 09:19:56,672 - __main__ - INFO - [STOPPED] Bot stopped by user
+2025-10-17 04:21:53,787 - __main__ - INFO - SafetyBot initialized successfully
+2025-10-17 04:21:53,787 - __main__ - INFO - Testing connections...
+2025-10-17 04:21:53,790 - __main__ - INFO - Testing Telegram connection...
+2025-10-17 04:21:54,285 - __main__ - INFO - Telegram connected: nntexpressinc_safety_bot
+2025-10-17 04:21:54,556 - __main__ - INFO - Telegram startup message sent
+2025-10-17 04:21:54,557 - __main__ - INFO - Testing API connections...
+2025-10-17 04:21:54,558 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:21:56,187 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:21:56,187 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:21:59,188 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:22:00,189 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:22:00,627 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:22:01,628 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:22:03,782 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:22:04,783 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:22:07,654 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:22:08,654 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:22:09,736 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:22:10,737 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:22:13,903 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:22:14,904 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:22:14,904 - __main__ - INFO - API test successful: 25 speeding, 100 performance events
+2025-10-17 04:22:14,907 - __main__ - INFO - Scheduled event check every 300s (5.0m)
+2025-10-17 04:22:14,907 - __main__ - INFO - Scheduled health check every hour
+2025-10-17 04:22:14,908 - __main__ - INFO - Running initial event check...
+2025-10-17 04:22:14,909 - __main__ - INFO - Starting event check...
+2025-10-17 04:22:14,909 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:22:15,274 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:22:15,275 - __main__ - INFO - Found 25 new speeding events (last ID: 2050367245)
+2025-10-17 04:22:15,275 - __main__ - INFO - Processing 25 speeding events
+2025-10-17 04:22:15,277 - __main__ - WARNING - Network error sending speeding event (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-10-17 04:22:16,692 - __main__ - INFO - Speeding event 2082966906 sent successfully
+2025-10-17 04:22:18,877 - __main__ - INFO - Speeding event 2082967725 sent successfully
+2025-10-17 04:22:21,013 - __main__ - INFO - Speeding event 2082969614 sent successfully
+2025-10-17 04:22:23,154 - __main__ - INFO - Speeding event 2082970346 sent successfully
+2025-10-17 04:22:25,299 - __main__ - INFO - Speeding event 2082977708 sent successfully
+2025-10-17 04:22:27,477 - __main__ - INFO - Speeding event 2082982948 sent successfully
+2025-10-17 04:22:29,701 - __main__ - INFO - Speeding event 2082986760 sent successfully
+2025-10-17 04:22:31,953 - __main__ - INFO - Speeding event 2082987962 sent successfully
+2025-10-17 04:22:34,094 - __main__ - INFO - Speeding event 2082994620 sent successfully
+2025-10-17 04:22:36,262 - __main__ - INFO - Speeding event 2082995142 sent successfully
+2025-10-17 04:22:38,470 - __main__ - INFO - Speeding event 2082996610 sent successfully
+2025-10-17 04:22:40,703 - __main__ - INFO - Speeding event 2082999783 sent successfully
+2025-10-17 04:22:42,837 - __main__ - INFO - Speeding event 2083001710 sent successfully
+2025-10-17 04:22:44,988 - __main__ - INFO - Speeding event 2083004486 sent successfully
+2025-10-17 04:22:47,146 - __main__ - INFO - Speeding event 2083013258 sent successfully
+2025-10-17 04:22:49,295 - __main__ - INFO - Speeding event 2083024438 sent successfully
+2025-10-17 04:22:51,455 - __main__ - INFO - Speeding event 2083026259 sent successfully
+2025-10-17 04:22:53,609 - __main__ - INFO - Speeding event 2083027315 sent successfully
+2025-10-17 04:22:55,769 - __main__ - INFO - Speeding event 2083045322 sent successfully
+2025-10-17 04:22:57,943 - __main__ - INFO - Speeding event 2083054381 sent successfully
+2025-10-17 04:23:00,083 - __main__ - INFO - Speeding event 2083056972 sent successfully
+2025-10-17 04:23:02,216 - __main__ - INFO - Speeding event 2083061923 sent successfully
+2025-10-17 04:23:04,371 - __main__ - INFO - Speeding event 2083070365 sent successfully
+2025-10-17 04:23:06,637 - __main__ - INFO - Speeding event 2083070565 sent successfully
+2025-10-17 04:23:08,838 - __main__ - INFO - Speeding event 2083076761 sent successfully
+2025-10-17 04:23:10,844 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:23:13,190 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:23:14,191 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:23:14,699 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:23:15,700 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:23:17,544 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:23:18,545 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:23:20,969 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:23:21,970 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:23:22,699 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:23:23,700 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:23:26,122 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:23:27,123 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:23:27,147 - __main__ - INFO - Found 17 new hard_brake events (last ID: 1389109894)
+2025-10-17 04:23:27,159 - __main__ - INFO - Found 1 new crash events (last ID: 1390292205)
+2025-10-17 04:23:27,168 - __main__ - INFO - Found 5 new seat_belt_violation events (last ID: 1389928772)
+2025-10-17 04:23:27,175 - __main__ - INFO - Found 16 new stop_sign_violation events (last ID: 1388840141)
+2025-10-17 04:23:27,181 - __main__ - INFO - Found 5 new distraction events (last ID: 1393564571)
+2025-10-17 04:23:27,189 - __main__ - INFO - Found 10 new unsafe_lane_change events (last ID: 1388046240)
+2025-10-17 04:23:27,189 - __main__ - INFO - Processing 54 performance events
+2025-10-17 04:23:27,190 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:23:54,151 - __main__ - INFO - front_facing size: 6.4MB
+2025-10-17 04:23:54,155 - __main__ - INFO - front_facing (6.4MB) saved successfully
+2025-10-17 04:23:54,155 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:23:54,599 - __main__ - INFO - driver_facing size: 0.7MB
+2025-10-17 04:23:54,600 - __main__ - INFO - driver_facing (0.7MB) saved successfully
+2025-10-17 04:23:56,649 - __main__ - INFO - Media group sent for event 1400298184
+2025-10-17 04:23:58,660 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:23:59,379 - __main__ - INFO - front_facing size: 5.3MB
+2025-10-17 04:23:59,381 - __main__ - INFO - front_facing (5.3MB) saved successfully
+2025-10-17 04:23:59,381 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:23:59,796 - __main__ - INFO - driver_facing size: 0.6MB
+2025-10-17 04:23:59,797 - __main__ - INFO - driver_facing (0.6MB) saved successfully
+2025-10-17 04:24:03,603 - __main__ - INFO - Media group sent for event 1400303100
+2025-10-17 04:24:05,616 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:09,103 - __main__ - INFO - front_facing size: 5.0MB
+2025-10-17 04:24:09,105 - __main__ - INFO - front_facing (5.0MB) saved successfully
+2025-10-17 04:24:09,105 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:09,790 - __main__ - INFO - driver_facing size: 3.9MB
+2025-10-17 04:24:09,795 - __main__ - INFO - driver_facing (3.9MB) saved successfully
+2025-10-17 04:24:11,742 - __main__ - INFO - Media group sent for event 1400316737
+2025-10-17 04:24:13,753 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:14,435 - __main__ - INFO - front_facing size: 4.5MB
+2025-10-17 04:24:14,437 - __main__ - INFO - front_facing (4.5MB) saved successfully
+2025-10-17 04:24:14,438 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:14,981 - __main__ - INFO - driver_facing size: 3.0MB
+2025-10-17 04:24:14,983 - __main__ - INFO - driver_facing (3.0MB) saved successfully
+2025-10-17 04:24:18,994 - __main__ - INFO - Media group sent for event 1400327263
+2025-10-17 04:24:21,011 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:24,151 - __main__ - INFO - front_facing size: 4.4MB
+2025-10-17 04:24:24,154 - __main__ - INFO - front_facing (4.4MB) saved successfully
+2025-10-17 04:24:24,155 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:24,584 - __main__ - INFO - driver_facing size: 2.1MB
+2025-10-17 04:24:24,586 - __main__ - INFO - driver_facing (2.1MB) saved successfully
+2025-10-17 04:24:26,565 - __main__ - INFO - Media group sent for event 1400332940
+2025-10-17 04:24:28,580 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:29,259 - __main__ - INFO - front_facing size: 5.0MB
+2025-10-17 04:24:29,261 - __main__ - INFO - front_facing (5.0MB) saved successfully
+2025-10-17 04:24:29,262 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:29,957 - __main__ - INFO - driver_facing size: 4.6MB
+2025-10-17 04:24:29,959 - __main__ - INFO - driver_facing (4.6MB) saved successfully
+2025-10-17 04:24:30,387 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 26 seconds
+2025-10-17 04:24:30,653 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 26 seconds
+2025-10-17 04:24:30,913 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 25 seconds
+2025-10-17 04:24:32,928 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:33,445 - __main__ - INFO - front_facing size: 3.2MB
+2025-10-17 04:24:33,447 - __main__ - INFO - front_facing (3.2MB) saved successfully
+2025-10-17 04:24:33,447 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:34,080 - __main__ - INFO - driver_facing size: 3.6MB
+2025-10-17 04:24:34,082 - __main__ - INFO - driver_facing (3.6MB) saved successfully
+2025-10-17 04:24:34,616 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 22 seconds
+2025-10-17 04:24:34,919 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 21 seconds
+2025-10-17 04:24:35,222 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 21 seconds
+2025-10-17 04:24:37,228 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:37,996 - __main__ - INFO - front_facing size: 5.9MB
+2025-10-17 04:24:37,999 - __main__ - INFO - front_facing (5.9MB) saved successfully
+2025-10-17 04:24:37,999 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:38,648 - __main__ - INFO - driver_facing size: 4.4MB
+2025-10-17 04:24:38,651 - __main__ - INFO - driver_facing (4.4MB) saved successfully
+2025-10-17 04:24:39,253 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:24:39,812 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 16 seconds
+2025-10-17 04:24:40,355 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 16 seconds
+2025-10-17 04:24:42,360 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:42,758 - __main__ - INFO - front_facing size: 1.9MB
+2025-10-17 04:24:42,759 - __main__ - INFO - front_facing (1.9MB) saved successfully
+2025-10-17 04:24:42,759 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:43,185 - __main__ - INFO - driver_facing size: 1.5MB
+2025-10-17 04:24:43,186 - __main__ - INFO - driver_facing (1.5MB) saved successfully
+2025-10-17 04:24:43,398 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 13 seconds
+2025-10-17 04:24:43,577 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 13 seconds
+2025-10-17 04:24:43,772 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 12 seconds
+2025-10-17 04:24:45,791 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:24:46,476 - __main__ - INFO - front_facing size: 4.7MB
+2025-10-17 04:24:46,478 - __main__ - INFO - front_facing (4.7MB) saved successfully
+2025-10-17 04:24:46,479 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:24:47,134 - __main__ - INFO - driver_facing size: 4.6MB
+2025-10-17 04:24:47,136 - __main__ - INFO - driver_facing (4.6MB) saved successfully
+2025-10-17 04:24:47,539 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 9 seconds
+2025-10-17 04:24:55,847 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 3 seconds
+2025-10-17 04:24:59,375 - __main__ - INFO - Video sent for event 1400433286
+2025-10-17 04:25:03,386 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:06,441 - __main__ - INFO - front_facing size: 3.9MB
+2025-10-17 04:25:06,443 - __main__ - INFO - front_facing (3.9MB) saved successfully
+2025-10-17 04:25:06,443 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:07,218 - __main__ - INFO - driver_facing size: 6.0MB
+2025-10-17 04:25:07,221 - __main__ - INFO - driver_facing (6.0MB) saved successfully
+2025-10-17 04:25:09,409 - __main__ - INFO - Media group sent for event 1400471371
+2025-10-17 04:25:11,423 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:12,161 - __main__ - INFO - front_facing size: 6.4MB
+2025-10-17 04:25:12,163 - __main__ - INFO - front_facing (6.4MB) saved successfully
+2025-10-17 04:25:12,164 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:12,747 - __main__ - INFO - driver_facing size: 2.0MB
+2025-10-17 04:25:12,749 - __main__ - INFO - driver_facing (2.0MB) saved successfully
+2025-10-17 04:25:16,510 - __main__ - INFO - Media group sent for event 1400488693
+2025-10-17 04:25:18,523 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:22,344 - __main__ - INFO - front_facing size: 5.2MB
+2025-10-17 04:25:22,346 - __main__ - INFO - front_facing (5.2MB) saved successfully
+2025-10-17 04:25:22,347 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:23,062 - __main__ - INFO - driver_facing size: 5.0MB
+2025-10-17 04:25:23,064 - __main__ - INFO - driver_facing (5.0MB) saved successfully
+2025-10-17 04:25:25,279 - __main__ - INFO - Media group sent for event 1400533024
+2025-10-17 04:25:27,291 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:28,003 - __main__ - INFO - front_facing size: 5.7MB
+2025-10-17 04:25:28,006 - __main__ - INFO - front_facing (5.7MB) saved successfully
+2025-10-17 04:25:28,006 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:28,475 - __main__ - INFO - driver_facing size: 2.0MB
+2025-10-17 04:25:28,476 - __main__ - INFO - driver_facing (2.0MB) saved successfully
+2025-10-17 04:25:32,003 - __main__ - INFO - Media group sent for event 1400551329
+2025-10-17 04:25:34,010 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:34,870 - __main__ - INFO - front_facing size: 6.1MB
+2025-10-17 04:25:34,872 - __main__ - INFO - front_facing (6.1MB) saved successfully
+2025-10-17 04:25:34,872 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:35,264 - __main__ - INFO - driver_facing size: 1.6MB
+2025-10-17 04:25:35,265 - __main__ - INFO - driver_facing (1.6MB) saved successfully
+2025-10-17 04:25:39,019 - __main__ - INFO - Media group sent for event 1400556113
+2025-10-17 04:25:41,036 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:44,625 - __main__ - INFO - front_facing size: 5.8MB
+2025-10-17 04:25:44,628 - __main__ - INFO - front_facing (5.8MB) saved successfully
+2025-10-17 04:25:44,629 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:45,318 - __main__ - INFO - driver_facing size: 5.0MB
+2025-10-17 04:25:45,321 - __main__ - INFO - driver_facing (5.0MB) saved successfully
+2025-10-17 04:25:47,344 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 12 seconds
+2025-10-17 04:25:47,866 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 11 seconds
+2025-10-17 04:25:48,220 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 11 seconds
+2025-10-17 04:25:50,225 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:25:50,963 - __main__ - INFO - front_facing size: 5.0MB
+2025-10-17 04:25:50,965 - __main__ - INFO - front_facing (5.0MB) saved successfully
+2025-10-17 04:25:50,965 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:25:51,365 - __main__ - INFO - driver_facing size: 1.6MB
+2025-10-17 04:25:51,366 - __main__ - INFO - driver_facing (1.6MB) saved successfully
+2025-10-17 04:25:58,947 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 3 seconds
+2025-10-17 04:25:59,801 - __main__ - INFO - Video sent for event 1400610118
+2025-10-17 04:26:02,099 - __main__ - INFO - Video sent for event 1400610118
+2025-10-17 04:26:06,123 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:09,510 - __main__ - INFO - front_facing size: 5.1MB
+2025-10-17 04:26:09,513 - __main__ - INFO - front_facing (5.1MB) saved successfully
+2025-10-17 04:26:09,513 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:09,986 - __main__ - INFO - driver_facing size: 2.2MB
+2025-10-17 04:26:09,990 - __main__ - INFO - driver_facing (2.2MB) saved successfully
+2025-10-17 04:26:11,932 - __main__ - INFO - Media group sent for event 1400654701
+2025-10-17 04:26:13,948 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:14,631 - __main__ - INFO - front_facing size: 5.3MB
+2025-10-17 04:26:14,633 - __main__ - INFO - front_facing (5.3MB) saved successfully
+2025-10-17 04:26:14,634 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:15,325 - __main__ - INFO - driver_facing size: 3.9MB
+2025-10-17 04:26:15,329 - __main__ - INFO - driver_facing (3.9MB) saved successfully
+2025-10-17 04:26:19,251 - __main__ - INFO - Media group sent for event 1400687556
+2025-10-17 04:26:21,259 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:24,454 - __main__ - INFO - front_facing size: 5.7MB
+2025-10-17 04:26:24,456 - __main__ - INFO - front_facing (5.7MB) saved successfully
+2025-10-17 04:26:24,456 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:24,881 - __main__ - INFO - driver_facing size: 1.9MB
+2025-10-17 04:26:24,882 - __main__ - INFO - driver_facing (1.9MB) saved successfully
+2025-10-17 04:26:26,751 - __main__ - INFO - Media group sent for event 1400705961
+2025-10-17 04:26:28,763 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:29,462 - __main__ - INFO - front_facing size: 5.5MB
+2025-10-17 04:26:29,464 - __main__ - INFO - front_facing (5.5MB) saved successfully
+2025-10-17 04:26:29,465 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:29,938 - __main__ - INFO - driver_facing size: 2.2MB
+2025-10-17 04:26:29,942 - __main__ - INFO - driver_facing (2.2MB) saved successfully
+2025-10-17 04:26:33,800 - __main__ - INFO - Media group sent for event 1400730059
+2025-10-17 04:26:35,805 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:39,447 - __main__ - INFO - front_facing size: 6.6MB
+2025-10-17 04:26:39,449 - __main__ - INFO - front_facing (6.6MB) saved successfully
+2025-10-17 04:26:39,450 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:39,973 - __main__ - INFO - driver_facing size: 3.6MB
+2025-10-17 04:26:39,975 - __main__ - INFO - driver_facing (3.6MB) saved successfully
+2025-10-17 04:26:41,983 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:26:42,276 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:26:42,464 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:26:44,476 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:45,244 - __main__ - INFO - front_facing size: 6.1MB
+2025-10-17 04:26:45,246 - __main__ - INFO - front_facing (6.1MB) saved successfully
+2025-10-17 04:26:45,247 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:45,896 - __main__ - INFO - driver_facing size: 4.0MB
+2025-10-17 04:26:45,898 - __main__ - INFO - driver_facing (4.0MB) saved successfully
+2025-10-17 04:26:46,250 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 13 seconds
+2025-10-17 04:26:46,615 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 13 seconds
+2025-10-17 04:26:46,861 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 12 seconds
+2025-10-17 04:26:48,870 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:26:49,604 - __main__ - INFO - front_facing size: 5.0MB
+2025-10-17 04:26:49,607 - __main__ - INFO - front_facing (5.0MB) saved successfully
+2025-10-17 04:26:49,607 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:26:50,181 - __main__ - INFO - driver_facing size: 3.6MB
+2025-10-17 04:26:50,183 - __main__ - INFO - driver_facing (3.6MB) saved successfully
+2025-10-17 04:26:50,533 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 9 seconds
+2025-10-17 04:26:58,912 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 3 seconds
+2025-10-17 04:27:02,369 - __main__ - INFO - Video sent for event 1400782078
+2025-10-17 04:27:06,385 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:09,550 - __main__ - INFO - front_facing size: 6.1MB
+2025-10-17 04:27:09,552 - __main__ - INFO - front_facing (6.1MB) saved successfully
+2025-10-17 04:27:09,553 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:10,085 - __main__ - INFO - driver_facing size: 2.9MB
+2025-10-17 04:27:10,087 - __main__ - INFO - driver_facing (2.9MB) saved successfully
+2025-10-17 04:27:12,085 - __main__ - INFO - Media group sent for event 1400850112
+2025-10-17 04:27:14,091 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:14,776 - __main__ - INFO - front_facing size: 4.0MB
+2025-10-17 04:27:14,778 - __main__ - INFO - front_facing (4.0MB) saved successfully
+2025-10-17 04:27:14,778 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:15,115 - __main__ - INFO - driver_facing size: 0.5MB
+2025-10-17 04:27:15,115 - __main__ - INFO - driver_facing (0.5MB) saved successfully
+2025-10-17 04:27:18,696 - __main__ - INFO - Media group sent for event 1400863467
+2025-10-17 04:27:20,704 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:21,413 - __main__ - INFO - front_facing size: 6.0MB
+2025-10-17 04:27:21,416 - __main__ - INFO - front_facing (6.0MB) saved successfully
+2025-10-17 04:27:21,417 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:22,315 - __main__ - INFO - driver_facing size: 3.6MB
+2025-10-17 04:27:22,317 - __main__ - INFO - driver_facing (3.6MB) saved successfully
+2025-10-17 04:27:26,225 - __main__ - INFO - Media group sent for event 1400907815
+2025-10-17 04:27:28,241 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:31,438 - __main__ - INFO - front_facing size: 5.4MB
+2025-10-17 04:27:31,441 - __main__ - INFO - front_facing (5.4MB) saved successfully
+2025-10-17 04:27:31,441 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:31,775 - __main__ - INFO - driver_facing size: 0.5MB
+2025-10-17 04:27:31,776 - __main__ - INFO - driver_facing (0.5MB) saved successfully
+2025-10-17 04:27:33,604 - __main__ - INFO - Media group sent for event 1400913116
+2025-10-17 04:27:35,616 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:36,342 - __main__ - INFO - front_facing size: 5.1MB
+2025-10-17 04:27:36,344 - __main__ - INFO - front_facing (5.1MB) saved successfully
+2025-10-17 04:27:36,344 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:36,782 - __main__ - INFO - driver_facing size: 1.4MB
+2025-10-17 04:27:36,783 - __main__ - INFO - driver_facing (1.4MB) saved successfully
+2025-10-17 04:27:40,259 - __main__ - INFO - Media group sent for event 1400950437
+2025-10-17 04:27:42,268 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:43,002 - __main__ - INFO - front_facing size: 6.1MB
+2025-10-17 04:27:43,005 - __main__ - INFO - front_facing (6.1MB) saved successfully
+2025-10-17 04:27:43,006 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:43,497 - __main__ - INFO - driver_facing size: 3.4MB
+2025-10-17 04:27:43,499 - __main__ - INFO - driver_facing (3.4MB) saved successfully
+2025-10-17 04:27:43,942 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 18 seconds
+2025-10-17 04:27:44,232 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 18 seconds
+2025-10-17 04:27:44,796 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:27:46,804 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:47,491 - __main__ - INFO - front_facing size: 4.9MB
+2025-10-17 04:27:47,493 - __main__ - INFO - front_facing (4.9MB) saved successfully
+2025-10-17 04:27:47,493 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:47,816 - __main__ - INFO - driver_facing size: 0.3MB
+2025-10-17 04:27:47,817 - __main__ - INFO - driver_facing (0.3MB) saved successfully
+2025-10-17 04:27:48,050 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 14 seconds
+2025-10-17 04:27:48,299 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 14 seconds
+2025-10-17 04:27:48,491 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 14 seconds
+2025-10-17 04:27:50,508 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:51,204 - __main__ - INFO - front_facing size: 5.0MB
+2025-10-17 04:27:51,206 - __main__ - INFO - front_facing (5.0MB) saved successfully
+2025-10-17 04:27:51,206 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:51,607 - __main__ - INFO - driver_facing size: 1.3MB
+2025-10-17 04:27:51,609 - __main__ - INFO - driver_facing (1.3MB) saved successfully
+2025-10-17 04:27:52,196 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 10 seconds
+2025-10-17 04:27:52,578 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 10 seconds
+2025-10-17 04:27:52,756 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 9 seconds
+2025-10-17 04:27:54,771 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:27:55,459 - __main__ - INFO - front_facing size: 5.8MB
+2025-10-17 04:27:55,462 - __main__ - INFO - front_facing (5.8MB) saved successfully
+2025-10-17 04:27:55,462 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:27:55,816 - __main__ - INFO - driver_facing size: 0.7MB
+2025-10-17 04:27:55,817 - __main__ - INFO - driver_facing (0.7MB) saved successfully
+2025-10-17 04:28:02,546 - __main__ - INFO - Media group sent for event 1401091625
+2025-10-17 04:28:04,562 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:08,050 - __main__ - INFO - front_facing size: 6.0MB
+2025-10-17 04:28:08,053 - __main__ - INFO - front_facing (6.0MB) saved successfully
+2025-10-17 04:28:08,053 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:08,466 - __main__ - INFO - driver_facing size: 2.1MB
+2025-10-17 04:28:08,468 - __main__ - INFO - driver_facing (2.1MB) saved successfully
+2025-10-17 04:28:10,561 - __main__ - INFO - Media group sent for event 1401121347
+2025-10-17 04:28:12,573 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:13,267 - __main__ - INFO - front_facing size: 6.0MB
+2025-10-17 04:28:13,270 - __main__ - INFO - front_facing (6.0MB) saved successfully
+2025-10-17 04:28:13,270 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:13,747 - __main__ - INFO - driver_facing size: 3.5MB
+2025-10-17 04:28:13,749 - __main__ - INFO - driver_facing (3.5MB) saved successfully
+2025-10-17 04:28:17,469 - __main__ - INFO - Media group sent for event 1401257137
+2025-10-17 04:28:19,476 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:22,610 - __main__ - INFO - front_facing size: 3.1MB
+2025-10-17 04:28:22,613 - __main__ - INFO - front_facing (3.1MB) saved successfully
+2025-10-17 04:28:22,613 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:23,288 - __main__ - INFO - driver_facing size: 4.9MB
+2025-10-17 04:28:23,290 - __main__ - INFO - driver_facing (4.9MB) saved successfully
+2025-10-17 04:28:25,605 - __main__ - INFO - Media group sent for event 1401345444
+2025-10-17 04:28:27,624 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:28,274 - __main__ - INFO - front_facing size: 5.0MB
+2025-10-17 04:28:28,277 - __main__ - INFO - front_facing (5.0MB) saved successfully
+2025-10-17 04:28:28,277 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:28,642 - __main__ - INFO - driver_facing size: 1.2MB
+2025-10-17 04:28:28,644 - __main__ - INFO - driver_facing (1.2MB) saved successfully
+2025-10-17 04:28:32,262 - __main__ - INFO - Media group sent for event 1401553969
+2025-10-17 04:28:34,267 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:34,959 - __main__ - INFO - front_facing size: 5.3MB
+2025-10-17 04:28:34,962 - __main__ - INFO - front_facing (5.3MB) saved successfully
+2025-10-17 04:28:34,963 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:35,428 - __main__ - INFO - driver_facing size: 2.4MB
+2025-10-17 04:28:35,431 - __main__ - INFO - driver_facing (2.4MB) saved successfully
+2025-10-17 04:28:35,836 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 26 seconds
+2025-10-17 04:28:36,295 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 26 seconds
+2025-10-17 04:28:36,564 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 26 seconds
+2025-10-17 04:28:38,571 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:39,292 - __main__ - INFO - front_facing size: 5.3MB
+2025-10-17 04:28:39,294 - __main__ - INFO - front_facing (5.3MB) saved successfully
+2025-10-17 04:28:39,294 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:39,675 - __main__ - INFO - driver_facing size: 1.3MB
+2025-10-17 04:28:39,677 - __main__ - INFO - driver_facing (1.3MB) saved successfully
+2025-10-17 04:28:39,954 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 22 seconds
+2025-10-17 04:28:40,214 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 22 seconds
+2025-10-17 04:28:40,367 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 22 seconds
+2025-10-17 04:28:42,375 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:43,137 - __main__ - INFO - front_facing size: 4.4MB
+2025-10-17 04:28:43,139 - __main__ - INFO - front_facing (4.4MB) saved successfully
+2025-10-17 04:28:43,140 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:43,940 - __main__ - INFO - driver_facing size: 5.7MB
+2025-10-17 04:28:43,942 - __main__ - INFO - driver_facing (5.7MB) saved successfully
+2025-10-17 04:28:44,501 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 18 seconds
+2025-10-17 04:28:44,875 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:28:45,228 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 17 seconds
+2025-10-17 04:28:47,244 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:47,968 - __main__ - INFO - front_facing size: 5.7MB
+2025-10-17 04:28:47,970 - __main__ - INFO - front_facing (5.7MB) saved successfully
+2025-10-17 04:28:47,971 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:48,700 - __main__ - INFO - driver_facing size: 5.6MB
+2025-10-17 04:28:48,703 - __main__ - INFO - driver_facing (5.6MB) saved successfully
+2025-10-17 04:28:49,276 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 13 seconds
+2025-10-17 04:28:49,629 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 13 seconds
+2025-10-17 04:28:49,934 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 12 seconds
+2025-10-17 04:28:51,941 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:28:52,513 - __main__ - INFO - front_facing size: 3.3MB
+2025-10-17 04:28:52,515 - __main__ - INFO - front_facing (3.3MB) saved successfully
+2025-10-17 04:28:52,515 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:28:53,023 - __main__ - INFO - driver_facing size: 2.4MB
+2025-10-17 04:28:53,028 - __main__ - INFO - driver_facing (2.4MB) saved successfully
+2025-10-17 04:28:53,402 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 9 seconds
+2025-10-17 04:28:53,699 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 9 seconds
+2025-10-17 04:29:01,920 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 3 seconds
+2025-10-17 04:29:03,926 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:07,588 - __main__ - INFO - front_facing size: 6.3MB
+2025-10-17 04:29:07,591 - __main__ - INFO - front_facing (6.3MB) saved successfully
+2025-10-17 04:29:07,591 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:08,319 - __main__ - INFO - driver_facing size: 4.0MB
+2025-10-17 04:29:08,323 - __main__ - INFO - driver_facing (4.0MB) saved successfully
+2025-10-17 04:29:10,990 - __main__ - INFO - Media group sent for event 1401948074
+2025-10-17 04:29:12,999 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:13,765 - __main__ - INFO - front_facing size: 5.2MB
+2025-10-17 04:29:13,768 - __main__ - INFO - front_facing (5.2MB) saved successfully
+2025-10-17 04:29:13,768 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:14,194 - __main__ - INFO - driver_facing size: 2.0MB
+2025-10-17 04:29:14,196 - __main__ - INFO - driver_facing (2.0MB) saved successfully
+2025-10-17 04:29:17,732 - __main__ - INFO - Media group sent for event 1402008415
+2025-10-17 04:29:21,918 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:25,104 - __main__ - INFO - front_facing size: 3.9MB
+2025-10-17 04:29:25,107 - __main__ - INFO - front_facing (3.9MB) saved successfully
+2025-10-17 04:29:25,107 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:25,618 - __main__ - INFO - driver_facing size: 2.3MB
+2025-10-17 04:29:25,619 - __main__ - INFO - driver_facing (2.3MB) saved successfully
+2025-10-17 04:29:27,292 - __main__ - INFO - Media group sent for event 1403302511
+2025-10-17 04:29:29,307 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:29,922 - __main__ - INFO - front_facing size: 4.0MB
+2025-10-17 04:29:29,924 - __main__ - INFO - front_facing (4.0MB) saved successfully
+2025-10-17 04:29:29,924 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:30,391 - __main__ - INFO - driver_facing size: 2.3MB
+2025-10-17 04:29:30,393 - __main__ - INFO - driver_facing (2.3MB) saved successfully
+2025-10-17 04:29:34,078 - __main__ - INFO - Media group sent for event 1403751301
+2025-10-17 04:29:36,082 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:36,779 - __main__ - INFO - front_facing size: 5.6MB
+2025-10-17 04:29:36,782 - __main__ - INFO - front_facing (5.6MB) saved successfully
+2025-10-17 04:29:36,782 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:37,439 - __main__ - INFO - driver_facing size: 4.8MB
+2025-10-17 04:29:37,442 - __main__ - INFO - driver_facing (4.8MB) saved successfully
+2025-10-17 04:29:41,172 - __main__ - INFO - Media group sent for event 1403917665
+2025-10-17 04:29:45,495 - __main__ - ERROR - Telegram error: Flood control exceeded. Retry in 25 seconds
+2025-10-17 04:29:47,633 - __main__ - ERROR - Telegram error: Flood control exceeded. Retry in 23 seconds
+2025-10-17 04:29:49,645 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:52,853 - __main__ - INFO - front_facing size: 2.4MB
+2025-10-17 04:29:52,856 - __main__ - INFO - front_facing (2.4MB) saved successfully
+2025-10-17 04:29:52,856 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:53,283 - __main__ - INFO - driver_facing size: 1.6MB
+2025-10-17 04:29:53,285 - __main__ - INFO - driver_facing (1.6MB) saved successfully
+2025-10-17 04:29:54,646 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 16 seconds
+2025-10-17 04:29:54,908 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 15 seconds
+2025-10-17 04:29:55,066 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 15 seconds
+2025-10-17 04:29:57,072 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-10-17 04:29:57,831 - __main__ - INFO - front_facing size: 3.9MB
+2025-10-17 04:29:57,833 - __main__ - INFO - front_facing (3.9MB) saved successfully
+2025-10-17 04:29:57,833 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-10-17 04:29:58,400 - __main__ - INFO - driver_facing size: 2.9MB
+2025-10-17 04:29:58,401 - __main__ - INFO - driver_facing (2.9MB) saved successfully
+2025-10-17 04:29:58,729 - __main__ - WARNING - Media group failed, trying individual videos: Flood control exceeded. Retry in 12 seconds
+2025-10-17 04:29:59,012 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 11 seconds
+2025-10-17 04:29:59,295 - __main__ - ERROR - Video send failed: Flood control exceeded. Retry in 11 seconds
+2025-10-17 04:30:01,501 - __main__ - ERROR - Telegram error: Flood control exceeded. Retry in 9 seconds
+2025-10-17 04:30:03,520 - __main__ - INFO - Event check completed in 468.6s
+2025-10-17 04:30:03,522 - __main__ - INFO - SafetyBot v2.0 is now monitoring
+2025-10-17 04:30:03,530 - __main__ - INFO - Starting event check...
+2025-10-17 04:30:03,532 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:30:05,470 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:30:05,478 - __main__ - INFO - Found 2 new speeding events (last ID: 2083076761)
+2025-10-17 04:30:05,479 - __main__ - INFO - Processing 2 speeding events
+2025-10-17 04:30:05,480 - __main__ - WARNING - Network error sending speeding event (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-10-17 04:30:11,788 - __main__ - WARNING - Network error sending speeding event (attempt 2/3): Timed out
+2025-10-17 04:30:14,192 - __main__ - INFO - Speeding event 2083081173 sent successfully
+2025-10-17 04:30:16,358 - __main__ - INFO - Speeding event 2083091042 sent successfully
+2025-10-17 04:30:18,374 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:30:21,580 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:30:22,581 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:30:23,058 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:30:24,059 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:30:26,331 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:30:27,331 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:30:30,290 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:30:31,291 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:30:32,140 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:30:33,140 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:30:37,326 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:30:38,327 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:30:38,339 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1402008415)
+2025-10-17 04:30:38,345 - __main__ - INFO - Found 0 new crash events (last ID: 1403917665)
+2025-10-17 04:30:38,352 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1405521043)
+2025-10-17 04:30:38,358 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1401022003)
+2025-10-17 04:30:38,365 - __main__ - INFO - Found 0 new distraction events (last ID: 1405365933)
+2025-10-17 04:30:38,371 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1400954906)
+2025-10-17 04:30:38,371 - __main__ - INFO - Event check completed in 34.8s
+2025-10-17 04:34:11,179 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:13,514 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:13,898 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:14,082 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:14,290 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:14,474 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:14,650 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:14,826 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:14,978 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,162 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,314 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,829 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,860 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,891 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,921 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,952 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:15,982 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,013 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,060 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,091 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,122 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,151 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,182 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,214 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,244 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,291 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,321 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,352 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,383 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,413 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,444 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,490 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,521 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,551 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,582 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,613 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,644 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,674 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,720 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,751 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,782 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,813 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,844 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,874 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,905 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,951 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:16,981 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,012 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,043 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,074 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,105 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,135 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,184 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,213 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,244 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,274 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,305 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,335 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,367 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,413 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,443 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,474 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,505 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,536 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,565 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,596 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,644 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,673 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,704 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,736 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,767 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,798 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,829 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,875 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,906 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,937 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,967 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:17,999 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,030 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,061 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,106 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,137 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,168 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,199 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,230 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,261 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,292 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,323 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,370 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:34:18,391 - __main__ - INFO - Cleanup completed successfully
+2025-10-17 04:34:21,472 - __main__ - INFO - SafetyBot initialized successfully
+2025-10-17 04:34:21,473 - __main__ - INFO - Testing connections...
+2025-10-17 04:34:21,475 - __main__ - INFO - Testing Telegram connection...
+2025-10-17 04:34:21,883 - __main__ - INFO - Telegram connected: nntexpressinc_safety_bot
+2025-10-17 04:34:22,016 - __main__ - INFO - Telegram startup message sent
+2025-10-17 04:34:22,017 - __main__ - INFO - Testing API connections...
+2025-10-17 04:34:22,020 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:34:23,658 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:34:23,658 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:34:27,005 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:34:28,006 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:34:28,465 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:34:29,466 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:34:31,720 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:34:32,720 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:34:36,099 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:34:37,099 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:34:37,965 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:34:38,965 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:34:42,788 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:34:43,788 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:34:43,789 - __main__ - INFO - API test successful: 25 speeding, 100 performance events
+2025-10-17 04:34:43,797 - __main__ - INFO - Scheduled event check every 300s (5.0m)
+2025-10-17 04:34:43,798 - __main__ - INFO - Scheduled health check every hour
+2025-10-17 04:34:43,800 - __main__ - INFO - Running initial event check...
+2025-10-17 04:34:43,802 - __main__ - INFO - Starting event check...
+2025-10-17 04:34:43,802 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:34:44,450 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:34:44,459 - __main__ - INFO - Found 2 new speeding events (last ID: 2083091042)
+2025-10-17 04:34:44,459 - __main__ - INFO - Processing 2 speeding events
+2025-10-17 04:34:44,460 - __main__ - ERROR - Error formatting time: No module named 'pytz'
+2025-10-17 04:34:44,461 - __main__ - WARNING - Network error sending speeding event (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-10-17 04:34:45,470 - __main__ - ERROR - Error formatting time: No module named 'pytz'
+2025-10-17 04:34:45,966 - __main__ - INFO - Speeding event 2083095468 sent successfully
+2025-10-17 04:34:47,977 - __main__ - ERROR - Error formatting time: No module named 'pytz'
+2025-10-17 04:34:48,225 - __main__ - INFO - Speeding event 2083101935 sent successfully
+2025-10-17 04:34:50,234 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:34:53,217 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:34:54,217 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:34:54,675 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:34:55,677 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:34:58,653 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:34:59,654 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:35:03,371 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:35:04,371 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:35:05,407 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:35:06,408 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:35:09,015 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:35:10,016 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:35:10,017 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1402008415)
+2025-10-17 04:35:10,017 - __main__ - INFO - Found 0 new crash events (last ID: 1403917665)
+2025-10-17 04:35:10,018 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1405521043)
+2025-10-17 04:35:10,019 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1401022003)
+2025-10-17 04:35:10,019 - __main__ - INFO - Found 0 new distraction events (last ID: 1405365933)
+2025-10-17 04:35:10,019 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1400954906)
+2025-10-17 04:35:10,020 - __main__ - INFO - Event check completed in 26.2s
+2025-10-17 04:35:10,022 - __main__ - INFO - SafetyBot v2.0 is now monitoring
+2025-10-17 04:39:50,038 - __main__ - INFO - Starting event check...
+2025-10-17 04:39:50,038 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:39:50,405 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:39:50,413 - __main__ - INFO - Found 1 new speeding events (last ID: 2083101935)
+2025-10-17 04:39:50,413 - __main__ - INFO - Processing 1 speeding events
+2025-10-17 04:39:50,414 - __main__ - ERROR - Error formatting time: No module named 'pytz'
+2025-10-17 04:39:50,415 - __main__ - WARNING - Network error sending speeding event (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-10-17 04:39:51,422 - __main__ - ERROR - Error formatting time: No module named 'pytz'
+2025-10-17 04:39:51,856 - __main__ - INFO - Speeding event 2083106290 sent successfully
+2025-10-17 04:39:53,861 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:39:56,428 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:39:57,429 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:39:57,906 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:39:58,906 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:40:00,890 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:40:01,891 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:40:05,134 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:40:06,134 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:40:07,064 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:40:08,064 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:40:10,925 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:40:11,925 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:40:11,927 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1402008415)
+2025-10-17 04:40:11,933 - __main__ - INFO - Found 0 new crash events (last ID: 1403917665)
+2025-10-17 04:40:11,934 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1405521043)
+2025-10-17 04:40:11,934 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1401022003)
+2025-10-17 04:40:11,935 - __main__ - INFO - Found 0 new distraction events (last ID: 1405365933)
+2025-10-17 04:40:11,935 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1400954906)
+2025-10-17 04:40:11,935 - __main__ - INFO - Event check completed in 21.9s
+2025-10-17 04:42:30,706 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:30,970 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,147 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,307 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,819 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,850 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,882 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,913 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,944 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:42:31,948 - __main__ - INFO - Cleanup completed successfully
+2025-10-17 04:44:01,850 - __main__ - INFO - SafetyBot initialized successfully
+2025-10-17 04:44:01,850 - __main__ - INFO - Testing connections...
+2025-10-17 04:44:01,852 - __main__ - INFO - Testing Telegram connection...
+2025-10-17 04:44:02,258 - __main__ - INFO - Telegram connected: nntexpressinc_safety_bot
+2025-10-17 04:44:02,447 - __main__ - INFO - Telegram startup message sent
+2025-10-17 04:44:02,448 - __main__ - INFO - Testing API connections...
+2025-10-17 04:44:02,448 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:44:04,371 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:44:04,372 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:44:07,344 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:44:08,345 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:44:08,783 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:44:09,784 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:44:12,374 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:45:04,883 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:45:08,626 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:45:09,627 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:45:10,505 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:45:11,506 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:45:14,258 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:45:15,259 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:45:15,260 - __main__ - INFO - API test successful: 25 speeding, 100 performance events
+2025-10-17 04:45:15,269 - __main__ - INFO - Scheduled event check every 300s (5.0m)
+2025-10-17 04:45:15,270 - __main__ - INFO - Scheduled health check every hour
+2025-10-17 04:45:15,271 - __main__ - INFO - Running initial event check...
+2025-10-17 04:45:15,274 - __main__ - INFO - Starting event check...
+2025-10-17 04:45:15,278 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:45:15,645 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:45:15,657 - __main__ - INFO - Found 1 new speeding events (last ID: 2083106290)
+2025-10-17 04:45:15,657 - __main__ - INFO - Processing 1 speeding events
+2025-10-17 04:45:21,032 - __main__ - ERROR - Error formatting time: Invalid format string
+2025-10-17 04:45:21,034 - __main__ - WARNING - Network error sending speeding event (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-10-17 04:45:22,972 - __main__ - ERROR - Error formatting time: Invalid format string
+2025-10-17 04:45:23,429 - __main__ - INFO - Speeding event 2083113030 sent successfully
+2025-10-17 04:45:25,432 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:45:28,053 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:45:29,053 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:45:29,518 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:45:30,518 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:45:32,497 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:45:33,497 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:45:36,289 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:45:37,291 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:45:38,218 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:45:39,219 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:45:41,870 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:45:42,871 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:45:42,872 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1402008415)
+2025-10-17 04:45:42,872 - __main__ - INFO - Found 0 new crash events (last ID: 1403917665)
+2025-10-17 04:45:42,873 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1405521043)
+2025-10-17 04:45:42,873 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1401022003)
+2025-10-17 04:45:42,874 - __main__ - INFO - Found 0 new distraction events (last ID: 1405365933)
+2025-10-17 04:45:42,874 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1400954906)
+2025-10-17 04:45:42,874 - __main__ - INFO - Event check completed in 27.6s
+2025-10-17 04:45:42,876 - __main__ - INFO - SafetyBot v2.0 is now monitoring
+2025-10-17 04:49:25,322 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:30,042 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:31,634 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,142 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,173 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,204 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,235 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,281 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,312 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:49:32,896 - __main__ - INFO - Cleanup completed successfully
+2025-10-17 04:49:57,148 - __main__ - INFO - SafetyBot initialized successfully
+2025-10-17 04:49:57,149 - __main__ - INFO - Testing connections...
+2025-10-17 04:49:57,150 - __main__ - INFO - Testing Telegram connection...
+2025-10-17 04:49:57,558 - __main__ - INFO - Telegram connected: nntexpressinc_safety_bot
+2025-10-17 04:49:57,803 - __main__ - INFO - Telegram startup message sent
+2025-10-17 04:49:57,804 - __main__ - INFO - Testing API connections...
+2025-10-17 04:49:57,806 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:49:59,438 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:49:59,438 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:50:03,011 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:50:04,011 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:50:04,607 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:50:05,608 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:50:09,787 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:50:10,788 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:50:13,289 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:50:14,289 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:50:15,068 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:50:16,069 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:50:18,342 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:50:19,343 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:50:19,343 - __main__ - INFO - API test successful: 25 speeding, 100 performance events
+2025-10-17 04:50:19,352 - __main__ - INFO - Scheduled event check every 300s (5.0m)
+2025-10-17 04:50:19,353 - __main__ - INFO - Scheduled health check every hour
+2025-10-17 04:50:19,354 - __main__ - INFO - Running initial event check...
+2025-10-17 04:50:19,358 - __main__ - INFO - Starting event check...
+2025-10-17 04:50:19,358 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-10-17 04:50:19,722 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-10-17 04:50:19,734 - __main__ - INFO - Found 1 new speeding events (last ID: 2083113030)
+2025-10-17 04:50:19,734 - __main__ - INFO - Processing 1 speeding events
+2025-10-17 04:50:20,733 - __main__ - WARNING - Network error sending speeding event (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-10-17 04:50:23,055 - __main__ - INFO - Speeding event 2083124055 sent successfully
+2025-10-17 04:50:25,066 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-10-17 04:50:27,999 - __main__ - INFO - Found 25 hard_brake events
+2025-10-17 04:50:29,001 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-10-17 04:50:29,472 - __main__ - INFO - Found 1 crash events
+2025-10-17 04:50:30,473 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-10-17 04:50:33,474 - __main__ - INFO - Found 19 seat_belt_violation events
+2025-10-17 04:50:34,475 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-10-17 04:50:38,155 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-10-17 04:50:39,155 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-10-17 04:50:40,351 - __main__ - INFO - Found 5 distraction events
+2025-10-17 04:50:41,352 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-10-17 04:50:44,478 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-10-17 04:50:45,479 - __main__ - INFO - Successfully fetched 100 total performance events
+2025-10-17 04:50:45,481 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1402008415)
+2025-10-17 04:50:45,484 - __main__ - INFO - Found 0 new crash events (last ID: 1403917665)
+2025-10-17 04:50:45,486 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1405521043)
+2025-10-17 04:50:45,487 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1401022003)
+2025-10-17 04:50:45,488 - __main__ - INFO - Found 0 new distraction events (last ID: 1405365933)
+2025-10-17 04:50:45,489 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1400954906)
+2025-10-17 04:50:45,489 - __main__ - INFO - Event check completed in 26.1s
+2025-10-17 04:50:45,491 - __main__ - INFO - SafetyBot v2.0 is now monitoring
+2025-10-17 04:53:24,819 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:53:25,490 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-10-17 04:53:25,501 - __main__ - INFO - Cleanup completed successfully
