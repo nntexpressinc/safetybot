@@ -17,7 +17,7 @@ import signal
 import atexit
 import threading
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Set, Tuple
 from dotenv import load_dotenv
 import schedule
 from requests.adapters import HTTPAdapter
@@ -70,6 +70,12 @@ class SafetyBot:
         'distraction', 'unsafe_lane_change'
     ]
     
+    # Constraints
+    MAX_VIDEO_SIZE_MB = 20
+    VIDEO_DOWNLOAD_TIMEOUT = 90  # seconds
+    TELEGRAM_SEND_TIMEOUT = 30  # seconds
+    MAX_QUEUE_SIZE = 50
+    
     def __init__(self):
         """Initialize the bot with configuration from environment variables"""
         self.api_key = os.getenv('API_KEY')
@@ -82,6 +88,7 @@ class SafetyBot:
         self.last_successful_check = None
         self.consecutive_failures = 0
         self.max_consecutive_failures = 5
+        self.critical_alert_sent = False  # Track if we already sent critical alert
         
         # Event tracking files
         self.last_performance_event_file = 'last_performance_event_id.txt'
@@ -91,6 +98,9 @@ class SafetyBot:
             event_type: f'last_{event_type}_event_id.txt'
             for event_type in self.ALLOWED_EVENT_TYPES
         }
+        
+        # Deduplication within current cycle
+        self.processed_event_ids: Set[int] = set()
         
         # Concurrency and shutdown control
         self.is_processing = False
@@ -132,7 +142,7 @@ class SafetyBot:
         self.headers = {
             'accept': 'application/json',
             'x-api-key': self.api_key,
-            'User-Agent': 'SafetyBot/2.0'
+            'User-Agent': 'SafetyBot/2.1'
         }
         
         self.session = requests.Session()
@@ -160,6 +170,18 @@ class SafetyBot:
         severity = metadata.get('severity')
         return severity in ['medium', 'high', 'critical']
     
+    def _is_already_processed(self, event_id: int) -> bool:
+        """Check if event was already processed in this cycle"""
+        return event_id in self.processed_event_ids
+    
+    def _mark_processed(self, event_id: int):
+        """Mark event as processed in this cycle"""
+        self.processed_event_ids.add(event_id)
+    
+    def _reset_cycle_tracking(self):
+        """Reset deduplication tracking for new cycle"""
+        self.processed_event_ids.clear()
+    
     def get_last_processed_event_id(self, event_type='performance') -> int:
         """Get the ID of the last processed event"""
         try:
@@ -177,6 +199,7 @@ class SafetyBot:
             file_path = self.last_performance_event_file if event_type == 'performance' else self.last_speeding_event_file
             with open(file_path, 'w') as f:
                 f.write(str(event_id))
+            logger.info(f"[ID_SAVED] {event_type}: {event_id}")
         except Exception as e:
             logger.error(f"Could not save last {event_type} event ID: {e}")
     
@@ -197,11 +220,12 @@ class SafetyBot:
         try:
             with open(file_path, 'w') as f:
                 f.write(str(event_id))
+            logger.info(f"[ID_SAVED] {event_type}: {event_id}")
         except IOError as e:
             logger.error(f"Error saving last {event_type} event ID: {e}")
     
-    def fetch_speeding_events(self) -> Optional[List[Dict[str, Any]]]:
-        """Fetch speeding events from GoMotive v1 API"""
+    def fetch_speeding_events(self) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+        """Fetch speeding events from GoMotive v1 API. Returns (events, error_code)"""
         max_retries = 3
         for attempt in range(max_retries):
             try:
@@ -210,21 +234,33 @@ class SafetyBot:
                 
                 logger.info(f"Fetching speeding events (attempt {attempt + 1}/{max_retries})")
                 response = self.session.get(url, headers=self.headers, params=params, timeout=45)
+                
+                # Check for auth/permission errors
+                if response.status_code == 401:
+                    logger.error("API Authentication failed (401) - Invalid API key")
+                    return None, "AUTH_ERROR"
+                elif response.status_code == 403:
+                    logger.error("API Permission denied (403)")
+                    return None, "PERMISSION_ERROR"
+                elif response.status_code == 404:
+                    logger.error("API Endpoint not found (404)")
+                    return None, "NOT_FOUND"
+                
                 response.raise_for_status()
                 
                 if not response.content:
                     logger.warning("Empty response from speeding events API")
-                    return []
+                    return [], None
                 
                 data = response.json()
                 events = data.get('speeding_events', [])
                 
                 if not isinstance(events, list):
                     logger.warning("Unexpected data structure in speeding events response")
-                    return []
+                    return [], None
                 
                 logger.info(f"Successfully fetched {len(events)} speeding events")
-                return events
+                return events, None
                 
             except requests.exceptions.Timeout:
                 logger.warning(f"Timeout fetching speeding events (attempt {attempt + 1}/{max_retries})")
@@ -244,11 +280,12 @@ class SafetyBot:
                     time.sleep(2 ** attempt)
         
         logger.error(f"Failed to fetch speeding events after {max_retries} attempts")
-        return None
+        return None, "FETCH_ERROR"
     
-    def fetch_driver_performance_events(self) -> Optional[List[Dict[str, Any]]]:
-        """Fetch driver performance events from GoMotive v2 API"""
+    def fetch_driver_performance_events(self) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+        """Fetch driver performance events from GoMotive v2 API. Returns (events, error_code)"""
         all_events = []
+        first_error = None
         
         for event_type in self.ALLOWED_EVENT_TYPES:
             max_retries = 3
@@ -264,6 +301,19 @@ class SafetyBot:
                     url = f"{self.api_base_url}/driver_performance_events"
                     logger.info(f"Fetching {event_type} events (attempt {attempt + 1}/{max_retries})")
                     response = self.session.get(url, headers=self.headers, params=params, timeout=45)
+                    
+                    # Check for auth/permission errors
+                    if response.status_code == 401:
+                        logger.error(f"API Authentication failed (401) for {event_type}")
+                        if not first_error:
+                            first_error = "AUTH_ERROR"
+                        break
+                    elif response.status_code == 403:
+                        logger.error(f"API Permission denied (403) for {event_type}")
+                        if not first_error:
+                            first_error = "PERMISSION_ERROR"
+                        break
+                    
                     response.raise_for_status()
                     
                     if not response.content:
@@ -286,11 +336,7 @@ class SafetyBot:
                     if attempt < max_retries - 1:
                         time.sleep(2 ** attempt)
                 except requests.exceptions.RequestException as e:
-                    logger.error(f"Request error fetching {event_type} events (attempt {attempt + 1}/{max_retries}): {e}")
-                    if attempt < max_retries - 1:
-                        time.sleep(2 ** attempt)
-                except json.JSONDecodeError as e:
-                    logger.error(f"JSON decode error in {event_type} events response: {e}")
+                    logger.error(f"Request error fetching {event_type} events: {e}")
                     if attempt < max_retries - 1:
                         time.sleep(2 ** attempt)
                 except Exception as e:
@@ -301,28 +347,37 @@ class SafetyBot:
             time.sleep(1)
         
         logger.info(f"Successfully fetched {len(all_events)} total performance events")
-        return all_events
+        return all_events, first_error
     
     def filter_new_speeding_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Filter new speeding events with allowed severity"""
+        """Filter new speeding events with allowed severity. Saves ID immediately."""
         last_event_id = self.get_last_processed_event_id('speeding')
         new_events = []
         
         for event_data in events:
             event = event_data.get('speeding_event', {})
             event_id = event.get('id', 0)
+            
             if event_id > last_event_id and self._has_allowed_severity(event):
-                new_events.append(event)
+                if not self._is_already_processed(event_id):
+                    new_events.append(event)
         
         new_events.sort(key=lambda x: x.get('id', 0))
         logger.info(f"Found {len(new_events)} new speeding events (last ID: {last_event_id})")
+        
+        # Save ID immediately after filtering, before sending
+        if new_events:
+            max_id = max([e.get('id', 0) for e in new_events])
+            self.save_last_processed_event_id(max_id, 'speeding')
+        
         return new_events
     
     def filter_new_performance_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Filter new performance events per event type"""
+        """Filter new performance events per event type. Saves IDs immediately."""
         new_events = []
         events_by_type = {}
         
+        # Group events by type
         for event_data in events:
             event = event_data.get('driver_performance_event', {})
             event_type = event.get('type', '')
@@ -331,14 +386,25 @@ class SafetyBot:
                     events_by_type[event_type] = []
                 events_by_type[event_type].append(event)
         
+        # Process each event type independently
         for event_type, type_events in events_by_type.items():
             last_event_id = self.get_last_processed_event_id_for_type(event_type)
-            type_new_events = [
-                event for event in type_events
-                if event.get('id', 0) > last_event_id and self._has_allowed_severity(event)
-            ]
+            type_new_events = []
+            
+            for event in type_events:
+                event_id = event.get('id', 0)
+                if event_id > last_event_id and self._has_allowed_severity(event):
+                    if not self._is_already_processed(event_id):
+                        type_new_events.append(event)
+            
             type_new_events.sort(key=lambda x: x.get('id', 0))
             logger.info(f"Found {len(type_new_events)} new {event_type} events (last ID: {last_event_id})")
+            
+            # Save ID immediately for this event type, before sending
+            if type_new_events:
+                max_id_for_type = max([e.get('id', 0) for e in type_new_events])
+                self.save_last_processed_event_id_for_type(max_id_for_type, event_type)
+            
             new_events.extend(type_new_events)
         
         new_events.sort(key=lambda x: x.get('id', 0))
@@ -351,62 +417,42 @@ class SafetyBot:
             
             # Parse UTC time string
             dt_utc = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
-            
-            # Ensure it's in UTC
             dt_utc = dt_utc.astimezone(pytz.UTC)
             
             # Determine timezone from longitude (US timezones)
-            # Longitude ranges based on actual US timezone boundaries
             tz_local = None
-            
             if longitude is not None:
-                if longitude >= -125 and longitude < -120:  # Pacific
+                if longitude >= -125 and longitude < -120:
                     tz_local = pytz.timezone('America/Los_Angeles')
-                    logger.info(f"[TZ] Pacific Time for longitude {longitude}")
-                elif longitude >= -120 and longitude < -104:  # Mountain (includes Arizona)
+                elif longitude >= -120 and longitude < -104:
                     tz_local = pytz.timezone('America/Denver')
-                    logger.info(f"[TZ] Mountain Time for longitude {longitude}")
-                elif longitude >= -104 and longitude < -87:  # Central
+                elif longitude >= -104 and longitude < -87:
                     tz_local = pytz.timezone('America/Chicago')
-                    logger.info(f"[TZ] Central Time for longitude {longitude}")
-                elif longitude >= -87 and longitude <= -60:  # Eastern
+                elif longitude >= -87 and longitude <= -60:
                     tz_local = pytz.timezone('America/New_York')
-                    logger.info(f"[TZ] Eastern Time for longitude {longitude}")
                 else:
-                    # Default to Pacific for out-of-range
                     tz_local = pytz.timezone('America/Los_Angeles')
-                    logger.info(f"[TZ] Default Pacific Time for longitude {longitude}")
             else:
-                # Default when no coordinates available
                 tz_local = pytz.timezone('America/Los_Angeles')
-                logger.info(f"[TZ] Default Pacific Time (no coordinates)")
             
-            # Convert to local timezone - pytz automatically handles DST
+            # Convert to local timezone
             dt_local = dt_utc.astimezone(tz_local)
-            
-            # Subtract 1 hour as requested
             dt_local = dt_local - timedelta(hours=1)
             
-            logger.info(f"[TIME] {time_str} UTC -> {dt_local.strftime('%m/%d/%Y %I:%M %p %Z')} ({tz_local}) [adjusted -1h]")
-            
-            # Format as: 10/17/2025 08:31 AM
             formatted = dt_local.strftime('%m/%d/%Y %I:%M %p')
             return formatted
             
         except Exception as e:
-            logger.error(f"[TZ_ERROR] Error formatting time '{time_str}' with coords ({latitude}, {longitude}): {e}")
-            import traceback
-            logger.error(traceback.format_exc())
+            logger.error(f"[TZ_ERROR] Error formatting time '{time_str}': {e}")
             return time_str
     
-    def format_speeding_message(self, event: Dict[str, Any]) -> str:
-        """Format speeding event message with localized time"""
+    def format_speeding_message(self, event: Dict[str, Any]) -> Optional[str]:
+        """Format speeding event message. Returns None if formatting fails."""
         try:
             vehicle_number = event.get('vehicle', {}).get('number', 'N/A')
             driver = event.get('driver', {})
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
-            # Get coordinates for timezone detection - use start time/location
             start_lat = event.get('start_lat')
             start_lon = event.get('start_lon')
             date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
@@ -430,18 +476,17 @@ Exceeded By: +{avg_exceeded_mph} mph
 Severity: {severity}"""
             
         except Exception as e:
-            logger.error(f"Error formatting speeding message: {e}")
-            return "Error formatting speeding event"
+            logger.error(f"[FORMAT_ERROR] Error formatting speeding message: {e}")
+            return None
     
-    def format_performance_message(self, event: Dict[str, Any]) -> str:
-        """Format performance event message with localized time"""
+    def format_performance_message(self, event: Dict[str, Any]) -> Optional[str]:
+        """Format performance event message. Returns None if formatting fails."""
         try:
             event_type = event.get('type', 'Unknown').replace('_', ' ').title()
             vehicle_number = event.get('vehicle', {}).get('number', 'N/A')
             driver = event.get('driver', {})
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
-            # Get coordinates for timezone detection
             end_lat = event.get('end_lat')
             end_lon = event.get('end_lon')
             end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
@@ -455,39 +500,41 @@ Vehicle: {vehicle_number}
 Severity: {severity}"""
             
         except Exception as e:
-            logger.error(f"Error formatting performance message: {e}")
-            return "Error formatting performance event"
+            logger.error(f"[FORMAT_ERROR] Error formatting performance message: {e}")
+            return None
     
     async def download_video_to_temp_file(self, video_url: str, video_type: str = "video") -> Optional[str]:
-        """Download video and save to temporary file with timeout handling"""
+        """Download video and save to temporary file. Returns path or None."""
         max_retries = 2
         for attempt in range(max_retries):
             try:
                 logger.info(f"Downloading {video_type} (attempt {attempt + 1}/{max_retries})")
                 
-                response = self.session.get(video_url, timeout=180, stream=True)
+                response = self.session.get(video_url, timeout=self.VIDEO_DOWNLOAD_TIMEOUT, stream=True)
                 response.raise_for_status()
                 video_data = response.content
                 
                 if not video_data:
-                    logger.warning(f"Empty video data for {video_type}")
+                    logger.warning(f"[VIDEO] Empty video data for {video_type}")
                     if attempt < max_retries - 1:
                         await asyncio.sleep(3)
                     continue
                 
                 size_mb = len(video_data) / (1024 * 1024)
-                logger.info(f"{video_type} size: {size_mb:.1f}MB")
+                logger.info(f"[VIDEO] {video_type} size: {size_mb:.1f}MB")
                 
-                if size_mb > 50:
-                    logger.warning(f"{video_type} too large ({size_mb:.1f}MB)")
+                # Check size constraints
+                if size_mb > self.MAX_VIDEO_SIZE_MB:
+                    logger.warning(f"[VIDEO] {video_type} exceeds max size ({size_mb:.1f}MB > {self.MAX_VIDEO_SIZE_MB}MB)")
                     return None
                 
                 if size_mb < 0.01:
-                    logger.warning(f"{video_type} too small ({size_mb:.3f}MB)")
+                    logger.warning(f"[VIDEO] {video_type} too small ({size_mb:.3f}MB)")
                     if attempt < max_retries - 1:
                         await asyncio.sleep(3)
                     continue
                 
+                # Save to temp file
                 temp_filename = f"{video_type}_{uuid.uuid4().hex}.mp4"
                 temp_file_path = os.path.join(tempfile.gettempdir(), temp_filename)
                 
@@ -495,69 +542,83 @@ Severity: {severity}"""
                     temp_file.write(video_data)
                 
                 if os.path.exists(temp_file_path) and os.path.getsize(temp_file_path) > 0:
-                    logger.info(f"{video_type} ({size_mb:.1f}MB) saved successfully")
+                    logger.info(f"[VIDEO] {video_type} ({size_mb:.1f}MB) saved successfully")
                     return temp_file_path
                 else:
-                    logger.error(f"Failed to create {video_type} file")
+                    logger.error(f"[VIDEO] Failed to create {video_type} file")
                     if attempt < max_retries - 1:
                         await asyncio.sleep(3)
                 
             except requests.exceptions.Timeout:
-                logger.warning(f"Timeout downloading {video_type} (attempt {attempt + 1})")
+                logger.warning(f"[VIDEO] Timeout downloading {video_type}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(5)
             except requests.exceptions.RequestException as e:
-                logger.error(f"Request error downloading {video_type}: {e}")
+                logger.error(f"[VIDEO] Request error: {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(5)
             except Exception as e:
-                logger.error(f"Unexpected error downloading {video_type}: {e}")
+                logger.error(f"[VIDEO] Unexpected error: {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(5)
         
-        logger.error(f"Failed to download {video_type}")
+        logger.error(f"[VIDEO] Failed to download {video_type}")
         return None
     
-    async def send_speeding_event_to_telegram(self, event: Dict[str, Any]):
-        """Send speeding event to Telegram with retry logic"""
+    async def send_speeding_event_to_telegram(self, event: Dict[str, Any]) -> bool:
+        """Send speeding event to Telegram. Returns True if sent."""
+        message = self.format_speeding_message(event)
+        
+        # Skip if formatting failed
+        if message is None:
+            logger.warning(f"[SKIP] Speeding event {event.get('id')} - formatting failed")
+            return False
+        
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                message = self.format_speeding_message(event)
                 await self.telegram_bot.send_message(
                     chat_id=self.chat_id,
                     text=message,
-                    parse_mode='Markdown'
+                    parse_mode='Markdown',
+                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
                 )
-                logger.info(f"Speeding event {event.get('id')} sent successfully")
-                return
+                logger.info(f"[SENT] Speeding event {event.get('id')}")
+                return True
                     
             except (NetworkError, TimedOut) as e:
-                logger.warning(f"Network error sending speeding event (attempt {attempt + 1}/{max_retries}): {e}")
+                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
             except TelegramError as e:
-                logger.error(f"Telegram API error: {e}")
-                break
+                logger.error(f"[ERROR] Telegram API error: {e}")
+                return False
             except Exception as e:
-                logger.error(f"Unexpected error sending speeding event (attempt {attempt + 1}/{max_retries}): {e}")
+                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
         
-        logger.error(f"Failed to send speeding event {event.get('id')}")
+        logger.error(f"[FAILED] Could not send speeding event {event.get('id')}")
+        return False
     
-    async def send_performance_event_to_telegram(self, event: Dict[str, Any]):
-        """Send performance event to Telegram with comprehensive handling"""
+    async def send_performance_event_to_telegram(self, event: Dict[str, Any]) -> bool:
+        """Send performance event to Telegram with video. Returns True if sent."""
         event_id = event.get('id', 0)
-        event_type = event.get('type', 'unknown')
+        message = self.format_performance_message(event)
+        
+        # Skip if formatting failed
+        if message is None:
+            logger.warning(f"[SKIP] Performance event {event_id} - formatting failed")
+            return False
         
         max_retries = 3
         for attempt in range(max_retries):
             temp_files = []
             try:
-                message = self.format_performance_message(event)
                 camera_media = event.get('camera_media', {})
                 
+                # Try to get and send videos
                 if camera_media and camera_media.get('available'):
                     downloadable_videos = camera_media.get('downloadable_videos', {})
                     front_facing_url = downloadable_videos.get('front_facing_plain_url')
@@ -578,8 +639,8 @@ Severity: {severity}"""
                             temp_files.append(driver_file)
                             videos_for_group.append(('Driver', driver_file))
                     
-                    # Send videos as media group
-                    if videos_for_group:
+                    # Try media group first
+                    if videos_for_group and len(videos_for_group) > 1:
                         try:
                             media_group = []
                             video_files = []
@@ -599,19 +660,21 @@ Severity: {severity}"""
                             await self.telegram_bot.send_media_group(
                                 chat_id=self.chat_id,
                                 media=media_group,
-                                read_timeout=240,
-                                write_timeout=240
+                                read_timeout=self.TELEGRAM_SEND_TIMEOUT * 2,
+                                write_timeout=self.TELEGRAM_SEND_TIMEOUT * 2
                             )
-                            logger.info(f"Media group sent for event {event_id}")
+                            logger.info(f"[SENT] Media group for event {event_id}")
                             
                             for vf in video_files:
                                 try:
                                     vf.close()
                                 except:
                                     pass
+                            
+                            return True
                             
                         except Exception as media_error:
-                            logger.warning(f"Media group failed, trying individual videos: {media_error}")
+                            logger.warning(f"[RETRY] Media group failed, trying individual videos: {media_error}")
                             
                             for vf in video_files:
                                 try:
@@ -619,6 +682,7 @@ Severity: {severity}"""
                                 except:
                                     pass
                             
+                            # Try individual videos
                             for i, (video_name, video_path) in enumerate(videos_for_group):
                                 try:
                                     with open(video_path, 'rb') as vf:
@@ -628,47 +692,84 @@ Severity: {severity}"""
                                             video=vf,
                                             caption=cap,
                                             parse_mode='Markdown',
-                                            read_timeout=180,
-                                            write_timeout=180
+                                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
                                         )
-                                    logger.info(f"Video sent for event {event_id}")
+                                    logger.info(f"[SENT] Video {video_name} for event {event_id}")
                                     await asyncio.sleep(2)
                                 except Exception as e:
-                                    logger.error(f"Video send failed: {e}")
+                                    logger.error(f"[ERROR] Individual video send failed: {e}")
+                            
+                            return True
+                    
+                    # Single video
+                    elif videos_for_group:
+                        for i, (video_name, video_path) in enumerate(videos_for_group):
+                            try:
+                                with open(video_path, 'rb') as vf:
+                                    cap = f"{message}\nVideo: {video_name}" if i == 0 else f"Video: {video_name}"
+                                    await self.telegram_bot.send_video(
+                                        chat_id=self.chat_id,
+                                        video=vf,
+                                        caption=cap,
+                                        parse_mode='Markdown',
+                                        read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                                        write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                                    )
+                                logger.info(f"[SENT] Video {video_name} for event {event_id}")
+                                await asyncio.sleep(2)
+                            except Exception as e:
+                                logger.error(f"[ERROR] Video send failed: {e}")
+                        
+                        return True
                     else:
+                        # No videos available
                         await self.telegram_bot.send_message(
                             chat_id=self.chat_id,
-                            text=f"{message}\n\nVideos unavailable",
-                            parse_mode='Markdown'
+                            text=f"{message}\n\n❌ Videos unavailable",
+                            parse_mode='Markdown',
+                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
                         )
+                        logger.info(f"[SENT] Event {event_id} without videos")
+                        return True
                 else:
+                    # No camera media
                     await self.telegram_bot.send_message(
                         chat_id=self.chat_id,
-                        text=f"{message}\n\nNo camera media",
-                        parse_mode='Markdown'
+                        text=f"{message}\n\n❌ No camera media",
+                        parse_mode='Markdown',
+                        read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                        write_timeout=self.TELEGRAM_SEND_TIMEOUT
                     )
-                
-                return  # Success
+                    logger.info(f"[SENT] Event {event_id} without camera")
+                    return True
                 
             except (NetworkError, TimedOut) as e:
-                logger.warning(f"Network error (attempt {attempt + 1}/{max_retries}): {e}")
+                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
             except TelegramError as e:
                 if "file too large" in str(e).lower():
+                    logger.warning(f"[ERROR] File too large for event {event_id}")
                     try:
                         await self.telegram_bot.send_message(
                             chat_id=self.chat_id,
-                            text=f"{message}\n\nFiles too large",
-                            parse_mode='Markdown'
+                            text=f"{message}\n\n⚠️ Files too large to upload",
+                            parse_mode='Markdown',
+                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
                         )
+                        logger.info(f"[SENT] Event {event_id} with fallback (files too large)")
+                        return True
                     except Exception as e2:
-                        logger.error(f"Fallback failed: {e2}")
+                        logger.error(f"[ERROR] Fallback message failed: {e2}")
+                        return False
                 else:
-                    logger.error(f"Telegram error: {e}")
-                break
+                    logger.error(f"[ERROR] Telegram error: {e}")
+                    return False
             except Exception as e:
-                logger.error(f"Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
+                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
             
@@ -678,15 +779,19 @@ Severity: {severity}"""
                     try:
                         if os.path.exists(temp_file):
                             os.remove(temp_file)
+                            logger.debug(f"[CLEANUP] Removed temp file: {temp_file}")
                     except Exception as e:
-                        logger.error(f"Cleanup error: {e}")
+                        logger.error(f"[CLEANUP] Error removing file: {e}")
+        
+        logger.error(f"[FAILED] Could not send performance event {event_id}")
+        return False
     
     def process_new_events_sync(self):
         """Synchronous wrapper for async event processing"""
         try:
             asyncio.run(self._process_new_events_async())
         except Exception as e:
-            logger.error(f"Error in event processing: {e}")
+            logger.error(f"[CRITICAL] Error in event processing: {e}")
             self.consecutive_failures += 1
         finally:
             self.is_processing = False
@@ -694,76 +799,119 @@ Severity: {severity}"""
     async def _process_new_events_async(self):
         """Main async event processing logic"""
         if self.is_processing:
-            logger.warning("Previous check still running, skipping")
+            logger.warning("[SKIP] Previous check still running")
             return
         
         self.is_processing = True
+        self._reset_cycle_tracking()  # Reset deduplication for new cycle
         start_time = datetime.now()
         
         try:
-            logger.info("Starting event check...")
+            logger.info("="*60)
+            logger.info("Starting event check cycle")
+            logger.info("="*60)
             
             # Process speeding events
-            speeding_events = self.fetch_speeding_events()
+            logger.info("[FETCH] Fetching speeding events...")
+            speeding_events, speed_error = self.fetch_speeding_events()
+            
+            if speed_error:
+                logger.error(f"[ERROR] Speeding fetch error: {speed_error}")
+                if speed_error in ["AUTH_ERROR", "PERMISSION_ERROR"]:
+                    if not self.critical_alert_sent:
+                        try:
+                            await self.telegram_bot.send_message(
+                                chat_id=self.chat_id,
+                                text=f"🚨 CRITICAL: API Authentication/Permission Error\n\nError: {speed_error}\n\nCheck API key and permissions.",
+                                parse_mode='Markdown'
+                            )
+                            self.critical_alert_sent = True
+                            logger.error("[ALERT] Sent critical API error alert")
+                        except Exception as e:
+                            logger.error(f"[ERROR] Failed to send alert: {e}")
+            
             if speeding_events is not None:
                 new_speeding = self.filter_new_speeding_events(speeding_events)
                 if new_speeding:
-                    logger.info(f"Processing {len(new_speeding)} speeding events")
-                    latest_id = 0
+                    logger.info(f"[PROCESS] Processing {len(new_speeding)} speeding events")
                     for event in new_speeding:
+                        self._mark_processed(event.get('id', 0))
                         await self.send_speeding_event_to_telegram(event)
-                        latest_id = max(latest_id, event.get('id', 0))
                         await asyncio.sleep(2)
-                    
-                    if latest_id > 0:
-                        self.save_last_processed_event_id(latest_id, 'speeding')
+                else:
+                    logger.info("[PROCESS] No new speeding events")
+            else:
+                logger.warning("[FETCH] Failed to fetch speeding events")
             
             # Process performance events
-            performance_events = self.fetch_driver_performance_events()
+            logger.info("[FETCH] Fetching performance events...")
+            performance_events, perf_error = self.fetch_driver_performance_events()
+            
+            if perf_error:
+                logger.error(f"[ERROR] Performance fetch error: {perf_error}")
+                if perf_error in ["AUTH_ERROR", "PERMISSION_ERROR"]:
+                    if not self.critical_alert_sent:
+                        try:
+                            await self.telegram_bot.send_message(
+                                chat_id=self.chat_id,
+                                text=f"🚨 CRITICAL: API Authentication/Permission Error\n\nError: {perf_error}\n\nCheck API key and permissions.",
+                                parse_mode='Markdown'
+                            )
+                            self.critical_alert_sent = True
+                            logger.error("[ALERT] Sent critical API error alert")
+                        except Exception as e:
+                            logger.error(f"[ERROR] Failed to send alert: {e}")
+            
             if performance_events is not None:
                 new_performance = self.filter_new_performance_events(performance_events)
                 if new_performance:
-                    logger.info(f"Processing {len(new_performance)} performance events")
-                    latest_by_type = {}
-                    
+                    logger.info(f"[PROCESS] Processing {len(new_performance)} performance events")
                     for event in new_performance:
+                        self._mark_processed(event.get('id', 0))
                         await self.send_performance_event_to_telegram(event)
-                        event_type = event.get('type', '')
-                        event_id = event.get('id', 0)
-                        latest_by_type[event_type] = max(latest_by_type.get(event_type, 0), event_id)
                         await asyncio.sleep(2)
-                    
-                    for event_type, latest_id in latest_by_type.items():
-                        self.save_last_processed_event_id_for_type(latest_id, event_type)
+                else:
+                    logger.info("[PROCESS] No new performance events")
+            else:
+                logger.warning("[FETCH] Failed to fetch performance events")
             
-            # Update health
+            # Update health - success even if some events didn't send
             self.last_successful_check = datetime.now()
             self.consecutive_failures = 0
+            self.critical_alert_sent = False
             
             duration = (datetime.now() - start_time).total_seconds()
+            logger.info("="*60)
             logger.info(f"Event check completed in {duration:.1f}s")
+            logger.info("="*60)
             
         except Exception as e:
-            logger.error(f"Critical error in event processing: {e}")
+            logger.error(f"[CRITICAL] Unhandled error: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
             self.consecutive_failures += 1
-            if self.consecutive_failures >= self.max_consecutive_failures:
+            logger.warning(f"[HEALTH] Consecutive failures: {self.consecutive_failures}/{self.max_consecutive_failures}")
+            
+            if self.consecutive_failures >= self.max_consecutive_failures and not self.critical_alert_sent:
                 try:
                     await self.telegram_bot.send_message(
                         chat_id=self.chat_id,
-                        text=f"CRITICAL: SafetyBot has failed {self.consecutive_failures} times.\n\nError: {str(e)[:100]}",
+                        text=f"🚨 CRITICAL: SafetyBot encountered {self.consecutive_failures} consecutive failures\n\nError: {str(e)[:100]}\n\nPlease check logs.",
                         parse_mode='Markdown'
                     )
+                    self.critical_alert_sent = True
+                    logger.error("[ALERT] Sent consecutive failures alert")
                 except Exception as e2:
-                    logger.error(f"Failed to send alert: {e2}")
+                    logger.error(f"[ERROR] Failed to send critical alert: {e2}")
     
     async def health_check(self):
         """Perform health check and send status"""
         try:
-            logger.info("Running health check...")
+            logger.info("[HEALTH] Running health check...")
             
             # Test API connectivity
-            speeding_test = self.fetch_speeding_events()
-            performance_test = self.fetch_driver_performance_events()
+            speeding_test, _ = self.fetch_speeding_events()
+            performance_test, _ = self.fetch_driver_performance_events()
             apis_ok = (speeding_test is not None and performance_test is not None)
             
             # Test Telegram connectivity
@@ -772,11 +920,11 @@ Severity: {severity}"""
                 await self.telegram_bot.get_me()
                 telegram_ok = True
             except Exception as e:
-                logger.error(f"Telegram health check failed: {e}")
+                logger.error(f"[HEALTH] Telegram check failed: {e}")
             
             # Determine overall status
             overall_ok = apis_ok and telegram_ok
-            status = "Healthy" if overall_ok else "Issues Detected"
+            status = "✅ Healthy" if overall_ok else "❌ Issues Detected"
             
             last_check_str = "Never" if not self.last_successful_check else f"{(datetime.now() - self.last_successful_check).total_seconds() / 60:.1f}m ago"
             
@@ -784,9 +932,10 @@ Severity: {severity}"""
 Status: {status}
 Last Check: {last_check_str}
 Failures: {self.consecutive_failures}
-API: {'OK' if apis_ok else 'FAILED'}
-Telegram: {'OK' if telegram_ok else 'FAILED'}
-Interval: {self.check_interval // 60}m"""
+API: {'✅ OK' if apis_ok else '❌ FAILED'}
+Telegram: {'✅ OK' if telegram_ok else '❌ FAILED'}
+Interval: {self.check_interval // 60}m
+Version: 2.1 Pro"""
             
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
@@ -794,89 +943,89 @@ Interval: {self.check_interval // 60}m"""
                 parse_mode='Markdown'
             )
             
-            logger.info(f"Health check completed - Status: {status}")
+            logger.info(f"[HEALTH] Report sent - Status: {status}")
             
         except Exception as e:
-            logger.error(f"Health check failed: {e}")
+            logger.error(f"[HEALTH] Health check failed: {e}")
     
     def run_scheduler(self):
         """Main scheduler loop - runs in main thread"""
         # Schedule event checks
         schedule.every(self.check_interval).seconds.do(self.process_new_events_sync)
-        logger.info(f"Scheduled event check every {self.check_interval}s ({self.check_interval/60:.1f}m)")
+        logger.info(f"[SCHEDULER] Event check every {self.check_interval}s ({self.check_interval/60:.1f}m)")
         
         # Schedule health checks
         schedule.every().hour.do(lambda: asyncio.run(self.health_check()))
-        logger.info("Scheduled health check every hour")
+        logger.info("[SCHEDULER] Health check every hour")
         
         # Run initial check
-        logger.info("Running initial event check...")
+        logger.info("[STARTUP] Running initial event check...")
         self.process_new_events_sync()
         
         # Main loop
-        logger.info("SafetyBot v2.0 is now monitoring")
-        print("\n" + "="*50)
-        print("SafetyBot v2.0 is running")
+        logger.info("[STARTUP] SafetyBot v2.1 Pro is now monitoring")
+        print("\n" + "="*60)
+        print("SafetyBot v2.1 Pro - Production Ready")
         print(f"Check interval: {self.check_interval // 60} minutes")
-        print(f"Monitoring: Speeding & Performance Events")
+        print(f"Monitoring: Speeding & 6 Performance Events")
+        print("Separate ID tracking for each event type")
         print("Press Ctrl+C to stop")
-        print("="*50 + "\n")
+        print("="*60 + "\n")
         
         while self.running:
             try:
                 schedule.run_pending()
                 time.sleep(10)  # Check scheduler every 10 seconds
             except KeyboardInterrupt:
-                logger.info("Bot stopped by user")
+                logger.info("[SHUTDOWN] Bot stopped by user")
                 break
             except Exception as e:
-                logger.error(f"Error in scheduler loop: {e}")
+                logger.error(f"[ERROR] Scheduler loop error: {e}")
                 time.sleep(30)
     
     def start(self):
         """Start the bot"""
         try:
-            # Test connections first
-            logger.info("Testing connections...")
+            logger.info("[STARTUP] Testing connections...")
             asyncio.run(self._test_connections())
             
             # Start the scheduler
             self.run_scheduler()
             
         except Exception as e:
-            logger.error(f"Fatal error during startup: {e}")
+            logger.error(f"[CRITICAL] Fatal error during startup: {e}")
             sys.exit(1)
     
     async def _test_connections(self):
         """Test API and Telegram connections"""
         try:
-            logger.info("Testing Telegram connection...")
+            logger.info("[TEST] Testing Telegram connection...")
             bot_info = await self.telegram_bot.get_me()
-            logger.info(f"Telegram connected: {bot_info.username}")
+            logger.info(f"[TEST] Telegram OK: @{bot_info.username}")
             
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
-                text="SafetyBot v2.0 Started\nCheck Interval: " + str(self.check_interval // 60) + "m\nReady to monitor",
+                text="✅ SafetyBot v2.1 Pro Started\nCheck Interval: " + str(self.check_interval // 60) + "m\nReady to monitor",
                 parse_mode='Markdown'
             )
-            logger.info("Telegram startup message sent")
+            logger.info("[TEST] Startup message sent")
             
         except Exception as e:
-            logger.error(f"Telegram connection test failed: {e}")
+            logger.error(f"[TEST] Telegram connection failed: {e}")
             raise
         
         try:
-            logger.info("Testing API connections...")
-            speeding = self.fetch_speeding_events()
-            performance = self.fetch_driver_performance_events()
+            logger.info("[TEST] Testing API connections...")
+            speeding, _ = self.fetch_speeding_events()
+            performance, _ = self.fetch_driver_performance_events()
             
             s_count = len(speeding) if speeding else 0
             p_count = len(performance) if performance else 0
             
-            logger.info(f"API test successful: {s_count} speeding, {p_count} performance events")
+            logger.info(f"[TEST] API OK: {s_count} speeding, {p_count} performance events")
             
         except Exception as e:
-            logger.error(f"API connection test failed: {e}")
+            logger.error(f"[TEST] API connection failed: {e}")
             raise
 
 def main():
@@ -885,9 +1034,9 @@ def main():
         bot = SafetyBot()
         bot.start()
     except KeyboardInterrupt:
-        logger.info("Bot stopped by user")
+        logger.info("[MAIN] Bot stopped by user")
     except Exception as e:
-        logger.error(f"Fatal error: {e}")
+        logger.error(f"[MAIN] Fatal error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
