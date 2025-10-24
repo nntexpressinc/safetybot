@@ -213,13 +213,13 @@ class SafetyBot:
     def fetch_speeding_events(self) -> Tuple[Optional[List[Dict]], Optional[str]]:
         """Fetch speeding events from API"""
         try:
-            url = f"{self.api_base_url}/v2/speeding"
+            url = f"{self.api_base_url.replace('v2', 'v1')}/speeding_events"
             params = {
-                'page_size': 50,
-                'sort': '-timestamp'
+                'per_page': '25',
+                'page_no': '1'
             }
             
-            response = self.session.get(url, headers=self.headers, params=params, timeout=30)
+            response = self.session.get(url, headers=self.headers, params=params, timeout=45)
             
             if response.status_code == 401:
                 logger.error("[API] Authentication error - check API key")
@@ -227,12 +227,15 @@ class SafetyBot:
             elif response.status_code == 403:
                 logger.error("[API] Permission error - insufficient permissions")
                 return None, "PERMISSION_ERROR"
+            elif response.status_code == 404:
+                logger.error("[API] Endpoint not found (404)")
+                return None, "NOT_FOUND"
             elif response.status_code != 200:
                 logger.error(f"[API] Speeding events error: {response.status_code}")
                 return None, f"HTTP_{response.status_code}"
             
             data = response.json()
-            events = data.get('data', [])
+            events = data.get('speeding_events', [])
             logger.info(f"[API] Fetched {len(events)} speeding events")
             return events, None
             
@@ -248,39 +251,57 @@ class SafetyBot:
     
     def fetch_driver_performance_events(self) -> Tuple[Optional[List[Dict]], Optional[str]]:
         """Fetch driver performance events from API"""
-        try:
-            url = f"{self.api_base_url}/v2/driver_performance"
-            params = {
-                'page_size': 50,
-                'sort': '-timestamp'
-            }
+        all_events = []
+        first_error = None
+        
+        for event_type in self.ALLOWED_EVENT_TYPES:
+            try:
+                params = {
+                    'event_types': event_type,
+                    'media_required': 'true',
+                    'per_page': '25',
+                    'page_no': '1'
+                }
+                
+                url = f"{self.api_base_url}/driver_performance_events"
+                logger.info(f"[API] Fetching {event_type} events")
+                response = self.session.get(url, headers=self.headers, params=params, timeout=45)
+                
+                if response.status_code == 401:
+                    logger.error(f"[API] Authentication error for {event_type}")
+                    if not first_error:
+                        first_error = "AUTH_ERROR"
+                    continue
+                elif response.status_code == 403:
+                    logger.error(f"[API] Permission error for {event_type}")
+                    if not first_error:
+                        first_error = "PERMISSION_ERROR"
+                    continue
+                elif response.status_code == 404:
+                    logger.error(f"[API] Endpoint not found for {event_type}")
+                    if not first_error:
+                        first_error = "NOT_FOUND"
+                    continue
+                elif response.status_code != 200:
+                    logger.error(f"[API] Error fetching {event_type}: {response.status_code}")
+                    continue
+                
+                data = response.json()
+                events = data.get('driver_performance_events', [])
+                logger.info(f"[API] Found {len(events)} {event_type} events")
+                all_events.extend(events)
+                
+            except requests.exceptions.Timeout:
+                logger.error(f"[API] Timeout fetching {event_type}")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"[API] Request error for {event_type}: {e}")
+            except Exception as e:
+                logger.error(f"[API] Unexpected error for {event_type}: {e}")
             
-            response = self.session.get(url, headers=self.headers, params=params, timeout=30)
-            
-            if response.status_code == 401:
-                logger.error("[API] Authentication error - check API key")
-                return None, "AUTH_ERROR"
-            elif response.status_code == 403:
-                logger.error("[API] Permission error - insufficient permissions")
-                return None, "PERMISSION_ERROR"
-            elif response.status_code != 200:
-                logger.error(f"[API] Performance events error: {response.status_code}")
-                return None, f"HTTP_{response.status_code}"
-            
-            data = response.json()
-            events = data.get('data', [])
-            logger.info(f"[API] Fetched {len(events)} performance events")
-            return events, None
-            
-        except requests.exceptions.Timeout:
-            logger.error("[API] Timeout fetching performance events")
-            return None, "TIMEOUT"
-        except requests.exceptions.RequestException as e:
-            logger.error(f"[API] Request error: {e}")
-            return None, "REQUEST_ERROR"
-        except Exception as e:
-            logger.error(f"[API] Unexpected error: {e}")
-            return None, "UNEXPECTED_ERROR"
+            time.sleep(1)  # Rate limiting between event types
+        
+        logger.info(f"[API] Fetched {len(all_events)} total performance events")
+        return all_events, first_error
     
     def filter_new_speeding_events(self, events: List[Dict]) -> List[Dict]:
         """Filter speeding events for new ones only"""
