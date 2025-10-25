@@ -586,6 +586,10 @@ Severity: {severity}"""
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
             except TelegramError as e:
+                if "Flood control exceeded" in str(e):
+                    logger.warning(f"[FLOOD] Rate limit hit - backing off. {e}")
+                    await asyncio.sleep(30)  # Wait 30 seconds before retry
+                    continue
                 logger.error(f"[ERROR] Telegram API error: {e}")
                 return False
             except Exception as e:
@@ -596,8 +600,62 @@ Severity: {severity}"""
         logger.error(f"[FAILED] Could not send speeding event {event.get('id')}")
         return False
     
+    async def download_video_to_temp_file(self, video_url: str, video_type: str = "video") -> Optional[str]:
+        """Download video and save to temporary file. Returns path or None."""
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                logger.info(f"Downloading {video_type} (attempt {attempt + 1}/{max_retries})")
+                
+                response = self.session.get(video_url, timeout=self.VIDEO_DOWNLOAD_TIMEOUT, stream=True)
+                response.raise_for_status()
+                video_data = response.content
+                
+                if not video_data:
+                    logger.warning(f"[VIDEO] Empty video data for {video_type}")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                    continue
+                
+                size_mb = len(video_data) / (1024 * 1024)
+                logger.info(f"[VIDEO] {video_type} size: {size_mb:.1f}MB")
+                
+                # Check size constraints
+                if size_mb > self.MAX_VIDEO_SIZE_MB:
+                    logger.warning(f"[VIDEO] {video_type} exceeds max size ({size_mb:.1f}MB > {self.MAX_VIDEO_SIZE_MB}MB)")
+                    return None
+                
+                if size_mb < 0.01:
+                    logger.warning(f"[VIDEO] {video_type} too small ({size_mb:.3f}MB)")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                    continue
+                
+                # Save to temp file
+                temp_filename = f"{video_type}_{uuid.uuid4().hex}.mp4"
+                temp_file_path = os.path.join(tempfile.gettempdir(), temp_filename)
+                
+                with open(temp_file_path, 'wb') as temp_file:
+                    temp_file.write(video_data)
+                
+                if os.path.exists(temp_file_path) and os.path.getsize(temp_file_path) > 0:
+                    logger.info(f"[VIDEO] {video_type} ({size_mb:.1f}MB) saved successfully")
+                    return temp_file_path
+                else:
+                    logger.error(f"[VIDEO] Failed to create {video_type} file")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                
+            except Exception as e:
+                logger.error(f"[VIDEO] Error: {e}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(5)
+        
+        logger.error(f"[VIDEO] Failed to download {video_type}")
+        return None
+    
     async def send_performance_event_to_telegram(self, event: Dict[str, Any]) -> bool:
-        """Send performance event to Telegram. Returns True if sent."""
+        """Send performance event to Telegram with video. Returns True if sent."""
         event_id = event.get('id', 0)
         message = self.format_performance_message(event)
         
@@ -607,16 +665,68 @@ Severity: {severity}"""
             return False
         
         max_retries = 3
+        temp_files = []
+        
         for attempt in range(max_retries):
             try:
+                camera_media = event.get('camera_media', {})
+                
+                # Try to get and send videos if available
+                if camera_media and camera_media.get('available'):
+                    downloadable_videos = camera_media.get('downloadable_videos', {})
+                    front_facing_url = downloadable_videos.get('front_facing_plain_url')
+                    driver_facing_url = downloadable_videos.get('driver_facing_plain_url')
+                    
+                    videos_for_group = []
+                    
+                    # Download videos
+                    if front_facing_url:
+                        front_file = await self.download_video_to_temp_file(front_facing_url, "front_facing")
+                        if front_file:
+                            temp_files.append(front_file)
+                            videos_for_group.append(('Front', front_file))
+                    
+                    if driver_facing_url:
+                        driver_file = await self.download_video_to_temp_file(driver_facing_url, "driver_facing")
+                        if driver_file:
+                            temp_files.append(driver_file)
+                            videos_for_group.append(('Driver', driver_file))
+                    
+                    # Send videos if available
+                    if videos_for_group:
+                        for i, (video_name, video_path) in enumerate(videos_for_group):
+                            try:
+                                with open(video_path, 'rb') as vf:
+                                    cap = f"{message}\nVideo: {video_name}" if i == 0 else f"Video: {video_name}"
+                                    await self.telegram_bot.send_video(
+                                        chat_id=self.chat_id,
+                                        video=vf,
+                                        caption=cap,
+                                        parse_mode='Markdown',
+                                        read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                                        write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                                    )
+                                logger.info(f"[SENT] Video {video_name} for event {event_id} to Telegram")
+                                await asyncio.sleep(1)  # Delay between videos
+                            except TelegramError as e:
+                                if "Flood control exceeded" in str(e):
+                                    logger.warning(f"[FLOOD] Rate limit hit - backing off. {e}")
+                                    await asyncio.sleep(30)
+                                    continue
+                                logger.error(f"[ERROR] Video send failed: {e}")
+                            except Exception as e:
+                                logger.error(f"[ERROR] Video send failed: {e}")
+                        return True
+                
+                # No videos - send text only
                 await self.telegram_bot.send_message(
                     chat_id=self.chat_id,
-                    text=message,
+                    text=f"{message}\n\n(No videos available)",
                     parse_mode='Markdown',
                     read_timeout=self.TELEGRAM_SEND_TIMEOUT,
                     write_timeout=self.TELEGRAM_SEND_TIMEOUT
                 )
-                logger.info(f"[SENT] Performance event {event_id} to Telegram")
+                logger.info(f"[SENT] Performance event {event_id} to Telegram (no videos)")
                 return True
                     
             except (NetworkError, TimedOut) as e:
@@ -624,12 +734,28 @@ Severity: {severity}"""
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
             except TelegramError as e:
-                logger.error(f"[ERROR] Telegram API error: {e}")
+                if "Flood control exceeded" in str(e):
+                    logger.warning(f"[FLOOD] Rate limit hit - backing off. {e}")
+                    await asyncio.sleep(30)
+                    continue
+                if "file too large" in str(e).lower():
+                    logger.warning(f"[ERROR] File too large for event {event_id}")
+                    return False
+                logger.error(f"[ERROR] Telegram error: {e}")
                 return False
             except Exception as e:
                 logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
+            finally:
+                # Clean up temporary files
+                for temp_file in temp_files:
+                    try:
+                        if os.path.exists(temp_file):
+                            os.remove(temp_file)
+                            logger.debug(f"[CLEANUP] Removed temp file: {temp_file}")
+                    except Exception as e:
+                        logger.error(f"[CLEANUP] Error removing file: {e}")
         
         logger.error(f"[FAILED] Could not send performance event {event_id}")
         return False
@@ -841,7 +967,7 @@ Severity: {severity}"""
                         if event_data:
                             self.event_store.save_event(event_data)
                         await self.send_speeding_event_to_telegram(event) # Send immediately
-                        await asyncio.sleep(0.5)
+                        await asyncio.sleep(1.5)  # Rate limit to avoid Telegram flood control
                 else:
                     logger.info("[PROCESS] No new speeding events")
             else:
@@ -863,7 +989,7 @@ Severity: {severity}"""
                         if event_data:
                             self.event_store.save_event(event_data)
                         await self.send_performance_event_to_telegram(event) # Send immediately
-                        await asyncio.sleep(0.5)
+                        await asyncio.sleep(2.0)  # Rate limit to avoid Telegram flood control
                 else:
                     logger.info("[PROCESS] No new performance events")
             else:
