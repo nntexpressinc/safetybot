@@ -446,23 +446,31 @@ class SafetyBot:
     def store_speeding_event(self, event: Dict[str, Any]):
         """Store speeding event in memory"""
         try:
-            driver = event.get('driver', {})
+            if event is None:
+                logger.warning("[STORE] Speeding event is None")
+                return
+                
+            driver = event.get('driver') or {}
+            if not isinstance(driver, dict):
+                driver = {}
+                
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
             start_lat = event.get('start_lat')
             start_lon = event.get('start_lon')
             date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
             
-            min_speed = event.get('min_vehicle_speed', 0)
-            max_speed = event.get('max_vehicle_speed', 0)
-            avg_exceeded = event.get('avg_over_speed_in_kph', 0)
+            min_speed = event.get('min_vehicle_speed') or 0
+            max_speed = event.get('max_vehicle_speed') or 0
+            avg_exceeded = event.get('avg_over_speed_in_kph') or 0
             
             min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
             max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
             avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
             
             speed_range = f"{min_speed_mph}–{max_speed_mph} mph"
-            severity = event.get('metadata', {}).get('severity', 'unknown')
+            metadata = event.get('metadata') or {}
+            severity = metadata.get('severity', 'unknown') if isinstance(metadata, dict) else 'unknown'
             
             event_record = {
                 'event_type': 'Speeding',
@@ -480,19 +488,34 @@ class SafetyBot:
             
         except Exception as e:
             logger.error(f"[STORE_ERROR] Error storing speeding event: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
     
     def store_performance_event(self, event: Dict[str, Any]):
         """Store performance event in memory"""
         try:
-            event_type = event.get('type', 'Unknown').replace('_', ' ').title()
-            driver = event.get('driver', {})
+            if event is None:
+                logger.warning("[STORE] Performance event is None")
+                return
+                
+            event_type = event.get('type', 'Unknown')
+            if event_type:
+                event_type = event_type.replace('_', ' ').title()
+            else:
+                event_type = 'Unknown'
+                
+            driver = event.get('driver') or {}
+            if not isinstance(driver, dict):
+                driver = {}
+                
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
             end_lat = event.get('end_lat')
             end_lon = event.get('end_lon')
             end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
             
-            severity = event.get('metadata', {}).get('severity', 'unknown')
+            metadata = event.get('metadata') or {}
+            severity = metadata.get('severity', 'unknown') if isinstance(metadata, dict) else 'unknown'
             
             event_record = {
                 'event_type': event_type,
@@ -510,6 +533,8 @@ class SafetyBot:
             
         except Exception as e:
             logger.error(f"[STORE_ERROR] Error storing performance event: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
     
     def create_excel_file(self, events: Optional[List[Dict[str, str]]] = None) -> Optional[str]:
         """Create Excel file with events data. Returns file path or None."""
