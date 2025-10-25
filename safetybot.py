@@ -423,54 +423,120 @@ class SafetyBot:
                 pass
     
     def fetch_speeding_events(self) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
-        """Fetch speeding events from API"""
-        try:
-            url = f"{self.api_base_url}/speeding-events"
-            response = self.session.get(url, headers=self.headers, timeout=30)
-            
-            if response.status_code == 401:
-                return None, "AUTH_ERROR"
-            elif response.status_code == 403:
-                return None, "PERMISSION_ERROR"
-            elif response.status_code != 200:
-                return None, f"HTTP_{response.status_code}"
-            
-            data = response.json()
-            events = data.get('data', [])
-            logger.info(f"[API] Fetched {len(events)} speeding events")
-            return events, None
-            
-        except requests.exceptions.Timeout:
-            logger.error("[API] Speeding events request timed out")
-            return None, "TIMEOUT"
-        except Exception as e:
-            logger.error(f"[API] Error fetching speeding events: {e}")
-            return None, str(e)
+        """Fetch speeding events from GoMotive v1 API"""
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                params = {'per_page': '25', 'page_no': '1'}
+                url = f"{self.api_base_url.replace('v2', 'v1')}/speeding_events"
+                
+                logger.info(f"[API] Fetching speeding events (attempt {attempt + 1}/{max_retries})")
+                response = self.session.get(url, headers=self.headers, params=params, timeout=45)
+                
+                if response.status_code == 401:
+                    logger.error("[API] Authentication failed (401)")
+                    return None, "AUTH_ERROR"
+                elif response.status_code == 403:
+                    logger.error("[API] Permission denied (403)")
+                    return None, "PERMISSION_ERROR"
+                elif response.status_code == 404:
+                    logger.error("[API] Endpoint not found (404)")
+                    return None, "NOT_FOUND"
+                
+                response.raise_for_status()
+                
+                if not response.content:
+                    logger.warning("[API] Empty response from speeding events")
+                    return [], None
+                
+                data = response.json()
+                events = data.get('speeding_events', [])
+                
+                if not isinstance(events, list):
+                    logger.warning("[API] Unexpected data structure in response")
+                    return [], None
+                
+                logger.info(f"[API] Fetched {len(events)} speeding events")
+                return events, None
+                
+            except requests.exceptions.Timeout:
+                logger.warning(f"[API] Timeout (attempt {attempt + 1}/{max_retries})")
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)
+            except Exception as e:
+                logger.error(f"[API] Error (attempt {attempt + 1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)
+        
+        logger.error(f"[API] Failed after {max_retries} attempts")
+        return None, "FETCH_ERROR"
     
     def fetch_driver_performance_events(self) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
-        """Fetch driver performance events from API"""
-        try:
-            url = f"{self.api_base_url}/driver-performance-events"
-            response = self.session.get(url, headers=self.headers, timeout=30)
+        """Fetch driver performance events from GoMotive v2 API"""
+        all_events = []
+        first_error = None
+        
+        for event_type in self.ALLOWED_EVENT_TYPES:
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    params = {
+                        'event_types': event_type,
+                        'media_required': 'true',
+                        'per_page': '25',
+                        'page_no': '1'
+                    }
+                    
+                    url = f"{self.api_base_url}/driver_performance_events"
+                    logger.info(f"[API] Fetching {event_type} events (attempt {attempt + 1}/{max_retries})")
+                    response = self.session.get(url, headers=self.headers, params=params, timeout=45)
+                    
+                    if response.status_code == 401:
+                        logger.error(f"[API] Authentication failed (401) for {event_type}")
+                        if not first_error:
+                            first_error = "AUTH_ERROR"
+                        break
+                    elif response.status_code == 403:
+                        logger.error(f"[API] Permission denied (403) for {event_type}")
+                        if not first_error:
+                            first_error = "PERMISSION_ERROR"
+                        break
+                    elif response.status_code == 404:
+                        logger.error(f"[API] Endpoint not found (404) for {event_type}")
+                        if not first_error:
+                            first_error = "NOT_FOUND"
+                        break
+                    
+                    response.raise_for_status()
+                    
+                    if not response.content:
+                        logger.warning(f"[API] Empty response for {event_type}")
+                        break
+                    
+                    data = response.json()
+                    events = data.get('driver_performance_events', [])
+                    
+                    if not isinstance(events, list):
+                        logger.warning(f"[API] Unexpected data structure for {event_type}")
+                        break
+                    
+                    logger.info(f"[API] Found {len(events)} {event_type} events")
+                    all_events.extend(events)
+                    break
+                    
+                except requests.exceptions.Timeout:
+                    logger.warning(f"[API] Timeout for {event_type} (attempt {attempt + 1}/{max_retries})")
+                    if attempt < max_retries - 1:
+                        time.sleep(2 ** attempt)
+                except Exception as e:
+                    logger.error(f"[API] Error fetching {event_type}: {e}")
+                    if attempt < max_retries - 1:
+                        time.sleep(2 ** attempt)
             
-            if response.status_code == 401:
-                return None, "AUTH_ERROR"
-            elif response.status_code == 403:
-                return None, "PERMISSION_ERROR"
-            elif response.status_code != 200:
-                return None, f"HTTP_{response.status_code}"
-            
-            data = response.json()
-            events = data.get('data', [])
-            logger.info(f"[API] Fetched {len(events)} performance events")
-            return events, None
-            
-        except requests.exceptions.Timeout:
-            logger.error("[API] Performance events request timed out")
-            return None, "TIMEOUT"
-        except Exception as e:
-            logger.error(f"[API] Error fetching performance events: {e}")
-            return None, str(e)
+            time.sleep(1)
+        
+        logger.info(f"[API] Fetched {len(all_events)} total performance events")
+        return all_events, first_error
     
     def filter_new_speeding_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Filter speeding events to only return new ones"""
@@ -480,7 +546,8 @@ class SafetyBot:
         last_id = self.get_last_processed_event_id('speeding')
         new_events = []
         
-        for event in events:
+        for event_data in events:
+            event = event_data.get('speeding_event', {})
             event_id = event.get('id', 0)
             
             if event_id <= last_id:
@@ -496,6 +563,7 @@ class SafetyBot:
             new_events.append(event)
         
         if new_events:
+            new_events.sort(key=lambda x: x.get('id', 0))
             max_id = max(e.get('id', 0) for e in new_events)
             self.save_last_processed_event_id(max_id, 'speeding')
             logger.info(f"[FILTER] Found {len(new_events)} new speeding events. Updated last ID to {max_id}")
@@ -508,12 +576,15 @@ class SafetyBot:
             return []
         
         new_events = []
-        events_by_type = defaultdict(list)
+        events_by_type = {}
         
         # Group events by type
-        for event in events:
-            event_type = event.get('event_type', '').lower()
+        for event_data in events:
+            event = event_data.get('driver_performance_event', {})
+            event_type = event.get('type', '')
             if event_type in self.ALLOWED_EVENT_TYPES:
+                if event_type not in events_by_type:
+                    events_by_type[event_type] = []
                 events_by_type[event_type].append(event)
         
         # Process each event type separately
@@ -537,7 +608,8 @@ class SafetyBot:
             
             # Update last ID for this event type
             if type_events:
-                max_id = max(e.get('id', 0) for e in type_events if e.get('id', 0) > last_id)
+                type_events_sorted = sorted(type_events, key=lambda x: x.get('id', 0))
+                max_id = type_events_sorted[-1].get('id', 0)
                 if max_id > last_id:
                     self.save_last_specific_event_id(max_id, event_type)
                     logger.info(f"[FILTER] Updated last {event_type} ID to {max_id}")
@@ -552,19 +624,28 @@ class SafetyBot:
             driver = event.get('driver', {})
             
             # Get driver name
-            driver_name = driver.get('name', 'Unknown Driver')
+            driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown Driver'
             
             # Get timestamp
-            timestamp = event.get('start_time') or event.get('created_at', '')
+            timestamp = event.get('start_time', '')
             try:
                 dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
                 formatted_time = dt.strftime('%Y-%m-%d %H:%M:%S')
             except:
                 formatted_time = timestamp
             
-            # Get speed info
-            speed_range = metadata.get('speed_range', '')
-            exceeded_by = metadata.get('exceeded_by', '')
+            # Get speed info - convert from kph to mph
+            min_speed_kph = event.get('min_vehicle_speed', 0)
+            max_speed_kph = event.get('max_vehicle_speed', 0)
+            avg_exceeded_kph = event.get('avg_over_speed_in_kph', 0)
+            
+            min_speed_mph = round(min_speed_kph * 0.621371, 1) if min_speed_kph else 0
+            max_speed_mph = round(max_speed_kph * 0.621371, 1) if max_speed_kph else 0
+            avg_exceeded_mph = round(avg_exceeded_kph * 0.621371, 1) if avg_exceeded_kph else 0
+            
+            speed_range = f"{min_speed_mph}–{max_speed_mph} mph"
+            exceeded_by = f"+{avg_exceeded_mph} mph"
+            
             severity = metadata.get('severity', 'unknown').capitalize()
             
             return {
@@ -584,13 +665,13 @@ class SafetyBot:
         try:
             metadata = event.get('metadata', {})
             driver = event.get('driver', {})
-            event_type = event.get('event_type', 'unknown')
+            event_type = event.get('type', 'unknown')
             
             # Get driver name
-            driver_name = driver.get('name', 'Unknown Driver')
+            driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown Driver'
             
             # Get timestamp
-            timestamp = event.get('start_time') or event.get('created_at', '')
+            timestamp = event.get('end_time', '')
             try:
                 dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
                 formatted_time = dt.strftime('%Y-%m-%d %H:%M:%S')
