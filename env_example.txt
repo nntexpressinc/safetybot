@@ -1,0 +1,11 @@
+# GoMotive API Configuration
+API_KEY=22dd2300-492d-4ce1-9f0d-772b1deefde9
+API_BASE_URL=https://api.gomotive.com/v2
+
+# Telegram Bot Configuration
+TELEGRAM_BOT_TOKEN=8434204515:AAF_5rthakHx68V1tmMAnyx8H8wGCQBTiYY
+TELEGRAM_CHAT_ID=-1003176780290
+
+# Bot Configuration
+CHECK_INTERVAL=300  # 5 minutes in seconds
+LAST_EVENT_FILE=last_event_id.txt

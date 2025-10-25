@@ -23,7 +23,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
+env_example.txt
 # Virtual Environment
 env/
 venv/
