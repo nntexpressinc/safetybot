@@ -1,195 +1,318 @@
-# SafetyBot v3.0 - Event Storage & Daily Reporting
+# SafetyBot - GoMotive APIs to Telegram Monitor with Excel Reports
 
-A production-grade bot that monitors GoMotive APIs for speeding and driver performance events, stores them in a structured format, and generates daily Excel reports for review.
+A Python bot that monitors both GoMotive Speeding Events (v1) and Driver Performance Events (v2) APIs and sends alerts to Telegram with videos AND automatically generates daily Excel reports.
 
-## 🆕 New Features (v3.0)
+## Features
 
-✅ **Event Storage**: All events are now stored in JSON format organized by date
-✅ **Daily Excel Reports**: Automatic Excel generation at 23:59 each day
-✅ **On-Demand Reports**: `/getid` command to retrieve today's report anytime
-✅ **Performance Events Fixed**: Removed `media_required` filter - now captures all 6 performance event types:
-   - Hard Brake
-   - Crash
-   - Seat Belt Violation
-   - Stop Sign Violation
-   - Distraction
-   - Unsafe Lane Change
+- Monitors two GoMotive APIs every 5 minutes:
+  - **Speeding Events API (v1)**: Vehicle speed violations with speed range and exceeded amounts
+  - **Driver Performance Events API (v2)**: Safety events with camera videos
+- Sends formatted alerts to Telegram
+- **NEW: Automatically stores event data to JSON** for later reporting
+- **NEW: Generates professional Excel reports daily at 11:59 PM** with:
+  - Event type (Speeding, Hard Brake, Crash, etc.)
+  - Driver's full name
+  - Date & time of event
+  - Speed range (for speeding events)
+  - Exceeded by value (for speeding events)
+  - Severity level
+- **NEW: /getexcel command** - send today's report on-demand from Telegram
+- Downloads and sends both front-facing and driver-facing camera videos
+- Tracks last processed event IDs separately for each API to avoid duplicates
+- Comprehensive logging and error handling
+- Designed to run as a service on Ubuntu
 
-## 📊 Excel Report Structure
+## Supported Event Types
 
-The generated Excel files include the following columns:
+### Speeding Events (v1 API)
+- Vehicle speed violations with detailed speed information
 
-| Column | Content |
-|--------|---------|
-| Event Type | Speeding, Hard Brake, Crash, etc. |
-| Driver Name | Full name of the driver |
-| Date & Time | Event timestamp in local timezone |
-| Speed Range | Only for speeding (e.g., "35–45 mph") |
-| Exceeded By | Only for speeding (e.g., "+5 mph") |
-| Severity | medium, high, or critical |
+### Driver Performance Events (v2 API)  
+- hard_brake
+- crash
+- seat_belt_violation
+- stop_sign_violation
+- distraction
+- unsafe_lane_change
 
-## 📁 Storage Structure
+## Excel Report Structure
 
-Events are stored in the `events_data/` directory:
+Each daily Excel report contains:
 
+| Column | Content | Example |
+|--------|---------|---------|
+| 1 | Event Type | Speeding, Hard Brake, Crash, etc. |
+| 2 | Driver Name | John Smith |
+| 3 | Date & Time | 09/25/2024 12:37 PM |
+| 4 | Speed Range | 62.1–72.5 mph (speeding only) |
+| 5 | Exceeded By | +8.7 mph (speeding only) |
+| 6 | Severity | medium, high, critical |
+
+Reports are automatically sent to Telegram at 11:59 PM each day and can be requested on-demand using `/getexcel`.
+
+## Message Formats
+
+### Speeding Events (Telegram)
 ```
-events_data/
-├── events_2025-10-25.json
-├── events_2025-10-26.json
-└── Daily_Report_2025-10-26.xlsx
+Speeding Alert
+Driver: John Smith
+Vehicle: 086
+09/25/2024 12:37 PM
+Speed Range: 62.1–72.5 mph
+Exceeded By: +8.7 mph
+Severity: high
 ```
 
-## 🚀 Quick Start
-
-### 1. Install Dependencies
-
-```bash
-pip install -r requirements.txt
+### Driver Performance Events (Telegram)
 ```
+Hard Brake
+Driver: John Smith
+Vehicle: 118
+09/25/2024 12:37 PM
+Severity: medium
+```
+*(Sent as caption under both front-facing and driver-facing videos)*
 
-### 2. Configure Environment Variables
+## Prerequisites
 
-Create a `.env` file in the project root with:
+- Ubuntu 18.04+ (or any Linux distribution with systemd)
+- Python 3.8+
+- Internet connection
+- GoMotive API key
+- Telegram Bot token and chat ID
+
+## Installation
+
+1. **Upload files to your Ubuntu server:**
+   ```bash
+   # Copy all files to your server, e.g., /home/ubuntu/safetybot/
+   ```
+
+2. **Make the startup script executable:**
+   ```bash
+   chmod +x start_bot.sh
+   ```
+
+3. **Run the setup script:**
+   ```bash
+   ./start_bot.sh
+   ```
+
+The startup script will:
+- Check for Python 3 and pip
+- Create a virtual environment
+- Install all required dependencies (including openpyxl for Excel generation)
+- Start the bot
+
+## Configuration
+
+The bot is configured through the `.env` file:
 
 ```env
 # GoMotive API Configuration
-API_KEY=your_api_key_here
+API_KEY=your_gomotive_api_key_here
 API_BASE_URL=https://api.gomotive.com/v2
 
 # Telegram Bot Configuration
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
+TELEGRAM_CHAT_ID=your_telegram_chat_id_here
 
 # Bot Configuration
-CHECK_INTERVAL=300  # Check every 5 minutes
+CHECK_INTERVAL=300  # 5 minutes in seconds
 ```
 
-### 3. Run the Bot
+### Getting Telegram Credentials
+
+1. **Create a Telegram Bot:**
+   - Message @BotFather on Telegram
+   - Send `/newbot` and follow instructions
+   - Save the bot token
+
+2. **Get Chat ID:**
+   - Add your bot to a group or start a private chat
+   - Send a message to the bot
+   - Visit: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
+   - Find your chat ID in the response
+
+## Running as a Service
+
+To run the bot as a systemd service:
+
+1. **Edit the service file:**
+   ```bash
+   sudo nano safetybot.service
+   ```
+   
+   Update the paths to match your installation directory:
+   ```ini
+   WorkingDirectory=/home/ubuntu/safetybot
+   Environment=PATH=/home/ubuntu/safetybot/venv/bin
+   ExecStart=/home/ubuntu/safetybot/venv/bin/python /home/ubuntu/safetybot/safetybot.py
+   ```
+
+2. **Install the service:**
+   ```bash
+   sudo cp safetybot.service /etc/systemd/system/
+   sudo systemctl daemon-reload
+   sudo systemctl enable safetybot.service
+   ```
+
+3. **Start the service:**
+   ```bash
+   sudo systemctl start safetybot.service
+   ```
+
+4. **Check service status:**
+   ```bash
+   sudo systemctl status safetybot.service
+   ```
+
+5. **View logs:**
+   ```bash
+   sudo journalctl -u safetybot.service -f
+   ```
+
+## Manual Operation
+
+To run the bot manually:
 
 ```bash
-python safetybot.py
+# Activate virtual environment
+source venv/bin/activate
+
+# Run the bot
+python3 safetybot.py
 ```
 
-## 📋 Commands
+## Commands
 
-### `/getid` or `/getid@nntexpressinc_safety_bot`
+### /getexcel
 
-Sends the Excel report for today's date to Telegram. Use this any time during the day to retrieve the current day's events.
+In Telegram, type `/getexcel@nntexpressinc_safety_bot` (or `@your_bot_name`) to get today's Excel report on-demand.
 
-## 🔄 Automatic Features
+The bot will:
+1. Generate an Excel file with all events from today
+2. Send it to the Telegram group/chat
+3. Automatically clean up the temporary file
 
-- **Event Checking**: Every 5 minutes (configurable via `CHECK_INTERVAL`)
-- **Daily Report**: Automatically generated and sent at 23:59 PM each day
-- **Event Deduplication**: Tracks processed event IDs to prevent duplicates
-- **Separate Event Type Tracking**: Each event type maintains its own last-processed ID
+## Monitoring
 
-## 📝 Event Data Format
+The bot creates detailed logs in:
+- `safetybot.log` - Application logs
+- `events_data/` directory - Daily JSON files with event data (e.g., `events_2024-09-25.json`)
+- Console output - Real-time status
+- systemd journal (if running as service)
 
-Each event stored in JSON includes:
+## File Structure
 
-```json
-{
-  "event_type": "speeding",
-  "driver_name": "John Doe",
-  "severity": "high",
-  "date_time": "10/25/2025 02:30 PM",
-  "speed_range": "35–45 mph",
-  "exceeded_by": "+5 mph",
-  "event_id": 12345,
-  "timestamp": "2025-10-25T14:30:00.123456"
-}
+```
+safetybot/
+├── safetybot.py              # Main bot application
+├── requirements.txt          # Python dependencies
+├── .env                      # Configuration file (create manually)
+├── start_bot.sh             # Ubuntu startup script
+├── safetybot.service        # Systemd service file
+├── README.md                # This file
+├── safetybot.log            # Application logs (created when running)
+├── events_data/             # Daily event data in JSON format (created when running)
+│   ├── events_2024-09-25.json
+│   ├── events_2024-09-26.json
+│   └── ...
+├── last_*_event_id.txt      # Event tracking files (created when running)
+└── venv/                    # Virtual environment (created by setup)
 ```
 
-## 🔧 Configuration
+## Troubleshooting
 
-### Check Interval
+### Common Issues
 
-The `CHECK_INTERVAL` environment variable controls how often the bot checks for new events (in seconds):
+1. **Import Errors:**
+   - Ensure virtual environment is activated
+   - Install requirements: `pip install -r requirements.txt`
 
-- `300` = Every 5 minutes (default, recommended)
-- `600` = Every 10 minutes
-- `1800` = Every 30 minutes
+2. **API Connection Issues:**
+   - Verify API key is correct
+   - Check internet connectivity
+   - Ensure GoMotive API is accessible
 
-### Daily Report Time
+3. **Telegram Issues:**
+   - Verify bot token and chat ID
+   - Ensure bot has permission to send messages
+   - Check Telegram API connectivity
 
-The Excel report is sent automatically at **23:59 PM** each day. To change this, modify the scheduler in `run_scheduler()`:
+4. **Performance Events Not Showing:**
+   - Check if events have medium/high/critical severity (events with low severity are filtered)
+   - Verify the API is returning data: check `safetybot.log` for fetch status
+   - Ensure media_required=true is being honored by the API
 
-```python
-schedule.every().day.at("23:59").do(lambda: asyncio.run(self.send_daily_excel()))
+5. **Excel Generation Issues:**
+   - Ensure `openpyxl` is installed: `pip install openpyxl==3.10.1`
+   - Check file permissions in the `events_data/` directory
+   - Verify temp directory has sufficient space
+
+6. **Permission Issues:**
+   - Ensure proper file permissions
+   - Run with appropriate user privileges
+
+### Logs
+
+Check the logs for detailed error information:
+```bash
+tail -f safetybot.log
 ```
 
-## 📊 Features & Reliability
+For systemd service:
+```bash
+sudo journalctl -u safetybot.service -f
+```
 
-- **Retry Logic**: 3-attempt retry with exponential backoff for API calls
-- **Health Monitoring**: Tracks consecutive failures with critical alerts
-- **Timezone Support**: Converts UTC to local timezone based on vehicle GPS coordinates
-- **Unicode Support**: Proper handling of international characters
-- **Graceful Shutdown**: Properly closes connections on SIGTERM/SIGINT
-- **Comprehensive Logging**: All events logged to `safetybot.log`
+### Debugging Event Issues
 
-## ⚙️ System Requirements
+To see what events are being stored:
+```bash
+# View today's events
+cat events_data/events_$(date +%Y-%m-%d).json
 
-- Python 3.8+
-- 50MB disk space minimum
-- Internet connection for API and Telegram
+# View events with pretty formatting
+cat events_data/events_$(date +%Y-%m-%d).json | python -m json.tool
+```
 
-## 📦 Dependencies
+## Security Notes
 
-See `requirements.txt` for complete list:
-- `python-telegram-bot` - Telegram bot integration
-- `requests` - HTTP client for API calls
-- `schedule` - Job scheduling
-- `openpyxl` - Excel file generation
-- `pytz` - Timezone handling
-- `python-dotenv` - Environment configuration
+- Keep your `.env` file secure and never commit it to version control
+- The API key and bot token should be treated as sensitive credentials
+- Consider running the bot with a dedicated user account
+- Regularly monitor the logs for any suspicious activity
+- Excel files are stored in system temp directory and automatically deleted after sending
 
-## 🐛 Troubleshooting
+## Customization
 
-### Performance Events Not Appearing
+You can modify the bot behavior by editing `safetybot.py`:
 
-**v3.0 Fix**: Removed the `media_required=true` filter that was restricting events to only those with video.
+- Change message formatting in `format_speeding_message()` and `format_performance_message()`
+- Adjust event filtering in `filter_new_performance_events()`
+- Modify check interval in `.env` file
+- Change daily report time from 11:59 PM: edit `schedule.every().day.at("23:59")` in `run_scheduler()`
+- Add additional event processing logic in `store_event()`
 
-If you're still not seeing events:
-1. Check API key permissions
-2. Verify `CHECK_INTERVAL` isn't too long
-3. Check `safetybot.log` for error messages
-4. Ensure event severity is medium/high/critical
+## Version History
 
-### Excel File Not Generating
+### v2.2 - Excel Reports Edition (Current)
+- Added Excel report generation
+- Added daily 11:59 PM automatic reports
+- Added `/getexcel` command for on-demand reports
+- Added JSON event storage system
+- Enhanced event tracking per event type
 
-- Check the `events_data/` directory exists and is writable
-- Verify `openpyxl` is installed: `pip install openpyxl`
-- Check logs for specific error messages
+### v2.1 - Production Ready
+- Separate ID tracking for each event type
+- Improved error handling
 
-### No Excel Sent at End of Day
+## Support
 
-- Ensure bot is running when 23:59 arrives
-- Check Telegram chat ID is correct
-- Verify bot has permission to send documents
-- Check logs for send failures
-
-## 📜 Version History
-
-### v3.0 (Current)
-- Event storage system with JSON format
-- Daily Excel report generation
-- Performance events filter fix (removed media_required)
-- `/getid` command support
-- Enhanced logging
-
-### v2.1
-- Real-time Telegram alerts with videos
-- Health monitoring
-- ID tracking per event type
-
-## 📞 Support
-
-For issues:
-1. Check `safetybot.log` for error details
-2. Verify all environment variables are set correctly
-3. Ensure API credentials are valid
-4. Check network connectivity
-
-## 📄 License
-
-See LICENSE file for details.
+For issues or questions:
+1. Check the logs for error details
+2. Verify configuration in `.env` file
+3. Test API connectivity manually
+4. Ensure all dependencies are installed correctly
+5. Review the "Troubleshooting" section above

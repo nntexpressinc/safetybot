@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Safety Bot - GoMotive APIs to Telegram Bot
-Monitors speeding and driver performance events with daily Excel reporting
+Monitors speeding and driver performance events with Excel daily reports
 """
 
 import os
@@ -16,18 +16,17 @@ import uuid
 import signal
 import atexit
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time as datetime_time
 from typing import Dict, List, Optional, Any, Set, Tuple
 from dotenv import load_dotenv
 import schedule
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from telegram import Bot, Update
+from telegram import Bot, InputMediaVideo, Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 from telegram.error import TelegramError, NetworkError, TimedOut
 from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Alignment
-import pytz
+from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 
 # Load environment variables
 load_dotenv()
@@ -66,57 +65,8 @@ def log_safe(level, message):
         safe_message = message.encode('ascii', 'ignore').decode('ascii')
         getattr(logger, level)(safe_message)
 
-class EventStore:
-    """Manages event storage and retrieval"""
-    
-    def __init__(self, storage_dir='events_data'):
-        self.storage_dir = storage_dir
-        if not os.path.exists(storage_dir):
-            os.makedirs(storage_dir)
-    
-    def get_today_file(self):
-        """Get the file path for today's events"""
-        today = datetime.now().strftime('%Y-%m-%d')
-        return os.path.join(self.storage_dir, f'events_{today}.json')
-    
-    def get_date_file(self, date_str):
-        """Get the file path for a specific date (YYYY-MM-DD format)"""
-        return os.path.join(self.storage_dir, f'events_{date_str}.json')
-    
-    def load_events(self, file_path=None):
-        """Load events from file"""
-        if file_path is None:
-            file_path = self.get_today_file()
-        
-        try:
-            if os.path.exists(file_path):
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading events from {file_path}: {e}")
-        
-        return []
-    
-    def save_event(self, event_data: Dict[str, Any], file_path=None):
-        """Save an event to file"""
-        if file_path is None:
-            file_path = self.get_today_file()
-        
-        try:
-            events = self.load_events(file_path)
-            events.append(event_data)
-            
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(events, f, indent=2, ensure_ascii=False)
-            
-            logger.info(f"[STORED] Event saved to {os.path.basename(file_path)}")
-            return True
-        except Exception as e:
-            logger.error(f"Error saving event: {e}")
-            return False
-
 class SafetyBot:
-    """Main bot class for monitoring GoMotive APIs and generating daily Excel reports"""
+    """Main bot class for monitoring GoMotive APIs and sending Telegram alerts with Excel reports"""
     
     ALLOWED_EVENT_TYPES = [
         'hard_brake', 'crash', 'seat_belt_violation', 'stop_sign_violation',
@@ -141,7 +91,7 @@ class SafetyBot:
         self.last_successful_check = None
         self.consecutive_failures = 0
         self.max_consecutive_failures = 5
-        self.critical_alert_sent = False
+        self.critical_alert_sent = False  # Track if we already sent critical alert
         
         # Event tracking files
         self.last_performance_event_file = 'last_performance_event_id.txt'
@@ -152,8 +102,9 @@ class SafetyBot:
             for event_type in self.ALLOWED_EVENT_TYPES
         }
         
-        # Event storage
-        self.event_store = EventStore()
+        # Data storage directory
+        self.data_dir = 'events_data'
+        os.makedirs(self.data_dir, exist_ok=True)
         
         # Deduplication within current cycle
         self.processed_event_ids: Set[int] = set()
@@ -163,12 +114,12 @@ class SafetyBot:
         self.running = True
         self.shutdown_lock = threading.Lock()
         
-        # Application for command handling
+        # Telegram application for command handlers
         self.app = None
-        self.telegram_bot = Bot(token=self.telegram_token)
         
         # Validate and initialize
         self._validate_config()
+        self.telegram_bot = Bot(token=self.telegram_token)
         self._init_session()
         
         # Register cleanup handlers
@@ -201,7 +152,7 @@ class SafetyBot:
         self.headers = {
             'accept': 'application/json',
             'x-api-key': self.api_key,
-            'User-Agent': 'SafetyBot/3.0'
+            'User-Agent': 'SafetyBot/2.1'
         }
         
         self.session = requests.Session()
@@ -283,6 +234,149 @@ class SafetyBot:
         except IOError as e:
             logger.error(f"Error saving last {event_type} event ID: {e}")
     
+    def get_events_data_file(self, date: datetime) -> str:
+        """Get the path for events data file for a specific date"""
+        date_str = date.strftime('%Y-%m-%d')
+        return os.path.join(self.data_dir, f'events_{date_str}.json')
+    
+    def store_event(self, event_data: Dict[str, Any], event_type: str, is_speeding: bool = False):
+        """Store event data to JSON file for the day"""
+        try:
+            today = datetime.now()
+            data_file = self.get_events_data_file(today)
+            
+            # Read existing data or create new
+            if os.path.exists(data_file):
+                with open(data_file, 'r', encoding='utf-8') as f:
+                    all_events = json.load(f)
+            else:
+                all_events = []
+            
+            # Prepare event record
+            event_record = {
+                'event_type': 'Speeding' if is_speeding else event_type.replace('_', ' ').title(),
+                'driver_name': f"{event_data.get('driver', {}).get('first_name', '')} {event_data.get('driver', {}).get('last_name', '')}".strip() or 'Unknown',
+                'date_time': event_data.get('start_time' if is_speeding else 'end_time', ''),
+                'severity': event_data.get('metadata', {}).get('severity', 'unknown'),
+                'speed_range': None,
+                'exceeded_by': None,
+                'event_id': event_data.get('id', 0)
+            }
+            
+            # Add speeding-specific fields
+            if is_speeding:
+                min_speed = event_data.get('min_vehicle_speed', 0)
+                max_speed = event_data.get('max_vehicle_speed', 0)
+                min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
+                max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
+                event_record['speed_range'] = f"{min_speed_mph}–{max_speed_mph} mph"
+                
+                avg_exceeded = event_data.get('avg_over_speed_in_kph', 0)
+                avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
+                event_record['exceeded_by'] = f"+{avg_exceeded_mph} mph"
+            
+            # Add event to list
+            all_events.append(event_record)
+            
+            # Save back to file
+            with open(data_file, 'w', encoding='utf-8') as f:
+                json.dump(all_events, f, indent=2, ensure_ascii=False)
+            
+            logger.info(f"[STORED] Event {event_data.get('id')} stored for {today.strftime('%Y-%m-%d')}")
+            
+        except Exception as e:
+            logger.error(f"[STORE_ERROR] Failed to store event: {e}")
+    
+    def generate_excel_report(self, date: datetime) -> Optional[str]:
+        """Generate Excel file for events on a specific date. Returns file path or None."""
+        try:
+            data_file = self.get_events_data_file(date)
+            
+            if not os.path.exists(data_file):
+                logger.warning(f"[EXCEL] No events data for {date.strftime('%Y-%m-%d')}")
+                return None
+            
+            # Read events
+            with open(data_file, 'r', encoding='utf-8') as f:
+                events = json.load(f)
+            
+            if not events:
+                logger.warning(f"[EXCEL] No events to report for {date.strftime('%Y-%m-%d')}")
+                return None
+            
+            # Create workbook
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "Daily Report"
+            
+            # Define styles
+            header_fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+            header_font = Font(bold=True, color="FFFFFF", size=11)
+            border = Border(
+                left=Side(style='thin'),
+                right=Side(style='thin'),
+                top=Side(style='thin'),
+                bottom=Side(style='thin')
+            )
+            center_alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+            left_alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            
+            # Set column widths
+            ws.column_dimensions['A'].width = 18
+            ws.column_dimensions['B'].width = 25
+            ws.column_dimensions['C'].width = 20
+            ws.column_dimensions['D'].width = 20
+            ws.column_dimensions['E'].width = 18
+            ws.column_dimensions['F'].width = 15
+            
+            # Headers
+            headers = ['Event Type', 'Driver Name', 'Date & Time', 'Speed Range', 'Exceeded By', 'Severity']
+            for col_num, header in enumerate(headers, 1):
+                cell = ws.cell(row=1, column=col_num)
+                cell.value = header
+                cell.fill = header_fill
+                cell.font = header_font
+                cell.border = border
+                cell.alignment = center_alignment
+            
+            # Add data rows
+            for row_num, event in enumerate(events, 2):
+                row_data = [
+                    event.get('event_type', ''),
+                    event.get('driver_name', ''),
+                    event.get('date_time', ''),
+                    event.get('speed_range') or '',
+                    event.get('exceeded_by') or '',
+                    event.get('severity', '')
+                ]
+                
+                for col_num, value in enumerate(row_data, 1):
+                    cell = ws.cell(row=row_num, column=col_num)
+                    cell.value = value
+                    cell.border = border
+                    cell.alignment = left_alignment
+            
+            # Add title row at top
+            ws.insert_rows(1)
+            title_cell = ws['A1']
+            title_cell.value = f"Safety Events Report - {date.strftime('%B %d, %Y')}"
+            title_cell.font = Font(bold=True, size=14, color="FFFFFF")
+            title_cell.fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+            ws.merge_cells('A1:F1')
+            title_cell.alignment = center_alignment
+            
+            # Save to temp file
+            excel_filename = f"safety_report_{date.strftime('%Y-%m-%d')}.xlsx"
+            excel_path = os.path.join(tempfile.gettempdir(), excel_filename)
+            wb.save(excel_path)
+            
+            logger.info(f"[EXCEL] Report generated: {excel_path} with {len(events)} events")
+            return excel_path
+            
+        except Exception as e:
+            logger.error(f"[EXCEL_ERROR] Failed to generate Excel report: {e}")
+            return None
+    
     def fetch_speeding_events(self) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
         """Fetch speeding events from GoMotive v1 API. Returns (events, error_code)"""
         max_retries = 3
@@ -352,6 +446,7 @@ class SafetyBot:
                 try:
                     params = {
                         'event_types': event_type,
+                        'media_required': 'true',
                         'per_page': '25',
                         'page_no': '1'
                     }
@@ -471,6 +566,8 @@ class SafetyBot:
     def format_time(self, time_str: str, latitude: Optional[float] = None, longitude: Optional[float] = None) -> str:
         """Format time string to readable format with timezone conversion using longitude offset"""
         try:
+            import pytz
+            
             # Parse UTC time string
             dt_utc = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
             dt_utc = dt_utc.astimezone(pytz.UTC)
@@ -506,24 +603,24 @@ class SafetyBot:
         """Format speeding event message. Returns None if formatting fails."""
         try:
             vehicle_number = event.get('vehicle', {}).get('number', 'N/A')
-            driver = event.get('driver', {}) or {}
+            driver = event.get('driver', {})
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
             start_lat = event.get('start_lat')
             start_lon = event.get('start_lon')
             date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
             
-            min_speed = event.get('min_vehicle_speed', 0) or 0
-            max_speed = event.get('max_vehicle_speed', 0) or 0
-            avg_exceeded = event.get('avg_over_speed_in_kph', 0) or 0
+            min_speed = event.get('min_vehicle_speed', 0)
+            max_speed = event.get('max_vehicle_speed', 0)
+            avg_exceeded = event.get('avg_over_speed_in_kph', 0)
             
             min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
             max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
             avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
             
-            severity = event.get('metadata', {}).get('severity', 'unknown') if event.get('metadata') else 'unknown'
+            severity = event.get('metadata', {}).get('severity', 'unknown')
             
-            return f"""⚠️ Speeding Alert
+            return f"""Speeding Alert
 Driver: {driver_name}
 Vehicle: {vehicle_number}
 {date_time}
@@ -540,16 +637,16 @@ Severity: {severity}"""
         try:
             event_type = event.get('type', 'Unknown').replace('_', ' ').title()
             vehicle_number = event.get('vehicle', {}).get('number', 'N/A')
-            driver = event.get('driver', {}) or {}
+            driver = event.get('driver', {})
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
             
             end_lat = event.get('end_lat')
             end_lon = event.get('end_lon')
             end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
             
-            severity = event.get('metadata', {}).get('severity', 'unknown') if event.get('metadata') else 'unknown'
+            severity = event.get('metadata', {}).get('severity', 'unknown')
             
-            return f"""🚨 {event_type}
+            return f"""{event_type}
 Driver: {driver_name}
 Vehicle: {vehicle_number}
 {end_time}
@@ -558,47 +655,6 @@ Severity: {severity}"""
         except Exception as e:
             logger.error(f"[FORMAT_ERROR] Error formatting performance message: {e}")
             return None
-    
-    async def send_speeding_event_to_telegram(self, event: Dict[str, Any]) -> bool:
-        """Send speeding event to Telegram. Returns True if sent."""
-        message = self.format_speeding_message(event)
-        
-        # Skip if formatting failed
-        if message is None:
-            logger.warning(f"[SKIP] Speeding event {event.get('id')} - formatting failed")
-            return False
-        
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                await self.telegram_bot.send_message(
-                    chat_id=self.chat_id,
-                    text=message,
-                    parse_mode='Markdown',
-                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
-                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
-                )
-                logger.info(f"[SENT] Speeding event {event.get('id')} to Telegram")
-                return True
-                    
-            except (NetworkError, TimedOut) as e:
-                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-            except TelegramError as e:
-                if "Flood control exceeded" in str(e):
-                    logger.warning(f"[FLOOD] Rate limit hit - backing off. {e}")
-                    await asyncio.sleep(30)  # Wait 30 seconds before retry
-                    continue
-                logger.error(f"[ERROR] Telegram API error: {e}")
-                return False
-            except Exception as e:
-                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-        
-        logger.error(f"[FAILED] Could not send speeding event {event.get('id')}")
-        return False
     
     async def download_video_to_temp_file(self, video_url: str, video_type: str = "video") -> Optional[str]:
         """Download video and save to temporary file. Returns path or None."""
@@ -646,13 +702,58 @@ Severity: {severity}"""
                     if attempt < max_retries - 1:
                         await asyncio.sleep(3)
                 
+            except requests.exceptions.Timeout:
+                logger.warning(f"[VIDEO] Timeout downloading {video_type}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(5)
+            except requests.exceptions.RequestException as e:
+                logger.error(f"[VIDEO] Request error: {e}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(5)
             except Exception as e:
-                logger.error(f"[VIDEO] Error: {e}")
+                logger.error(f"[VIDEO] Unexpected error: {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(5)
         
         logger.error(f"[VIDEO] Failed to download {video_type}")
         return None
+    
+    async def send_speeding_event_to_telegram(self, event: Dict[str, Any]) -> bool:
+        """Send speeding event to Telegram. Returns True if sent."""
+        message = self.format_speeding_message(event)
+        
+        # Skip if formatting failed
+        if message is None:
+            logger.warning(f"[SKIP] Speeding event {event.get('id')} - formatting failed")
+            return False
+        
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                await self.telegram_bot.send_message(
+                    chat_id=self.chat_id,
+                    text=message,
+                    parse_mode='Markdown',
+                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                )
+                logger.info(f"[SENT] Speeding event {event.get('id')}")
+                return True
+                    
+            except (NetworkError, TimedOut) as e:
+                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(2 ** attempt)
+            except TelegramError as e:
+                logger.error(f"[ERROR] Telegram API error: {e}")
+                return False
+            except Exception as e:
+                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(2 ** attempt)
+        
+        logger.error(f"[FAILED] Could not send speeding event {event.get('id')}")
+        return False
     
     async def send_performance_event_to_telegram(self, event: Dict[str, Any]) -> bool:
         """Send performance event to Telegram with video. Returns True if sent."""
@@ -665,13 +766,12 @@ Severity: {severity}"""
             return False
         
         max_retries = 3
-        temp_files = []
-        
         for attempt in range(max_retries):
+            temp_files = []
             try:
                 camera_media = event.get('camera_media', {})
                 
-                # Try to get and send videos if available
+                # Try to get and send videos
                 if camera_media and camera_media.get('available'):
                     downloadable_videos = camera_media.get('downloadable_videos', {})
                     front_facing_url = downloadable_videos.get('front_facing_plain_url')
@@ -692,8 +792,71 @@ Severity: {severity}"""
                             temp_files.append(driver_file)
                             videos_for_group.append(('Driver', driver_file))
                     
-                    # Send videos if available
-                    if videos_for_group:
+                    # Try media group first
+                    if videos_for_group and len(videos_for_group) > 1:
+                        try:
+                            media_group = []
+                            video_files = []
+                            
+                            for i, (video_name, video_path) in enumerate(videos_for_group):
+                                video_file = open(video_path, 'rb')
+                                video_files.append(video_file)
+                                
+                                caption = f"{message}\nVideos: {', '.join([n for n, _ in videos_for_group])}" if i == 0 else None
+                                
+                                media_group.append(InputMediaVideo(
+                                    media=video_file,
+                                    caption=caption,
+                                    parse_mode='Markdown' if caption else None
+                                ))
+                            
+                            await self.telegram_bot.send_media_group(
+                                chat_id=self.chat_id,
+                                media=media_group,
+                                read_timeout=self.TELEGRAM_SEND_TIMEOUT * 2,
+                                write_timeout=self.TELEGRAM_SEND_TIMEOUT * 2
+                            )
+                            logger.info(f"[SENT] Media group for event {event_id}")
+                            
+                            for vf in video_files:
+                                try:
+                                    vf.close()
+                                except:
+                                    pass
+                            
+                            return True
+                            
+                        except Exception as media_error:
+                            logger.warning(f"[RETRY] Media group failed, trying individual videos: {media_error}")
+                            
+                            for vf in video_files:
+                                try:
+                                    vf.close()
+                                except:
+                                    pass
+                            
+                            # Try individual videos
+                            for i, (video_name, video_path) in enumerate(videos_for_group):
+                                try:
+                                    with open(video_path, 'rb') as vf:
+                                        cap = f"{message}\nVideo: {video_name}" if i == 0 else f"Video: {video_name}"
+                                        await self.telegram_bot.send_video(
+                                            chat_id=self.chat_id,
+                                            video=vf,
+                                            caption=cap,
+                                            parse_mode='Markdown',
+                                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                                        )
+                                    logger.info(f"[SENT] Video {video_name} for event {event_id}")
+                                    await asyncio.sleep(2)
+                                except Exception as e:
+                                    logger.error(f"[ERROR] Individual video send failed: {e}")
+                            
+                            return True
+                    
+                    # Single video
+                    elif videos_for_group:
                         for i, (video_name, video_path) in enumerate(videos_for_group):
                             try:
                                 with open(video_path, 'rb') as vf:
@@ -706,47 +869,63 @@ Severity: {severity}"""
                                         read_timeout=self.TELEGRAM_SEND_TIMEOUT,
                                         write_timeout=self.TELEGRAM_SEND_TIMEOUT
                                     )
-                                logger.info(f"[SENT] Video {video_name} for event {event_id} to Telegram")
-                                await asyncio.sleep(1)  # Delay between videos
-                            except TelegramError as e:
-                                if "Flood control exceeded" in str(e):
-                                    logger.warning(f"[FLOOD] Rate limit hit - backing off. {e}")
-                                    await asyncio.sleep(30)
-                                    continue
-                                logger.error(f"[ERROR] Video send failed: {e}")
+                                logger.info(f"[SENT] Video {video_name} for event {event_id}")
+                                await asyncio.sleep(2)
                             except Exception as e:
                                 logger.error(f"[ERROR] Video send failed: {e}")
+                        
                         return True
+                    else:
+                        # No videos available
+                        await self.telegram_bot.send_message(
+                            chat_id=self.chat_id,
+                            text=f"{message}\n\n❌ Videos unavailable",
+                            parse_mode='Markdown',
+                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                        )
+                        logger.info(f"[SENT] Event {event_id} without videos")
+                        return True
+                else:
+                    # No camera media
+                    await self.telegram_bot.send_message(
+                        chat_id=self.chat_id,
+                        text=f"{message}\n\n❌ No camera media",
+                        parse_mode='Markdown',
+                        read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                        write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                    )
+                    logger.info(f"[SENT] Event {event_id} without camera")
+                    return True
                 
-                # No videos - send text only
-                await self.telegram_bot.send_message(
-                    chat_id=self.chat_id,
-                    text=f"{message}\n\n(No videos available)",
-                    parse_mode='Markdown',
-                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
-                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
-                )
-                logger.info(f"[SENT] Performance event {event_id} to Telegram (no videos)")
-                return True
-                    
             except (NetworkError, TimedOut) as e:
                 logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
             except TelegramError as e:
-                if "Flood control exceeded" in str(e):
-                    logger.warning(f"[FLOOD] Rate limit hit - backing off. {e}")
-                    await asyncio.sleep(30)
-                    continue
                 if "file too large" in str(e).lower():
                     logger.warning(f"[ERROR] File too large for event {event_id}")
+                    try:
+                        await self.telegram_bot.send_message(
+                            chat_id=self.chat_id,
+                            text=f"{message}\n\n⚠️ Files too large to upload",
+                            parse_mode='Markdown',
+                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                        )
+                        logger.info(f"[SENT] Event {event_id} with fallback (files too large)")
+                        return True
+                    except Exception as e2:
+                        logger.error(f"[ERROR] Fallback message failed: {e2}")
+                        return False
+                else:
+                    logger.error(f"[ERROR] Telegram error: {e}")
                     return False
-                logger.error(f"[ERROR] Telegram error: {e}")
-                return False
             except Exception as e:
                 logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     await asyncio.sleep(2 ** attempt)
+            
             finally:
                 # Clean up temporary files
                 for temp_file in temp_files:
@@ -759,174 +938,6 @@ Severity: {severity}"""
         
         logger.error(f"[FAILED] Could not send performance event {event_id}")
         return False
-    
-    def extract_event_data(self, event: Dict[str, Any], event_type: str) -> Dict[str, Any]:
-        """Extract relevant event data for storage"""
-        try:
-            # Handle None or missing driver dict
-            driver = event.get('driver') or {}
-            driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
-            
-            # Handle None or missing metadata dict
-            metadata = event.get('metadata') or {}
-            severity = metadata.get('severity', 'unknown') or 'unknown'
-            
-            extracted = {
-                'event_type': event_type,
-                'driver_name': driver_name,
-                'severity': severity,
-                'event_id': event.get('id', 0),
-                'timestamp': datetime.now().isoformat()
-            }
-            
-            if event_type == 'speeding':
-                start_lat = event.get('start_lat')
-                start_lon = event.get('start_lon')
-                date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
-                
-                min_speed = event.get('min_vehicle_speed', 0) or 0
-                max_speed = event.get('max_vehicle_speed', 0) or 0
-                avg_exceeded = event.get('avg_over_speed_in_kph', 0) or 0
-                
-                min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
-                max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
-                avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
-                
-                extracted.update({
-                    'date_time': date_time,
-                    'speed_range': f"{min_speed_mph}–{max_speed_mph} mph",
-                    'exceeded_by': f"+{avg_exceeded_mph} mph"
-                })
-            else:
-                # Performance events
-                end_lat = event.get('end_lat')
-                end_lon = event.get('end_lon')
-                end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
-                
-                extracted.update({
-                    'date_time': end_time,
-                    'speed_range': '',
-                    'exceeded_by': ''
-                })
-            
-            return extracted
-        except Exception as e:
-            logger.error(f"Error extracting event data: {e}")
-            return None
-    
-    def generate_excel_file(self, events: List[Dict[str, Any]], date_str: str = None) -> Optional[str]:
-        """Generate Excel file from events. Returns file path or None."""
-        try:
-            if date_str is None:
-                date_str = datetime.now().strftime('%Y-%m-%d')
-            
-            if not events:
-                logger.warning(f"No events to generate Excel for {date_str}")
-                return None
-            
-            # Create workbook
-            wb = Workbook()
-            ws = wb.active
-            ws.title = "Daily Report"
-            
-            # Define headers
-            headers = [
-                "Event Type",
-                "Driver Name",
-                "Date & Time",
-                "Speed Range",
-                "Exceeded By",
-                "Severity"
-            ]
-            
-            # Add headers with formatting
-            header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
-            header_font = Font(bold=True, color="FFFFFF")
-            
-            for col_num, header in enumerate(headers, 1):
-                cell = ws.cell(row=1, column=col_num)
-                cell.value = header
-                cell.fill = header_fill
-                cell.font = header_font
-                cell.alignment = Alignment(horizontal="center", vertical="center")
-            
-            # Add events
-            for row_num, event in enumerate(events, 2):
-                ws.cell(row=row_num, column=1).value = event.get('event_type', '').replace('_', ' ').title()
-                ws.cell(row=row_num, column=2).value = event.get('driver_name', '')
-                ws.cell(row=row_num, column=3).value = event.get('date_time', '')
-                ws.cell(row=row_num, column=4).value = event.get('speed_range', '')
-                ws.cell(row=row_num, column=5).value = event.get('exceeded_by', '')
-                ws.cell(row=row_num, column=6).value = event.get('severity', '')
-            
-            # Adjust column widths
-            ws.column_dimensions['A'].width = 20
-            ws.column_dimensions['B'].width = 25
-            ws.column_dimensions['C'].width = 20
-            ws.column_dimensions['D'].width = 20
-            ws.column_dimensions['E'].width = 18
-            ws.column_dimensions['F'].width = 15
-            
-            # Save file
-            file_path = os.path.join(self.event_store.storage_dir, f'Daily_Report_{date_str}.xlsx')
-            wb.save(file_path)
-            
-            logger.info(f"[EXCEL] Generated Excel file: {file_path}")
-            return file_path
-            
-        except Exception as e:
-            logger.error(f"Error generating Excel file: {e}")
-        return None
-    
-    async def send_excel_file(self, file_path: str, date_str: str = None) -> bool:
-        """Send Excel file to Telegram"""
-        try:
-            if not os.path.exists(file_path):
-                logger.error(f"Excel file not found: {file_path}")
-                return False
-            
-            if date_str is None:
-                date_str = datetime.now().strftime('%Y-%m-%d')
-            
-            with open(file_path, 'rb') as excel_file:
-                await self.telegram_bot.send_document(
-                    chat_id=self.chat_id,
-                    document=excel_file,
-                    caption=f"📊 Daily Safety Report - {date_str}",
-                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
-                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
-                )
-            
-            logger.info(f"[SENT] Excel file sent for {date_str}")
-            return True
-        except Exception as e:
-            logger.error(f"[ERROR] Failed to send Excel file: {e}")
-            return False
-    
-    async def handle_getid_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /getid command to send Excel for today"""
-        try:
-            # Get today's date
-            today = datetime.now().strftime('%Y-%m-%d')
-            
-            # Load today's events
-            events = self.event_store.load_events(self.event_store.get_today_file())
-            
-            if not events:
-                await update.message.reply_text("📋 No events recorded for today.")
-                return
-            
-            # Generate Excel
-            excel_path = self.generate_excel_file(events, today)
-            
-            if excel_path and os.path.exists(excel_path):
-                await self.send_excel_file(excel_path, today)
-                logger.info(f"[COMMAND] /getid executed, sent Excel for {today}")
-            else:
-                await update.message.reply_text("❌ Failed to generate Excel report.")
-        except Exception as e:
-            logger.error(f"Error handling /getid command: {e}")
-            await update.message.reply_text("❌ An error occurred while processing your request.")
     
     def process_new_events_sync(self):
         """Synchronous wrapper for async event processing"""
@@ -957,17 +968,32 @@ Severity: {severity}"""
             logger.info("[FETCH] Fetching speeding events...")
             speeding_events, speed_error = self.fetch_speeding_events()
             
+            if speed_error:
+                logger.error(f"[ERROR] Speeding fetch error: {speed_error}")
+                if speed_error in ["AUTH_ERROR", "PERMISSION_ERROR"]:
+                    if not self.critical_alert_sent:
+                        try:
+                            await self.telegram_bot.send_message(
+                                chat_id=self.chat_id,
+                                text=f"🚨 CRITICAL: API Authentication/Permission Error\n\nError: {speed_error}\n\nCheck API key and permissions.",
+                                parse_mode='Markdown'
+                            )
+                            self.critical_alert_sent = True
+                            logger.error("[ALERT] Sent critical API error alert")
+                        except Exception as e:
+                            logger.error(f"[ERROR] Failed to send alert: {e}")
+            
             if speeding_events is not None:
                 new_speeding = self.filter_new_speeding_events(speeding_events)
                 if new_speeding:
                     logger.info(f"[PROCESS] Processing {len(new_speeding)} speeding events")
                     for event in new_speeding:
                         self._mark_processed(event.get('id', 0))
-                        event_data = self.extract_event_data(event, 'speeding')
-                        if event_data:
-                            self.event_store.save_event(event_data)
-                        await self.send_speeding_event_to_telegram(event) # Send immediately
-                        await asyncio.sleep(1.5)  # Rate limit to avoid Telegram flood control
+                        # Store event to Excel data
+                        self.store_event(event, 'speeding', is_speeding=True)
+                        # Send to Telegram
+                        await self.send_speeding_event_to_telegram(event)
+                        await asyncio.sleep(2)
                 else:
                     logger.info("[PROCESS] No new speeding events")
             else:
@@ -977,19 +1003,33 @@ Severity: {severity}"""
             logger.info("[FETCH] Fetching performance events...")
             performance_events, perf_error = self.fetch_driver_performance_events()
             
+            if perf_error:
+                logger.error(f"[ERROR] Performance fetch error: {perf_error}")
+                if perf_error in ["AUTH_ERROR", "PERMISSION_ERROR"]:
+                    if not self.critical_alert_sent:
+                        try:
+                            await self.telegram_bot.send_message(
+                                chat_id=self.chat_id,
+                                text=f"🚨 CRITICAL: API Authentication/Permission Error\n\nError: {perf_error}\n\nCheck API key and permissions.",
+                                parse_mode='Markdown'
+                            )
+                            self.critical_alert_sent = True
+                            logger.error("[ALERT] Sent critical API error alert")
+                        except Exception as e:
+                            logger.error(f"[ERROR] Failed to send alert: {e}")
+            
             if performance_events is not None:
                 new_performance = self.filter_new_performance_events(performance_events)
                 if new_performance:
                     logger.info(f"[PROCESS] Processing {len(new_performance)} performance events")
                     for event in new_performance:
                         self._mark_processed(event.get('id', 0))
-                        # Determine event type
-                        event_type = event.get('type', 'unknown')
-                        event_data = self.extract_event_data(event, event_type)
-                        if event_data:
-                            self.event_store.save_event(event_data)
-                        await self.send_performance_event_to_telegram(event) # Send immediately
-                        await asyncio.sleep(2.0)  # Rate limit to avoid Telegram flood control
+                        # Store event to Excel data
+                        event_type = event.get('type', '')
+                        self.store_event(event, event_type, is_speeding=False)
+                        # Send to Telegram
+                        await self.send_performance_event_to_telegram(event)
+                        await asyncio.sleep(2)
                 else:
                     logger.info("[PROCESS] No new performance events")
             else:
@@ -998,6 +1038,7 @@ Severity: {severity}"""
             # Update health - success even if some events didn't send
             self.last_successful_check = datetime.now()
             self.consecutive_failures = 0
+            self.critical_alert_sent = False
             
             duration = (datetime.now() - start_time).total_seconds()
             logger.info("="*60)
@@ -1009,31 +1050,134 @@ Severity: {severity}"""
             import traceback
             logger.error(traceback.format_exc())
             self.consecutive_failures += 1
+            logger.warning(f"[HEALTH] Consecutive failures: {self.consecutive_failures}/{self.max_consecutive_failures}")
+            
+            if self.consecutive_failures >= self.max_consecutive_failures and not self.critical_alert_sent:
+                try:
+                    await self.telegram_bot.send_message(
+                        chat_id=self.chat_id,
+                        text=f"🚨 CRITICAL: SafetyBot encountered {self.consecutive_failures} consecutive failures\n\nError: {str(e)[:100]}\n\nPlease check logs.",
+                        parse_mode='Markdown'
+                    )
+                    self.critical_alert_sent = True
+                    logger.error("[ALERT] Sent consecutive failures alert")
+                except Exception as e2:
+                    logger.error(f"[ERROR] Failed to send critical alert: {e2}")
     
-    async def send_daily_excel(self):
-        """Generate and send daily Excel report at end of day"""
+    async def send_daily_excel_report(self):
+        """Send Excel report for today's events"""
         try:
-            today = datetime.now().strftime('%Y-%m-%d')
-            logger.info(f"[DAILY] Generating daily report for {today}...")
-            
-            # Load today's events
-            events = self.event_store.load_events(self.event_store.get_today_file())
-            
-            if not events:
-                logger.info(f"[DAILY] No events to report for {today}")
-                return
-            
-            # Generate Excel
-            excel_path = self.generate_excel_file(events, today)
+            today = datetime.now()
+            excel_path = self.generate_excel_report(today)
             
             if excel_path and os.path.exists(excel_path):
-                await self.send_excel_file(excel_path, today)
-                logger.info(f"[DAILY] Daily report sent successfully")
+                try:
+                    with open(excel_path, 'rb') as excel_file:
+                        await self.telegram_bot.send_document(
+                            chat_id=self.chat_id,
+                            document=excel_file,
+                            filename=f"safety_report_{today.strftime('%Y-%m-%d')}.xlsx",
+                            caption=f"📊 Daily Safety Report - {today.strftime('%B %d, %Y')}",
+                            read_timeout=60,
+                            write_timeout=60
+                        )
+                    logger.info(f"[EXCEL_SENT] Daily report sent for {today.strftime('%Y-%m-%d')}")
+                except Exception as e:
+                    logger.error(f"[EXCEL_ERROR] Failed to send Excel file: {e}")
+                finally:
+                    # Clean up
+                    try:
+                        os.remove(excel_path)
+                    except:
+                        pass
             else:
-                logger.error(f"[DAILY] Failed to generate daily report")
+                logger.info(f"[EXCEL] No data to send for {today.strftime('%Y-%m-%d')}")
+        
+        except Exception as e:
+            logger.error(f"[EXCEL_ERROR] Error in daily Excel report: {e}")
+    
+    async def handle_get_excel_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """Handle /getexcel command to send today's Excel report on demand"""
+        try:
+            today = datetime.now()
+            logger.info(f"[COMMAND] /getexcel requested by {update.effective_user.first_name}")
+            
+            await update.message.reply_text("📊 Generating Excel report for today...")
+            
+            excel_path = self.generate_excel_report(today)
+            
+            if excel_path and os.path.exists(excel_path):
+                try:
+                    with open(excel_path, 'rb') as excel_file:
+                        await update.message.reply_document(
+                            document=excel_file,
+                            filename=f"safety_report_{today.strftime('%Y-%m-%d')}.xlsx",
+                            caption=f"📊 Safety Report - {today.strftime('%B %d, %Y')}"
+                        )
+                    logger.info(f"[COMMAND] Excel report sent for {today.strftime('%Y-%m-%d')}")
+                except Exception as e:
+                    logger.error(f"[COMMAND_ERROR] Failed to send Excel file: {e}")
+                    await update.message.reply_text("❌ Error sending Excel file. Check logs.")
+                finally:
+                    # Clean up
+                    try:
+                        os.remove(excel_path)
+                    except:
+                        pass
+            else:
+                await update.message.reply_text("📭 No events recorded for today yet.")
+                logger.info(f"[COMMAND] No data for {today.strftime('%Y-%m-%d')}")
+        
+        except Exception as e:
+            logger.error(f"[COMMAND_ERROR] Error handling /getexcel: {e}")
+            try:
+                await update.message.reply_text("❌ An error occurred while generating the report.")
+            except:
+                pass
+    
+    async def health_check(self):
+        """Perform health check and send status"""
+        try:
+            logger.info("[HEALTH] Running health check...")
+            
+            # Test API connectivity
+            speeding_test, _ = self.fetch_speeding_events()
+            performance_test, _ = self.fetch_driver_performance_events()
+            apis_ok = (speeding_test is not None and performance_test is not None)
+            
+            # Test Telegram connectivity
+            telegram_ok = False
+            try:
+                await self.telegram_bot.get_me()
+                telegram_ok = True
+            except Exception as e:
+                logger.error(f"[HEALTH] Telegram check failed: {e}")
+            
+            # Determine overall status
+            overall_ok = apis_ok and telegram_ok
+            status = "✅ Healthy" if overall_ok else "❌ Issues Detected"
+            
+            last_check_str = "Never" if not self.last_successful_check else f"{(datetime.now() - self.last_successful_check).total_seconds() / 60:.1f}m ago"
+            
+            health_msg = f"""Health Report
+Status: {status}
+Last Check: {last_check_str}
+Failures: {self.consecutive_failures}
+API: {'✅ OK' if apis_ok else '❌ FAILED'}
+Telegram: {'✅ OK' if telegram_ok else '❌ FAILED'}
+Interval: {self.check_interval // 60}m
+Version: 2.2 with Excel Reports"""
+            
+            await self.telegram_bot.send_message(
+                chat_id=self.chat_id,
+                text=health_msg,
+                parse_mode='Markdown'
+            )
+            
+            logger.info(f"[HEALTH] Report sent - Status: {status}")
             
         except Exception as e:
-            logger.error(f"[DAILY] Error sending daily report: {e}")
+            logger.error(f"[HEALTH] Health check failed: {e}")
     
     def run_scheduler(self):
         """Main scheduler loop - runs in main thread"""
@@ -1041,23 +1185,26 @@ Severity: {severity}"""
         schedule.every(self.check_interval).seconds.do(self.process_new_events_sync)
         logger.info(f"[SCHEDULER] Event check every {self.check_interval}s ({self.check_interval/60:.1f}m)")
         
-        # Schedule daily report at 11:59 PM
-        schedule.every().day.at("23:59").do(lambda: asyncio.run(self.send_daily_excel()))
-        logger.info("[SCHEDULER] Daily Excel report scheduled for 23:59")
+        # Schedule daily Excel report at 11:59 PM
+        schedule.every().day.at("23:59").do(lambda: asyncio.run(self.send_daily_excel_report()))
+        logger.info("[SCHEDULER] Daily Excel report scheduled for 11:59 PM")
+        
+        # Schedule health checks
+        schedule.every().hour.do(lambda: asyncio.run(self.health_check()))
+        logger.info("[SCHEDULER] Health check every hour")
         
         # Run initial check
         logger.info("[STARTUP] Running initial event check...")
         self.process_new_events_sync()
         
         # Main loop
-        logger.info("[STARTUP] SafetyBot v3.0 - Now storing events for daily reporting")
+        logger.info("[STARTUP] SafetyBot v2.2 Pro is now monitoring")
         print("\n" + "="*60)
-        print("SafetyBot v3.0 - Event Storage & Daily Reporting")
+        print("SafetyBot v2.2 Pro - Excel Reports Edition")
         print(f"Check interval: {self.check_interval // 60} minutes")
-        print("Features:")
-        print("  • Stores all speeding & performance events")
-        print("  • Auto-sends Excel at 23:59 daily")
-        print("  • /getid command for today's report")
+        print(f"Monitoring: Speeding & 6 Performance Events")
+        print("Daily Excel reports at 11:59 PM")
+        print("Use /getexcel to get today's report on demand")
         print("Press Ctrl+C to stop")
         print("="*60 + "\n")
         
@@ -1094,7 +1241,7 @@ Severity: {severity}"""
             
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
-                text="✅ SafetyBot v3.0 Started\nEvent Storage & Daily Reporting Active\nReady to monitor",
+                text="✅ SafetyBot v2.2 Started\nCheck Interval: " + str(self.check_interval // 60) + "m\nExcel reports enabled\nReady to monitor",
                 parse_mode='Markdown'
             )
             logger.info("[TEST] Startup message sent")

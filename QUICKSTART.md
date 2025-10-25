@@ -1,170 +1,119 @@
-# SafetyBot v3.0 - Quick Start (5 Minutes)
+# SafetyBot v2.2 - Quick Start Guide
 
-## 🚀 Get Running in 5 Steps
+## ⚡ 5-Minute Setup
 
-### 1️⃣ Install Package (1 min)
+### 1. Install Excel Support
 ```bash
-pip install openpyxl==3.10.0
+pip install openpyxl==3.10.1
 ```
 
-### 2️⃣ Create `.env` File (1 min)
+### 2. Update the Bot
+Replace your `safetybot.py` with the new v2.2 version.
 
-Create a new file called `.env` in your safetybot folder with:
-
-```
-API_KEY=your_api_key_here
-API_BASE_URL=https://api.gomotive.com/v2
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
-CHECK_INTERVAL=300
-```
-
-Replace:
-- `your_api_key_here` → Your GoMotive API key
-- `your_telegram_bot_token_here` → Your Telegram bot token
-- `your_chat_id_here` → Your Telegram chat ID
-
-### 3️⃣ Run the Bot (1 min)
+### 3. Restart
 ```bash
-python safetybot.py
+# If using systemd service:
+sudo systemctl restart safetybot.service
+
+# If running manually:
+# Press Ctrl+C to stop, then run again:
+python3 safetybot.py
 ```
 
-You should see:
+### 4. Done! ✓
+
+## 🎯 What You Now Have
+
+✅ Events stored as JSON in `events_data/`
+✅ Excel reports generated daily at 11:59 PM  
+✅ `/getexcel` command for on-demand reports
+✅ All Telegram alerts still work
+
+## 📝 Test It
+
+**In Telegram, type:**
 ```
-============================================================
-SafetyBot v3.0 - Event Storage & Daily Reporting
-Check interval: 5 minutes
-Features:
-  • Stores all speeding & performance events
-  • Auto-sends Excel at 23:59 daily
-  • /getid command for today's report
-Press Ctrl+C to stop
-============================================================
-```
-
-### 4️⃣ Verify Setup (1 min)
-
-Look for messages in the console:
-- ✅ `[TEST] Telegram OK`
-- ✅ Telegram receives startup message
-- ✅ `[TEST] API OK: X speeding, Y performance events`
-
-### 5️⃣ Test the Bot (1 min)
-
-In your Telegram chat, type:
-```
-/getid
+/getexcel@nntexpressinc_safety_bot
 ```
 
-You should receive an Excel file (if there are events).
-
-## 📊 What Happens Next
-
-- **Every 5 minutes**: Bot checks for new events and stores them
-- **Daily at 23:59**: Bot generates and sends Excel report
-- **Anytime**: Type `/getid` to get today's report
-
-## 📁 Where's My Data?
-
-Events are stored in: `events_data/` directory
-- `events_2025-10-25.json` → Raw event data
-- `Daily_Report_2025-10-25.xlsx` → Excel file
-
-## 🔧 Need Help?
-
-### Bot Not Starting?
+**Check the logs:**
 ```bash
-python safetybot.py
-# Look for error message
-# Check safetybot.log file
+tail -f safetybot.log | grep EXCEL
 ```
 
-### No Events Showing?
-- Wait 5 minutes (first check cycle)
-- Verify API key is correct
-- Check `safetybot.log` for errors
-
-### /getid Not Working?
-- Make sure bot is running
-- Type exact command: `/getid`
-- Wait for bot to respond with Excel file
-
-## 📋 What's New in v3.0?
-
-✨ **Key Changes from Previous Version**:
-- ✅ Now captures ALL 6 performance event types (not just those with video)
-- ✅ Stores event data for reporting
-- ✅ Generates daily Excel files
-- ✅ `/getid` command for on-demand reports
-
-## 🎯 Excel Report Format
-
-The daily Excel contains:
-
-| Column | Content |
-|--------|---------|
-| Event Type | Speeding, Hard Brake, Crash, etc. |
-| Driver Name | Full name of driver |
-| Date & Time | When event occurred |
-| Speed Range | Only for speeding |
-| Exceeded By | Only for speeding |
-| Severity | medium / high / critical |
-
-## ⏰ Schedule
-
-- **Every 5 minutes**: Check for new events
-- **11:59 PM (23:59)**: Generate and send daily Excel
-- **Anytime**: `/getid` command gets today's data
-
-## 💾 Changing Check Interval
-
-Edit `.env`:
-```env
-CHECK_INTERVAL=300  # Change to:
-# 600 for 10 minutes
-# 1800 for 30 minutes
-# etc.
-```
-
-Then restart bot.
-
-## 📝 Logs
-
-Watch real-time activity:
+**View stored events:**
 ```bash
-tail -f safetybot.log
+cat events_data/events_$(date +%Y-%m-%d).json | python3 -m json.tool
 ```
 
-Look for:
-- `[FETCH]` - API calls
-- `[STORED]` - Events saved
-- `[SENT]` - Excel files sent
-- `ERROR` - Any problems
+## 🆘 If Something Breaks
 
-## ✅ You're Done!
+### openpyxl not found?
+```bash
+pip install openpyxl==3.10.1
+```
 
-Your bot is now running and:
-1. Collecting all events (speeding + 6 performance types)
-2. Storing them in JSON
-3. Generating daily Excel reports
-4. Ready to send on-demand with `/getid`
+### Bot won't start?
+```bash
+# Check for errors
+python3 safetybot.py
 
-## 🆘 Common Issues
+# Read last 50 lines of logs
+tail -50 safetybot.log
+```
 
-| Problem | Solution |
-|---------|----------|
-| `ModuleNotFoundError: openpyxl` | Run: `pip install openpyxl` |
-| `Missing required environment variables` | Check `.env` file has all 5 lines |
-| `Bot not receiving events` | Wait 5+ minutes, check `safetybot.log` |
-| No response to `/getid` | Make sure chat ID in `.env` matches |
-| Excel file is empty | Wait for events to occur (5+ minutes) |
+### /getexcel not working?
+Make sure bot is added to the group/chat and has permission to send documents.
 
-## 📞 Need Details?
+## 📚 Need More Help?
 
-- Full docs: See `README.md`
-- Setup help: See `SETUP_GUIDE.md`
-- All changes: See `CHANGELOG.md` and `IMPLEMENTATION_SUMMARY.md`
+- **Setup Details:** See `EXCEL_SETUP_GUIDE.md`
+- **Technical Changes:** See `CHANGES_SUMMARY.md`  
+- **Complete Docs:** See `README.md`
+- **What's New:** See `IMPLEMENTATION_COMPLETE.md`
 
----
+## 🚀 Key Commands
 
-**That's it!** Your SafetyBot v3.0 is ready. 🎉
+```bash
+# View today's events
+cat events_data/events_$(date +%Y-%m-%d).json | python3 -m json.tool
+
+# Watch Excel operations
+tail -f safetybot.log | grep EXCEL
+
+# Watch all commands
+tail -f safetybot.log | grep COMMAND
+
+# Check bot status
+tail -20 safetybot.log
+```
+
+## 💡 Pro Tips
+
+1. **Schedule reports at different time?**
+   - Edit `safetybot.py` line ~960, change `"23:59"` to your preferred time
+   - Restart bot
+
+2. **Backup your data?**
+   - Copy `events_data/` directory regularly
+
+3. **Performance events not showing?**
+   - Check: `tail -f safetybot.log | grep "ERROR\|performance"`
+   - See troubleshooting in `EXCEL_SETUP_GUIDE.md`
+
+## 📊 What Gets Exported
+
+**Excel contains:**
+- Event Type (Speeding, Hard Brake, Crash, etc.)
+- Driver Name
+- Date & Time  
+- Speed Range (if speeding)
+- Exceeded By (if speeding)
+- Severity (medium, high, critical)
+
+## ✨ That's It!
+
+Your bot now stores data AND sends daily Excel reports.
+Everything else works exactly as before.
+
+For more details, see the documentation files! 📚 
