@@ -502,138 +502,6 @@ class SafetyBot:
             logger.error(f"[TZ_ERROR] Error formatting time '{time_str}': {e}")
             return time_str
     
-    def format_speeding_message(self, event: Dict[str, Any]) -> Optional[str]:
-        """Format speeding event message. Returns None if formatting fails."""
-        try:
-            vehicle_number = event.get('vehicle', {}).get('number', 'N/A')
-            driver = event.get('driver', {}) or {}
-            driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
-            
-            start_lat = event.get('start_lat')
-            start_lon = event.get('start_lon')
-            date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
-            
-            min_speed = event.get('min_vehicle_speed', 0) or 0
-            max_speed = event.get('max_vehicle_speed', 0) or 0
-            avg_exceeded = event.get('avg_over_speed_in_kph', 0) or 0
-            
-            min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
-            max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
-            avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
-            
-            severity = event.get('metadata', {}).get('severity', 'unknown') if event.get('metadata') else 'unknown'
-            
-            return f"""⚠️ Speeding Alert
-Driver: {driver_name}
-Vehicle: {vehicle_number}
-{date_time}
-Speed Range: {min_speed_mph}–{max_speed_mph} mph
-Exceeded By: +{avg_exceeded_mph} mph
-Severity: {severity}"""
-            
-        except Exception as e:
-            logger.error(f"[FORMAT_ERROR] Error formatting speeding message: {e}")
-            return None
-    
-    def format_performance_message(self, event: Dict[str, Any]) -> Optional[str]:
-        """Format performance event message. Returns None if formatting fails."""
-        try:
-            event_type = event.get('type', 'Unknown').replace('_', ' ').title()
-            vehicle_number = event.get('vehicle', {}).get('number', 'N/A')
-            driver = event.get('driver', {}) or {}
-            driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
-            
-            end_lat = event.get('end_lat')
-            end_lon = event.get('end_lon')
-            end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
-            
-            severity = event.get('metadata', {}).get('severity', 'unknown') if event.get('metadata') else 'unknown'
-            
-            return f"""🚨 {event_type}
-Driver: {driver_name}
-Vehicle: {vehicle_number}
-{end_time}
-Severity: {severity}"""
-            
-        except Exception as e:
-            logger.error(f"[FORMAT_ERROR] Error formatting performance message: {e}")
-            return None
-    
-    async def send_speeding_event_to_telegram(self, event: Dict[str, Any]) -> bool:
-        """Send speeding event to Telegram. Returns True if sent."""
-        message = self.format_speeding_message(event)
-        
-        # Skip if formatting failed
-        if message is None:
-            logger.warning(f"[SKIP] Speeding event {event.get('id')} - formatting failed")
-            return False
-        
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                await self.telegram_bot.send_message(
-                    chat_id=self.chat_id,
-                    text=message,
-                    parse_mode='Markdown',
-                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
-                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
-                )
-                logger.info(f"[SENT] Speeding event {event.get('id')} to Telegram")
-                return True
-                    
-            except (NetworkError, TimedOut) as e:
-                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-            except TelegramError as e:
-                logger.error(f"[ERROR] Telegram API error: {e}")
-                return False
-            except Exception as e:
-                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-        
-        logger.error(f"[FAILED] Could not send speeding event {event.get('id')}")
-        return False
-    
-    async def send_performance_event_to_telegram(self, event: Dict[str, Any]) -> bool:
-        """Send performance event to Telegram. Returns True if sent."""
-        event_id = event.get('id', 0)
-        message = self.format_performance_message(event)
-        
-        # Skip if formatting failed
-        if message is None:
-            logger.warning(f"[SKIP] Performance event {event_id} - formatting failed")
-            return False
-        
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                await self.telegram_bot.send_message(
-                    chat_id=self.chat_id,
-                    text=message,
-                    parse_mode='Markdown',
-                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
-                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
-                )
-                logger.info(f"[SENT] Performance event {event_id} to Telegram")
-                return True
-                    
-            except (NetworkError, TimedOut) as e:
-                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-            except TelegramError as e:
-                logger.error(f"[ERROR] Telegram API error: {e}")
-                return False
-            except Exception as e:
-                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-        
-        logger.error(f"[FAILED] Could not send performance event {event_id}")
-        return False
-    
     def extract_event_data(self, event: Dict[str, Any], event_type: str) -> Dict[str, Any]:
         """Extract relevant event data for storage"""
         try:
@@ -840,7 +708,6 @@ Severity: {severity}"""
                         event_data = self.extract_event_data(event, 'speeding')
                         if event_data:
                             self.event_store.save_event(event_data)
-                        await self.send_speeding_event_to_telegram(event) # Send immediately
                         await asyncio.sleep(0.5)
                 else:
                     logger.info("[PROCESS] No new speeding events")
@@ -862,7 +729,6 @@ Severity: {severity}"""
                         event_data = self.extract_event_data(event, event_type)
                         if event_data:
                             self.event_store.save_event(event_data)
-                        await self.send_performance_event_to_telegram(event) # Send immediately
                         await asyncio.sleep(0.5)
                 else:
                     logger.info("[PROCESS] No new performance events")
