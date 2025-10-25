@@ -505,9 +505,13 @@ class SafetyBot:
     def extract_event_data(self, event: Dict[str, Any], event_type: str) -> Dict[str, Any]:
         """Extract relevant event data for storage"""
         try:
-            driver = event.get('driver', {})
+            # Handle None or missing driver dict
+            driver = event.get('driver') or {}
             driver_name = f"{driver.get('first_name', '')} {driver.get('last_name', '')}".strip() or 'Unknown'
-            severity = event.get('metadata', {}).get('severity', 'unknown')
+            
+            # Handle None or missing metadata dict
+            metadata = event.get('metadata') or {}
+            severity = metadata.get('severity', 'unknown') or 'unknown'
             
             extracted = {
                 'event_type': event_type,
@@ -518,18 +522,18 @@ class SafetyBot:
             }
             
             if event_type == 'speeding':
-                start_lat = event.get('start_lat')
-                start_lon = event.get('start_lon')
-                date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
-                
-                min_speed = event.get('min_vehicle_speed', 0)
-                max_speed = event.get('max_vehicle_speed', 0)
-                avg_exceeded = event.get('avg_over_speed_in_kph', 0)
-                
-                min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
-                max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
-                avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
-                
+            start_lat = event.get('start_lat')
+            start_lon = event.get('start_lon')
+            date_time = self.format_time(event.get('start_time', ''), start_lat, start_lon)
+            
+                min_speed = event.get('min_vehicle_speed', 0) or 0
+                max_speed = event.get('max_vehicle_speed', 0) or 0
+                avg_exceeded = event.get('avg_over_speed_in_kph', 0) or 0
+            
+            min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
+            max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
+            avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
+            
                 extracted.update({
                     'date_time': date_time,
                     'speed_range': f"{min_speed_mph}–{max_speed_mph} mph",
@@ -537,10 +541,10 @@ class SafetyBot:
                 })
             else:
                 # Performance events
-                end_lat = event.get('end_lat')
-                end_lon = event.get('end_lon')
-                end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
-                
+            end_lat = event.get('end_lat')
+            end_lon = event.get('end_lon')
+            end_time = self.format_time(event.get('end_time', ''), end_lat, end_lon)
+            
                 extracted.update({
                     'date_time': end_time,
                     'speed_range': '',
@@ -614,15 +618,15 @@ class SafetyBot:
             
         except Exception as e:
             logger.error(f"Error generating Excel file: {e}")
-            return None
+        return None
     
     async def send_excel_file(self, file_path: str, date_str: str = None) -> bool:
         """Send Excel file to Telegram"""
         try:
             if not os.path.exists(file_path):
                 logger.error(f"Excel file not found: {file_path}")
-                return False
-            
+            return False
+        
             if date_str is None:
                 date_str = datetime.now().strftime('%Y-%m-%d')
             
@@ -636,11 +640,11 @@ class SafetyBot:
                 )
             
             logger.info(f"[SENT] Excel file sent for {date_str}")
-            return True
-            
-        except Exception as e:
+                return True
+                    
+            except Exception as e:
             logger.error(f"[ERROR] Failed to send Excel file: {e}")
-            return False
+        return False
     
     async def handle_getid_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /getid command to send Excel for today"""
@@ -661,10 +665,10 @@ class SafetyBot:
             if excel_path and os.path.exists(excel_path):
                 await self.send_excel_file(excel_path, today)
                 logger.info(f"[COMMAND] /getid executed, sent Excel for {today}")
-            else:
+                    else:
                 await update.message.reply_text("❌ Failed to generate Excel report.")
                 
-        except Exception as e:
+            except Exception as e:
             logger.error(f"Error handling /getid command: {e}")
             await update.message.reply_text("❌ An error occurred while processing your request.")
     
@@ -769,7 +773,7 @@ class SafetyBot:
                 logger.info(f"[DAILY] Daily report sent successfully")
             else:
                 logger.error(f"[DAILY] Failed to generate daily report")
-                
+            
         except Exception as e:
             logger.error(f"[DAILY] Error sending daily report: {e}")
     
