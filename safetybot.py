@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Safety Bot - GoMotive APIs to Telegram Bot
-Monitors speeding and driver performance events with Excel daily reports
+Monitors speeding and driver performance events with production-grade reliability
 """
 
 import os
@@ -16,17 +16,14 @@ import uuid
 import signal
 import atexit
 import threading
-from datetime import datetime, timedelta, time as datetime_time
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Set, Tuple
 from dotenv import load_dotenv
 import schedule
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from telegram import Bot, InputMediaVideo, Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram import Bot, InputMediaVideo
 from telegram.error import TelegramError, NetworkError, TimedOut
-from openpyxl import Workbook
-from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 
 # Load environment variables
 load_dotenv()
@@ -66,7 +63,7 @@ def log_safe(level, message):
         getattr(logger, level)(safe_message)
 
 class SafetyBot:
-    """Main bot class for monitoring GoMotive APIs and sending Telegram alerts with Excel reports"""
+    """Main bot class for monitoring GoMotive APIs and sending Telegram alerts"""
     
     ALLOWED_EVENT_TYPES = [
         'hard_brake', 'crash', 'seat_belt_violation', 'stop_sign_violation',
@@ -102,10 +99,6 @@ class SafetyBot:
             for event_type in self.ALLOWED_EVENT_TYPES
         }
         
-        # Data storage directory
-        self.data_dir = 'events_data'
-        os.makedirs(self.data_dir, exist_ok=True)
-        
         # Deduplication within current cycle
         self.processed_event_ids: Set[int] = set()
         
@@ -113,9 +106,6 @@ class SafetyBot:
         self.is_processing = False
         self.running = True
         self.shutdown_lock = threading.Lock()
-        
-        # Telegram application for command handlers
-        self.app = None
         
         # Validate and initialize
         self._validate_config()
@@ -233,149 +223,6 @@ class SafetyBot:
             logger.info(f"[ID_SAVED] {event_type}: {event_id}")
         except IOError as e:
             logger.error(f"Error saving last {event_type} event ID: {e}")
-    
-    def get_events_data_file(self, date: datetime) -> str:
-        """Get the path for events data file for a specific date"""
-        date_str = date.strftime('%Y-%m-%d')
-        return os.path.join(self.data_dir, f'events_{date_str}.json')
-    
-    def store_event(self, event_data: Dict[str, Any], event_type: str, is_speeding: bool = False):
-        """Store event data to JSON file for the day"""
-        try:
-            today = datetime.now()
-            data_file = self.get_events_data_file(today)
-            
-            # Read existing data or create new
-            if os.path.exists(data_file):
-                with open(data_file, 'r', encoding='utf-8') as f:
-                    all_events = json.load(f)
-            else:
-                all_events = []
-            
-            # Prepare event record
-            event_record = {
-                'event_type': 'Speeding' if is_speeding else event_type.replace('_', ' ').title(),
-                'driver_name': f"{event_data.get('driver', {}).get('first_name', '')} {event_data.get('driver', {}).get('last_name', '')}".strip() or 'Unknown',
-                'date_time': event_data.get('start_time' if is_speeding else 'end_time', ''),
-                'severity': event_data.get('metadata', {}).get('severity', 'unknown'),
-                'speed_range': None,
-                'exceeded_by': None,
-                'event_id': event_data.get('id', 0)
-            }
-            
-            # Add speeding-specific fields
-            if is_speeding:
-                min_speed = event_data.get('min_vehicle_speed', 0)
-                max_speed = event_data.get('max_vehicle_speed', 0)
-                min_speed_mph = round(min_speed * 0.621371, 1) if min_speed else 0
-                max_speed_mph = round(max_speed * 0.621371, 1) if max_speed else 0
-                event_record['speed_range'] = f"{min_speed_mph}–{max_speed_mph} mph"
-                
-                avg_exceeded = event_data.get('avg_over_speed_in_kph', 0)
-                avg_exceeded_mph = round(avg_exceeded * 0.621371, 1) if avg_exceeded else 0
-                event_record['exceeded_by'] = f"+{avg_exceeded_mph} mph"
-            
-            # Add event to list
-            all_events.append(event_record)
-            
-            # Save back to file
-            with open(data_file, 'w', encoding='utf-8') as f:
-                json.dump(all_events, f, indent=2, ensure_ascii=False)
-            
-            logger.info(f"[STORED] Event {event_data.get('id')} stored for {today.strftime('%Y-%m-%d')}")
-            
-        except Exception as e:
-            logger.error(f"[STORE_ERROR] Failed to store event: {e}")
-    
-    def generate_excel_report(self, date: datetime) -> Optional[str]:
-        """Generate Excel file for events on a specific date. Returns file path or None."""
-        try:
-            data_file = self.get_events_data_file(date)
-            
-            if not os.path.exists(data_file):
-                logger.warning(f"[EXCEL] No events data for {date.strftime('%Y-%m-%d')}")
-                return None
-            
-            # Read events
-            with open(data_file, 'r', encoding='utf-8') as f:
-                events = json.load(f)
-            
-            if not events:
-                logger.warning(f"[EXCEL] No events to report for {date.strftime('%Y-%m-%d')}")
-                return None
-            
-            # Create workbook
-            wb = Workbook()
-            ws = wb.active
-            ws.title = "Daily Report"
-            
-            # Define styles
-            header_fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
-            header_font = Font(bold=True, color="FFFFFF", size=11)
-            border = Border(
-                left=Side(style='thin'),
-                right=Side(style='thin'),
-                top=Side(style='thin'),
-                bottom=Side(style='thin')
-            )
-            center_alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-            left_alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
-            
-            # Set column widths
-            ws.column_dimensions['A'].width = 18
-            ws.column_dimensions['B'].width = 25
-            ws.column_dimensions['C'].width = 20
-            ws.column_dimensions['D'].width = 20
-            ws.column_dimensions['E'].width = 18
-            ws.column_dimensions['F'].width = 15
-            
-            # Headers
-            headers = ['Event Type', 'Driver Name', 'Date & Time', 'Speed Range', 'Exceeded By', 'Severity']
-            for col_num, header in enumerate(headers, 1):
-                cell = ws.cell(row=1, column=col_num)
-                cell.value = header
-                cell.fill = header_fill
-                cell.font = header_font
-                cell.border = border
-                cell.alignment = center_alignment
-            
-            # Add data rows
-            for row_num, event in enumerate(events, 2):
-                row_data = [
-                    event.get('event_type', ''),
-                    event.get('driver_name', ''),
-                    event.get('date_time', ''),
-                    event.get('speed_range') or '',
-                    event.get('exceeded_by') or '',
-                    event.get('severity', '')
-                ]
-                
-                for col_num, value in enumerate(row_data, 1):
-                    cell = ws.cell(row=row_num, column=col_num)
-                    cell.value = value
-                    cell.border = border
-                    cell.alignment = left_alignment
-            
-            # Add title row at top
-            ws.insert_rows(1)
-            title_cell = ws['A1']
-            title_cell.value = f"Safety Events Report - {date.strftime('%B %d, %Y')}"
-            title_cell.font = Font(bold=True, size=14, color="FFFFFF")
-            title_cell.fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
-            ws.merge_cells('A1:F1')
-            title_cell.alignment = center_alignment
-            
-            # Save to temp file
-            excel_filename = f"safety_report_{date.strftime('%Y-%m-%d')}.xlsx"
-            excel_path = os.path.join(tempfile.gettempdir(), excel_filename)
-            wb.save(excel_path)
-            
-            logger.info(f"[EXCEL] Report generated: {excel_path} with {len(events)} events")
-            return excel_path
-            
-        except Exception as e:
-            logger.error(f"[EXCEL_ERROR] Failed to generate Excel report: {e}")
-            return None
     
     def fetch_speeding_events(self) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
         """Fetch speeding events from GoMotive v1 API. Returns (events, error_code)"""
@@ -989,9 +836,6 @@ Severity: {severity}"""
                     logger.info(f"[PROCESS] Processing {len(new_speeding)} speeding events")
                     for event in new_speeding:
                         self._mark_processed(event.get('id', 0))
-                        # Store event to Excel data
-                        self.store_event(event, 'speeding', is_speeding=True)
-                        # Send to Telegram
                         await self.send_speeding_event_to_telegram(event)
                         await asyncio.sleep(2)
                 else:
@@ -1024,10 +868,6 @@ Severity: {severity}"""
                     logger.info(f"[PROCESS] Processing {len(new_performance)} performance events")
                     for event in new_performance:
                         self._mark_processed(event.get('id', 0))
-                        # Store event to Excel data
-                        event_type = event.get('type', '')
-                        self.store_event(event, event_type, is_speeding=False)
-                        # Send to Telegram
                         await self.send_performance_event_to_telegram(event)
                         await asyncio.sleep(2)
                 else:
@@ -1064,77 +904,6 @@ Severity: {severity}"""
                 except Exception as e2:
                     logger.error(f"[ERROR] Failed to send critical alert: {e2}")
     
-    async def send_daily_excel_report(self):
-        """Send Excel report for today's events"""
-        try:
-            today = datetime.now()
-            excel_path = self.generate_excel_report(today)
-            
-            if excel_path and os.path.exists(excel_path):
-                try:
-                    with open(excel_path, 'rb') as excel_file:
-                        await self.telegram_bot.send_document(
-                            chat_id=self.chat_id,
-                            document=excel_file,
-                            filename=f"safety_report_{today.strftime('%Y-%m-%d')}.xlsx",
-                            caption=f"📊 Daily Safety Report - {today.strftime('%B %d, %Y')}",
-                            read_timeout=60,
-                            write_timeout=60
-                        )
-                    logger.info(f"[EXCEL_SENT] Daily report sent for {today.strftime('%Y-%m-%d')}")
-                except Exception as e:
-                    logger.error(f"[EXCEL_ERROR] Failed to send Excel file: {e}")
-                finally:
-                    # Clean up
-                    try:
-                        os.remove(excel_path)
-                    except:
-                        pass
-            else:
-                logger.info(f"[EXCEL] No data to send for {today.strftime('%Y-%m-%d')}")
-        
-        except Exception as e:
-            logger.error(f"[EXCEL_ERROR] Error in daily Excel report: {e}")
-    
-    async def handle_get_excel_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        """Handle /getexcel command to send today's Excel report on demand"""
-        try:
-            today = datetime.now()
-            logger.info(f"[COMMAND] /getexcel requested by {update.effective_user.first_name}")
-            
-            await update.message.reply_text("📊 Generating Excel report for today...")
-            
-            excel_path = self.generate_excel_report(today)
-            
-            if excel_path and os.path.exists(excel_path):
-                try:
-                    with open(excel_path, 'rb') as excel_file:
-                        await update.message.reply_document(
-                            document=excel_file,
-                            filename=f"safety_report_{today.strftime('%Y-%m-%d')}.xlsx",
-                            caption=f"📊 Safety Report - {today.strftime('%B %d, %Y')}"
-                        )
-                    logger.info(f"[COMMAND] Excel report sent for {today.strftime('%Y-%m-%d')}")
-                except Exception as e:
-                    logger.error(f"[COMMAND_ERROR] Failed to send Excel file: {e}")
-                    await update.message.reply_text("❌ Error sending Excel file. Check logs.")
-                finally:
-                    # Clean up
-                    try:
-                        os.remove(excel_path)
-                    except:
-                        pass
-            else:
-                await update.message.reply_text("📭 No events recorded for today yet.")
-                logger.info(f"[COMMAND] No data for {today.strftime('%Y-%m-%d')}")
-        
-        except Exception as e:
-            logger.error(f"[COMMAND_ERROR] Error handling /getexcel: {e}")
-            try:
-                await update.message.reply_text("❌ An error occurred while generating the report.")
-            except:
-                pass
-    
     async def health_check(self):
         """Perform health check and send status"""
         try:
@@ -1166,7 +935,7 @@ Failures: {self.consecutive_failures}
 API: {'✅ OK' if apis_ok else '❌ FAILED'}
 Telegram: {'✅ OK' if telegram_ok else '❌ FAILED'}
 Interval: {self.check_interval // 60}m
-Version: 2.2 with Excel Reports"""
+Version: 2.1 Pro"""
             
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
@@ -1185,10 +954,6 @@ Version: 2.2 with Excel Reports"""
         schedule.every(self.check_interval).seconds.do(self.process_new_events_sync)
         logger.info(f"[SCHEDULER] Event check every {self.check_interval}s ({self.check_interval/60:.1f}m)")
         
-        # Schedule daily Excel report at 11:59 PM
-        schedule.every().day.at("23:59").do(lambda: asyncio.run(self.send_daily_excel_report()))
-        logger.info("[SCHEDULER] Daily Excel report scheduled for 11:59 PM")
-        
         # Schedule health checks
         schedule.every().hour.do(lambda: asyncio.run(self.health_check()))
         logger.info("[SCHEDULER] Health check every hour")
@@ -1198,13 +963,12 @@ Version: 2.2 with Excel Reports"""
         self.process_new_events_sync()
         
         # Main loop
-        logger.info("[STARTUP] SafetyBot v2.2 Pro is now monitoring")
+        logger.info("[STARTUP] SafetyBot v2.1 Pro is now monitoring")
         print("\n" + "="*60)
-        print("SafetyBot v2.2 Pro - Excel Reports Edition")
+        print("SafetyBot v2.1 Pro - Production Ready")
         print(f"Check interval: {self.check_interval // 60} minutes")
         print(f"Monitoring: Speeding & 6 Performance Events")
-        print("Daily Excel reports at 11:59 PM")
-        print("Use /getexcel to get today's report on demand")
+        print("Separate ID tracking for each event type")
         print("Press Ctrl+C to stop")
         print("="*60 + "\n")
         
@@ -1241,7 +1005,7 @@ Version: 2.2 with Excel Reports"""
             
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
-                text="✅ SafetyBot v2.2 Started\nCheck Interval: " + str(self.check_interval // 60) + "m\nExcel reports enabled\nReady to monitor",
+                text="✅ SafetyBot v2.1 Pro Started\nCheck Interval: " + str(self.check_interval // 60) + "m\nReady to monitor",
                 parse_mode='Markdown'
             )
             logger.info("[TEST] Startup message sent")
