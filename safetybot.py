@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Safety Bot - GoMotive APIs to Telegram Bot
+Safety Bot - Enhanced with Screenshot Functionality
 Monitors speeding and driver performance events with production-grade reliability
+Now includes automated web screenshots from GoMotive platform
 """
 
 import os
@@ -22,8 +23,17 @@ from dotenv import load_dotenv
 import schedule
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from telegram import Bot, InputMediaVideo
+from telegram import Bot, InputMediaVideo, InputMediaPhoto
 from telegram.error import TelegramError, NetworkError, TimedOut
+
+# Selenium imports for screenshot functionality
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import TimeoutException, WebDriverException
 
 # Load environment variables
 load_dotenv()
@@ -62,6 +72,183 @@ def log_safe(level, message):
         safe_message = message.encode('ascii', 'ignore').decode('ascii')
         getattr(logger, level)(safe_message)
 
+class GoMotiveScreenshotManager:
+    """Manages browser automation and screenshots for GoMotive platform"""
+    
+    LOGIN_URL = "https://account.gomotive.com/log-in"
+    SPEEDING_URL_TEMPLATE = "https://app.gomotive.com/en-US/#/safety/speeding/{id};start_time={start_time}"
+    
+    def __init__(self, email: str, password: str):
+        """Initialize screenshot manager with login credentials"""
+        self.email = email
+        self.password = password
+        self.driver = None
+        self.is_logged_in = False
+        self.last_login_time = None
+        self.session_timeout = timedelta(hours=2)  # Re-login after 2 hours
+        
+    def _setup_driver(self):
+        """Set up Chrome driver with headless options"""
+        try:
+            chrome_options = Options()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--window-size=1920,1080')
+            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            
+            # Try to create driver
+            self.driver = webdriver.Chrome(options=chrome_options)
+            self.driver.set_page_load_timeout(30)
+            logger.info("[SCREENSHOT] Chrome driver initialized")
+            return True
+            
+        except Exception as e:
+            logger.error(f"[SCREENSHOT] Failed to initialize driver: {e}")
+            return False
+    
+    def _check_session_valid(self) -> bool:
+        """Check if current session is still valid"""
+        if not self.is_logged_in or not self.last_login_time:
+            return False
+        
+        if datetime.now() - self.last_login_time > self.session_timeout:
+            logger.info("[SCREENSHOT] Session expired, need to re-login")
+            return False
+        
+        return True
+    
+    async def login(self) -> bool:
+        """Login to GoMotive platform"""
+        max_retries = 2
+        
+        for attempt in range(max_retries):
+            try:
+                logger.info(f"[SCREENSHOT] Logging in (attempt {attempt + 1}/{max_retries})...")
+                
+                # Setup driver if needed
+                if not self.driver:
+                    if not self._setup_driver():
+                        return False
+                
+                # Navigate to login page
+                self.driver.get(self.LOGIN_URL)
+                await asyncio.sleep(2)
+                
+                # Wait for email field and enter credentials
+                email_field = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.ID, "email"))
+                )
+                email_field.clear()
+                email_field.send_keys(self.email)
+                
+                # Enter password
+                password_field = self.driver.find_element(By.ID, "password")
+                password_field.clear()
+                password_field.send_keys(self.password)
+                
+                # Click login button
+                login_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+                login_button.click()
+                
+                # Wait for successful login (dashboard or main page)
+                await asyncio.sleep(5)
+                
+                # Check if we're logged in by looking for URL change
+                if "log-in" not in self.driver.current_url.lower():
+                    self.is_logged_in = True
+                    self.last_login_time = datetime.now()
+                    logger.info("[SCREENSHOT] Login successful")
+                    return True
+                else:
+                    logger.warning("[SCREENSHOT] Login may have failed - still on login page")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                        continue
+                
+            except TimeoutException:
+                logger.error(f"[SCREENSHOT] Timeout during login (attempt {attempt + 1}/{max_retries})")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(3)
+            except Exception as e:
+                logger.error(f"[SCREENSHOT] Error during login: {e}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(3)
+        
+        return False
+    
+    async def capture_speeding_event_screenshot(self, event_id: int, start_time: str) -> Optional[str]:
+        """
+        Capture screenshot of speeding event page
+        Returns path to screenshot file or None if failed
+        """
+        try:
+            # Ensure we're logged in
+            if not self._check_session_valid():
+                logger.info("[SCREENSHOT] Session invalid, logging in...")
+                login_success = await self.login()
+                if not login_success:
+                    logger.error("[SCREENSHOT] Failed to login, cannot capture screenshot")
+                    return None
+            
+            # Build URL
+            url = self.SPEEDING_URL_TEMPLATE.format(id=event_id, start_time=start_time)
+            logger.info(f"[SCREENSHOT] Navigating to: {url}")
+            
+            # Navigate to speeding event page
+            self.driver.get(url)
+            
+            # Wait for page to load (adjust selector based on actual page structure)
+            # Wait for main content to load
+            await asyncio.sleep(5)  # Give time for Angular app to load
+            
+            # Additional wait for specific elements if needed
+            try:
+                WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.TAG_NAME, "body"))
+                )
+            except TimeoutException:
+                logger.warning("[SCREENSHOT] Timeout waiting for page elements")
+            
+            # Scroll to top to ensure we capture from beginning
+            self.driver.execute_script("window.scrollTo(0, 0);")
+            await asyncio.sleep(1)
+            
+            # Take screenshot
+            screenshot_filename = f"speeding_event_{event_id}_{uuid.uuid4().hex}.png"
+            screenshot_path = os.path.join(tempfile.gettempdir(), screenshot_filename)
+            
+            # Capture full page screenshot
+            self.driver.save_screenshot(screenshot_path)
+            
+            # Verify screenshot was created
+            if os.path.exists(screenshot_path) and os.path.getsize(screenshot_path) > 0:
+                size_kb = os.path.getsize(screenshot_path) / 1024
+                logger.info(f"[SCREENSHOT] Captured successfully ({size_kb:.1f}KB): {screenshot_path}")
+                return screenshot_path
+            else:
+                logger.error("[SCREENSHOT] Screenshot file is empty or not created")
+                return None
+                
+        except Exception as e:
+            logger.error(f"[SCREENSHOT] Error capturing screenshot: {e}")
+            return None
+    
+    def cleanup(self):
+        """Clean up browser resources"""
+        try:
+            if self.driver:
+                self.driver.quit()
+                self.driver = None
+                self.is_logged_in = False
+                logger.info("[SCREENSHOT] Browser cleaned up")
+        except Exception as e:
+            logger.error(f"[SCREENSHOT] Error during cleanup: {e}")
+
+
 class SafetyBot:
     """Main bot class for monitoring GoMotive APIs and sending Telegram alerts"""
     
@@ -84,11 +271,16 @@ class SafetyBot:
         self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
         self.check_interval = int(os.getenv('CHECK_INTERVAL', 300))
         
+        # GoMotive web credentials for screenshots
+        self.gomotive_email = os.getenv('GOMOTIVE_EMAIL', 'accounting@ldubet.com')
+        self.gomotive_password = os.getenv('GOMOTIVE_PASSWORD', 'Nnt2014$')
+        self.enable_screenshots = os.getenv('ENABLE_SCREENSHOTS', 'true').lower() == 'true'
+        
         # Health monitoring
         self.last_successful_check = None
         self.consecutive_failures = 0
         self.max_consecutive_failures = 5
-        self.critical_alert_sent = False  # Track if we already sent critical alert
+        self.critical_alert_sent = False
         
         # Event tracking files
         self.last_performance_event_file = 'last_performance_event_id.txt'
@@ -106,6 +298,19 @@ class SafetyBot:
         self.is_processing = False
         self.running = True
         self.shutdown_lock = threading.Lock()
+        
+        # Screenshot manager
+        self.screenshot_manager = None
+        if self.enable_screenshots:
+            try:
+                self.screenshot_manager = GoMotiveScreenshotManager(
+                    self.gomotive_email,
+                    self.gomotive_password
+                )
+                logger.info("[INIT] Screenshot functionality enabled")
+            except Exception as e:
+                logger.error(f"[INIT] Failed to initialize screenshot manager: {e}")
+                self.enable_screenshots = False
         
         # Validate and initialize
         self._validate_config()
@@ -133,6 +338,10 @@ class SafetyBot:
             
             if hasattr(self, 'session'):
                 self.session.close()
+            
+            if self.screenshot_manager:
+                self.screenshot_manager.cleanup()
+            
             logger.info("Cleanup completed successfully")
         except Exception as e:
             logger.error(f"Error during cleanup: {e}")
@@ -142,7 +351,7 @@ class SafetyBot:
         self.headers = {
             'accept': 'application/json',
             'x-api-key': self.api_key,
-            'User-Agent': 'SafetyBot/2.1'
+            'User-Agent': 'SafetyBot/2.2'
         }
         
         self.session = requests.Session()
@@ -235,7 +444,6 @@ class SafetyBot:
                 logger.info(f"Fetching speeding events (attempt {attempt + 1}/{max_retries})")
                 response = self.session.get(url, headers=self.headers, params=params, timeout=45)
                 
-                # Check for auth/permission errors
                 if response.status_code == 401:
                     logger.error("API Authentication failed (401) - Invalid API key")
                     return None, "AUTH_ERROR"
@@ -302,7 +510,6 @@ class SafetyBot:
                     logger.info(f"Fetching {event_type} events (attempt {attempt + 1}/{max_retries})")
                     response = self.session.get(url, headers=self.headers, params=params, timeout=45)
                     
-                    # Check for auth/permission errors
                     if response.status_code == 401:
                         logger.error(f"API Authentication failed (401) for {event_type}")
                         if not first_error:
@@ -365,7 +572,6 @@ class SafetyBot:
         new_events.sort(key=lambda x: x.get('id', 0))
         logger.info(f"Found {len(new_events)} new speeding events (last ID: {last_event_id})")
         
-        # Save ID immediately after filtering, before sending
         if new_events:
             max_id = max([e.get('id', 0) for e in new_events])
             self.save_last_processed_event_id(max_id, 'speeding')
@@ -377,7 +583,6 @@ class SafetyBot:
         new_events = []
         events_by_type = {}
         
-        # Group events by type
         for event_data in events:
             event = event_data.get('driver_performance_event', {})
             event_type = event.get('type', '')
@@ -386,7 +591,6 @@ class SafetyBot:
                     events_by_type[event_type] = []
                 events_by_type[event_type].append(event)
         
-        # Process each event type independently
         for event_type, type_events in events_by_type.items():
             last_event_id = self.get_last_processed_event_id_for_type(event_type)
             type_new_events = []
@@ -400,7 +604,6 @@ class SafetyBot:
             type_new_events.sort(key=lambda x: x.get('id', 0))
             logger.info(f"Found {len(type_new_events)} new {event_type} events (last ID: {last_event_id})")
             
-            # Save ID immediately for this event type, before sending
             if type_new_events:
                 max_id_for_type = max([e.get('id', 0) for e in type_new_events])
                 self.save_last_processed_event_id_for_type(max_id_for_type, event_type)
@@ -415,11 +618,9 @@ class SafetyBot:
         try:
             import pytz
             
-            # Parse UTC time string
             dt_utc = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
             dt_utc = dt_utc.astimezone(pytz.UTC)
             
-            # Determine timezone from longitude (US timezones)
             tz_local = None
             if longitude is not None:
                 if longitude >= -125 and longitude < -120:
@@ -435,7 +636,6 @@ class SafetyBot:
             else:
                 tz_local = pytz.timezone('America/Los_Angeles')
             
-            # Convert to local timezone
             dt_local = dt_utc.astimezone(tz_local)
             dt_local = dt_local - timedelta(hours=1)
             
@@ -523,7 +723,6 @@ Severity: {severity}"""
                 size_mb = len(video_data) / (1024 * 1024)
                 logger.info(f"[VIDEO] {video_type} size: {size_mb:.1f}MB")
                 
-                # Check size constraints
                 if size_mb > self.MAX_VIDEO_SIZE_MB:
                     logger.warning(f"[VIDEO] {video_type} exceeds max size ({size_mb:.1f}MB > {self.MAX_VIDEO_SIZE_MB}MB)")
                     return None
@@ -534,7 +733,6 @@ Severity: {severity}"""
                         await asyncio.sleep(3)
                     continue
                 
-                # Save to temp file
                 temp_filename = f"{video_type}_{uuid.uuid4().hex}.mp4"
                 temp_file_path = os.path.join(tempfile.gettempdir(), temp_filename)
                 
@@ -566,40 +764,82 @@ Severity: {severity}"""
         return None
     
     async def send_speeding_event_to_telegram(self, event: Dict[str, Any]) -> bool:
-        """Send speeding event to Telegram. Returns True if sent."""
+        """Send speeding event to Telegram with screenshot. Returns True if sent."""
+        event_id = event.get('id', 0)
         message = self.format_speeding_message(event)
         
-        # Skip if formatting failed
         if message is None:
-            logger.warning(f"[SKIP] Speeding event {event.get('id')} - formatting failed")
+            logger.warning(f"[SKIP] Speeding event {event_id} - formatting failed")
             return False
         
         max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                await self.telegram_bot.send_message(
-                    chat_id=self.chat_id,
-                    text=message,
-                    parse_mode='Markdown',
-                    read_timeout=self.TELEGRAM_SEND_TIMEOUT,
-                    write_timeout=self.TELEGRAM_SEND_TIMEOUT
-                )
-                logger.info(f"[SENT] Speeding event {event.get('id')}")
-                return True
-                    
-            except (NetworkError, TimedOut) as e:
-                logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
-            except TelegramError as e:
-                logger.error(f"[ERROR] Telegram API error: {e}")
-                return False
-            except Exception as e:
-                logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
+        screenshot_path = None
         
-        logger.error(f"[FAILED] Could not send speeding event {event.get('id')}")
+        try:
+            # Capture screenshot if enabled
+            if self.enable_screenshots and self.screenshot_manager:
+                start_time = event.get('start_time', '')
+                screenshot_path = await self.screenshot_manager.capture_speeding_event_screenshot(
+                    event_id, start_time
+                )
+            
+            # Send with screenshot if available
+            if screenshot_path and os.path.exists(screenshot_path):
+                for attempt in range(max_retries):
+                    try:
+                        with open(screenshot_path, 'rb') as photo:
+                            await self.telegram_bot.send_photo(
+                                chat_id=self.chat_id,
+                                photo=photo,
+                                caption=message,
+                                parse_mode='Markdown',
+                                read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                                write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                            )
+                        logger.info(f"[SENT] Speeding event {event_id} with screenshot")
+                        return True
+                    except (NetworkError, TimedOut) as e:
+                        logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
+                        if attempt < max_retries - 1:
+                            await asyncio.sleep(2 ** attempt)
+                    except TelegramError as e:
+                        logger.error(f"[ERROR] Telegram API error: {e}")
+                        break
+            else:
+                # Send without screenshot
+                for attempt in range(max_retries):
+                    try:
+                        await self.telegram_bot.send_message(
+                            chat_id=self.chat_id,
+                            text=message,
+                            parse_mode='Markdown',
+                            read_timeout=self.TELEGRAM_SEND_TIMEOUT,
+                            write_timeout=self.TELEGRAM_SEND_TIMEOUT
+                        )
+                        logger.info(f"[SENT] Speeding event {event_id} (no screenshot)")
+                        return True
+                    except (NetworkError, TimedOut) as e:
+                        logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
+                        if attempt < max_retries - 1:
+                            await asyncio.sleep(2 ** attempt)
+                    except TelegramError as e:
+                        logger.error(f"[ERROR] Telegram API error: {e}")
+                        return False
+                    except Exception as e:
+                        logger.error(f"[ERROR] Unexpected error (attempt {attempt + 1}/{max_retries}): {e}")
+                        if attempt < max_retries - 1:
+                            await asyncio.sleep(2 ** attempt)
+            
+        finally:
+            # Clean up screenshot
+            if screenshot_path and os.path.exists(screenshot_path):
+                try:
+                    os.remove(screenshot_path)
+                    logger.debug(f"[CLEANUP] Removed screenshot: {screenshot_path}")
+                except Exception as e:
+                    logger.error(f"[CLEANUP] Error removing screenshot: {e}")
+        
+        logger.error(f"[FAILED] Could not send speeding event {event_id}")
         return False
     
     async def send_performance_event_to_telegram(self, event: Dict[str, Any]) -> bool:
@@ -607,7 +847,6 @@ Severity: {severity}"""
         event_id = event.get('id', 0)
         message = self.format_performance_message(event)
         
-        # Skip if formatting failed
         if message is None:
             logger.warning(f"[SKIP] Performance event {event_id} - formatting failed")
             return False
@@ -618,7 +857,6 @@ Severity: {severity}"""
             try:
                 camera_media = event.get('camera_media', {})
                 
-                # Try to get and send videos
                 if camera_media and camera_media.get('available'):
                     downloadable_videos = camera_media.get('downloadable_videos', {})
                     front_facing_url = downloadable_videos.get('front_facing_plain_url')
@@ -626,7 +864,6 @@ Severity: {severity}"""
                     
                     videos_for_group = []
                     
-                    # Download videos
                     if front_facing_url:
                         front_file = await self.download_video_to_temp_file(front_facing_url, "front_facing")
                         if front_file:
@@ -639,7 +876,6 @@ Severity: {severity}"""
                             temp_files.append(driver_file)
                             videos_for_group.append(('Driver', driver_file))
                     
-                    # Try media group first
                     if videos_for_group and len(videos_for_group) > 1:
                         try:
                             media_group = []
@@ -682,7 +918,6 @@ Severity: {severity}"""
                                 except:
                                     pass
                             
-                            # Try individual videos
                             for i, (video_name, video_path) in enumerate(videos_for_group):
                                 try:
                                     with open(video_path, 'rb') as vf:
@@ -702,7 +937,6 @@ Severity: {severity}"""
                             
                             return True
                     
-                    # Single video
                     elif videos_for_group:
                         for i, (video_name, video_path) in enumerate(videos_for_group):
                             try:
@@ -723,7 +957,6 @@ Severity: {severity}"""
                         
                         return True
                     else:
-                        # No videos available
                         await self.telegram_bot.send_message(
                             chat_id=self.chat_id,
                             text=f"{message}\n\n❌ Videos unavailable",
@@ -734,7 +967,6 @@ Severity: {severity}"""
                         logger.info(f"[SENT] Event {event_id} without videos")
                         return True
                 else:
-                    # No camera media
                     await self.telegram_bot.send_message(
                         chat_id=self.chat_id,
                         text=f"{message}\n\n❌ No camera media",
@@ -774,7 +1006,6 @@ Severity: {severity}"""
                     await asyncio.sleep(2 ** attempt)
             
             finally:
-                # Clean up temporary files
                 for temp_file in temp_files:
                     try:
                         if os.path.exists(temp_file):
@@ -803,7 +1034,7 @@ Severity: {severity}"""
             return
         
         self.is_processing = True
-        self._reset_cycle_tracking()  # Reset deduplication for new cycle
+        self._reset_cycle_tracking()
         start_time = datetime.now()
         
         try:
@@ -875,7 +1106,6 @@ Severity: {severity}"""
             else:
                 logger.warning("[FETCH] Failed to fetch performance events")
             
-            # Update health - success even if some events didn't send
             self.last_successful_check = datetime.now()
             self.consecutive_failures = 0
             self.critical_alert_sent = False
@@ -909,12 +1139,10 @@ Severity: {severity}"""
         try:
             logger.info("[HEALTH] Running health check...")
             
-            # Test API connectivity
             speeding_test, _ = self.fetch_speeding_events()
             performance_test, _ = self.fetch_driver_performance_events()
             apis_ok = (speeding_test is not None and performance_test is not None)
             
-            # Test Telegram connectivity
             telegram_ok = False
             try:
                 await self.telegram_bot.get_me()
@@ -922,7 +1150,8 @@ Severity: {severity}"""
             except Exception as e:
                 logger.error(f"[HEALTH] Telegram check failed: {e}")
             
-            # Determine overall status
+            screenshot_status = "✅ Enabled" if self.enable_screenshots else "⚠️ Disabled"
+            
             overall_ok = apis_ok and telegram_ok
             status = "✅ Healthy" if overall_ok else "❌ Issues Detected"
             
@@ -934,8 +1163,9 @@ Last Check: {last_check_str}
 Failures: {self.consecutive_failures}
 API: {'✅ OK' if apis_ok else '❌ FAILED'}
 Telegram: {'✅ OK' if telegram_ok else '❌ FAILED'}
+Screenshots: {screenshot_status}
 Interval: {self.check_interval // 60}m
-Version: 2.1 Pro"""
+Version: 2.2 Enhanced"""
             
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
@@ -950,24 +1180,21 @@ Version: 2.1 Pro"""
     
     def run_scheduler(self):
         """Main scheduler loop - runs in main thread"""
-        # Schedule event checks
         schedule.every(self.check_interval).seconds.do(self.process_new_events_sync)
         logger.info(f"[SCHEDULER] Event check every {self.check_interval}s ({self.check_interval/60:.1f}m)")
         
-        # Schedule health checks
         schedule.every().hour.do(lambda: asyncio.run(self.health_check()))
         logger.info("[SCHEDULER] Health check every hour")
         
-        # Run initial check
         logger.info("[STARTUP] Running initial event check...")
         self.process_new_events_sync()
         
-        # Main loop
-        logger.info("[STARTUP] SafetyBot v2.1 Pro is now monitoring")
+        logger.info("[STARTUP] SafetyBot v2.2 Enhanced is now monitoring")
         print("\n" + "="*60)
-        print("SafetyBot v2.1 Pro - Production Ready")
+        print("SafetyBot v2.2 Enhanced - Production Ready")
         print(f"Check interval: {self.check_interval // 60} minutes")
         print(f"Monitoring: Speeding & 6 Performance Events")
+        print(f"Screenshots: {'Enabled' if self.enable_screenshots else 'Disabled'}")
         print("Separate ID tracking for each event type")
         print("Press Ctrl+C to stop")
         print("="*60 + "\n")
@@ -975,7 +1202,7 @@ Version: 2.1 Pro"""
         while self.running:
             try:
                 schedule.run_pending()
-                time.sleep(10)  # Check scheduler every 10 seconds
+                time.sleep(10)
             except KeyboardInterrupt:
                 logger.info("[SHUTDOWN] Bot stopped by user")
                 break
@@ -989,7 +1216,6 @@ Version: 2.1 Pro"""
             logger.info("[STARTUP] Testing connections...")
             asyncio.run(self._test_connections())
             
-            # Start the scheduler
             self.run_scheduler()
             
         except Exception as e:
@@ -1003,9 +1229,11 @@ Version: 2.1 Pro"""
             bot_info = await self.telegram_bot.get_me()
             logger.info(f"[TEST] Telegram OK: @{bot_info.username}")
             
+            screenshot_status = "📸 Enabled" if self.enable_screenshots else "⚠️ Disabled"
+            
             await self.telegram_bot.send_message(
                 chat_id=self.chat_id,
-                text="✅ SafetyBot v2.1 Pro Started\nCheck Interval: " + str(self.check_interval // 60) + "m\nReady to monitor",
+                text=f"✅ SafetyBot v2.2 Enhanced Started\nCheck Interval: {self.check_interval // 60}m\nScreenshots: {screenshot_status}\nReady to monitor",
                 parse_mode='Markdown'
             )
             logger.info("[TEST] Startup message sent")
