@@ -283,27 +283,47 @@ class GoMotiveScreenshotManager:
     async def capture_speeding_event_screenshot(self, event_id: int, start_time: str) -> Optional[str]:
         """
         Capture screenshot of speeding event page
+        Strategy: Try direct access first, login only if redirected
         Returns path to screenshot file or None if failed
         """
         try:
-            # Ensure we're logged in
-            if not self._check_session_valid():
-                logger.info("[SCREENSHOT] Session invalid, logging in...")
-                login_success = await self.login()
-                if not login_success:
-                    logger.error("[SCREENSHOT] Failed to login, cannot capture screenshot")
+            # Setup driver if needed
+            if not self.driver:
+                if not self._setup_driver():
+                    logger.error("[SCREENSHOT] Failed to initialize driver")
                     return None
             
-            # Build URL
-            url = self.SPEEDING_URL_TEMPLATE.format(id=event_id, start_time=start_time)
-            logger.info(f"[SCREENSHOT] Navigating to: {url}")
+            # Build main URL
+            main_url = self.SPEEDING_URL_TEMPLATE.format(id=event_id, start_time=start_time)
+            logger.info(f"[SCREENSHOT] Navigating to main URL: {main_url}")
             
-            # Navigate to speeding event page
-            self.driver.get(url)
+            # Navigate to main URL
+            self.driver.get(main_url)
+            await asyncio.sleep(5)  # Wait for page load
             
-            # Wait for initial page load
-            logger.info("[SCREENSHOT] Waiting for page to load...")
-            await asyncio.sleep(5)
+            # Check if redirected to login page
+            current_url = self.driver.current_url.lower()
+            logger.info(f"[SCREENSHOT] Current URL after navigation: {self.driver.current_url}")
+            
+            if "log-in" in current_url or "login" in current_url:
+                # Redirected to login - need to authenticate
+                logger.info("[SCREENSHOT] Redirected to login page, logging in...")
+                
+                login_success = await self.login()
+                if not login_success:
+                    logger.error("[SCREENSHOT] Login failed, cannot capture screenshot")
+                    return None
+                
+                # After successful login, navigate back to main URL
+                logger.info(f"[SCREENSHOT] Login successful, navigating back to: {main_url}")
+                self.driver.get(main_url)
+                await asyncio.sleep(5)  # Wait for page load
+            else:
+                # No redirect, already on the correct page
+                logger.info("[SCREENSHOT] No login redirect, already on main page")
+                # Update session tracking since we're clearly logged in
+                self.is_logged_in = True
+                self.last_login_time = datetime.now()
             
             # Wait for map/content to be visible - Angular app takes time to render
             logger.info("[SCREENSHOT] Waiting for content to render...")
@@ -328,7 +348,7 @@ class GoMotiveScreenshotManager:
             screenshot_filename = f"speeding_event_{event_id}_{uuid.uuid4().hex}.png"
             screenshot_path = os.path.join(tempfile.gettempdir(), screenshot_filename)
             
-            # Capture full page screenshot (no JavaScript manipulation)
+            # Capture full page screenshot
             logger.info("[SCREENSHOT] Capturing screenshot...")
             self.driver.save_screenshot(screenshot_path)
             

@@ -2800,3 +2800,199 @@
 2025-11-10 12:25:10,711 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
 2025-11-10 12:25:11,943 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
 2025-11-10 12:25:12,246 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:24:23,591 - __main__ - INFO - [INIT] Loaded 27 processed IDs from processed_speeding_event_ids.json
+2025-11-10 14:24:23,591 - __main__ - INFO - [INIT] Loaded 54 processed IDs from processed_performance_event_ids.json
+2025-11-10 14:24:23,591 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 14:24:24,127 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 14:24:24,128 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 14:24:24,128 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 14:24:24,456 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 14:24:24,589 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 14:24:24,589 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 14:24:24,590 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 14:24:26,134 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 14:24:26,134 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 14:24:29,590 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 14:24:30,592 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 14:24:30,906 - __main__ - INFO - Found 0 crash events
+2025-11-10 14:24:31,908 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 14:24:33,480 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 14:24:34,481 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 14:24:37,739 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 14:24:38,740 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 14:24:39,239 - __main__ - INFO - Found 1 distraction events
+2025-11-10 14:24:40,240 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 14:24:43,529 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 14:24:44,530 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 14:24:44,530 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 14:24:44,532 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 14:24:44,532 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 14:24:44,532 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 14:24:44,533 - __main__ - INFO - ============================================================
+2025-11-10 14:24:44,533 - __main__ - INFO - Starting event check cycle
+2025-11-10 14:24:44,533 - __main__ - INFO - ============================================================
+2025-11-10 14:24:44,534 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 14:24:44,534 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 14:24:44,906 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 14:24:44,906 - __main__ - INFO - Found 25 new speeding events to process
+2025-11-10 14:24:44,907 - __main__ - INFO - [PROCESS] Processing 25 speeding events
+2025-11-10 14:24:46,945 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 14:24:46,945 - __main__ - INFO - [SCREENSHOT] Navigating to main URL: https://app.gomotive.com/en-US/#/safety/speeding/2135751087;start_time=2025-11-10T20:25:47Z
+2025-11-10 14:24:54,866 - __main__ - INFO - [SCREENSHOT] Current URL after navigation: https://account.gomotive.com/log-in?alert=session_expired&return_url=https%3A%2F%2Fapp.gomotive.com%2Fen-US%2F%23%2Fsafety%2Fspeeding%2F2135751087%3Bstart_time%3D2025-11-10T20%3A25%3A47Z
+2025-11-10 14:24:54,866 - __main__ - INFO - [SCREENSHOT] Redirected to login page, logging in...
+2025-11-10 14:24:54,866 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 14:24:58,811 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 14:24:59,386 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 14:24:59,405 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 14:24:59,969 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 14:24:59,990 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 14:25:02,384 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 14:25:07,398 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 14:25:07,398 - __main__ - INFO - [SCREENSHOT] Login successful, navigating back to: https://app.gomotive.com/en-US/#/safety/speeding/2135751087;start_time=2025-11-10T20:25:47Z
+2025-11-10 14:25:12,405 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 14:25:12,417 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 14:25:12,417 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 14:25:28,443 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 14:25:28,892 - __main__ - INFO - [SCREENSHOT] Screenshot captured (1943.8KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135751087_14861ab75e6e44aab1774e52618ff0b7.png
+2025-11-10 14:25:28,962 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 14:25:31,333 - __main__ - INFO - [SENT] Speeding event 2135751087 with screenshot
+2025-11-10 14:25:31,333 - __main__ - INFO - [ID_MARKED] speeding event 2135751087 marked as processed
+2025-11-10 14:25:33,335 - __main__ - INFO - [SCREENSHOT] Navigating to main URL: https://app.gomotive.com/en-US/#/safety/speeding/2135766539;start_time=2025-11-10T20:32:11Z
+2025-11-10 14:25:38,362 - __main__ - INFO - [SCREENSHOT] Current URL after navigation: https://app.gomotive.com/en-US/#/safety/speeding/2135766539;start_time=2025-11-10T20:32:11Z
+2025-11-10 14:25:38,362 - __main__ - INFO - [SCREENSHOT] No login redirect, already on main page
+2025-11-10 14:25:38,362 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 14:25:38,367 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 14:25:38,367 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 14:25:43,739 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:44,035 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:44,242 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:44,402 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:46,355 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:46,659 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:47,171 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:25:47,202 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 14:26:09,631 - __main__ - ERROR - [SCREENSHOT] Error capturing screenshot: HTTPConnectionPool(host='localhost', port=53917): Max retries exceeded with url: /session/0e7d822e8b846518d46fac077a40c895/execute/sync (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000028000EC7950>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-10 14:26:09,641 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+    ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<6 lines>...
+        enforce_content_length=enforce_content_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connection.py", line 494, in request
+    self.endheaders()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\Lib\http\client.py", line 1333, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\Lib\http\client.py", line 1093, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\Lib\http\client.py", line 1037, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connection.py", line 325, in connect
+    self.sock = self._new_conn()
+                ~~~~~~~~~~~~~~^^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x0000028000EC7950>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Xolmirza\Desktop\safetybot\safetybot.py", line 344, in capture_speeding_event_screenshot
+    self.driver.execute_script("window.scrollTo(0, 0);")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 555, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 455, in execute
+    response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 407, in execute
+    return self._request(command_info[0], url, body=data)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 431, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        method, url, fields=fields, headers=headers, **urlopen_kw
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\poolmanager.py", line 459, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\Xolmirza\Desktop\safetybot\env\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=53917): Max retries exceeded with url: /session/0e7d822e8b846518d46fac077a40c895/execute/sync (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000028000EC7950>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+2025-11-10 14:26:10,020 - __main__ - INFO - [SENT] Speeding event 2135766539 (no screenshot)
+2025-11-10 14:26:10,021 - __main__ - INFO - [ID_MARKED] speeding event 2135766539 marked as processed
+2025-11-10 14:26:12,026 - __main__ - INFO - [SCREENSHOT] Navigating to main URL: https://app.gomotive.com/en-US/#/safety/speeding/2135771901;start_time=2025-11-10T20:33:28Z
