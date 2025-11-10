@@ -1186,3 +1186,1617 @@
 2025-11-10 09:36:17,314 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 2/2)...
 2025-11-10 09:36:19,356 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
 2025-11-10 09:36:21,400 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:28:46,154 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 11:28:46,687 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 11:28:46,688 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 11:28:46,689 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 11:28:47,021 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 11:28:47,230 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 11:28:47,231 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 11:28:47,231 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:28:48,839 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:28:48,839 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:28:52,364 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:28:53,365 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:28:53,680 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:28:54,681 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:28:56,609 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:28:57,610 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:29:03,143 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:29:04,144 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:29:04,657 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:29:05,659 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:29:08,839 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:29:09,841 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:29:09,841 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 11:29:09,843 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 11:29:09,843 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 11:29:09,843 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 11:29:09,844 - __main__ - INFO - ============================================================
+2025-11-10 11:29:09,844 - __main__ - INFO - Starting event check cycle
+2025-11-10 11:29:09,844 - __main__ - INFO - ============================================================
+2025-11-10 11:29:09,845 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 11:29:09,845 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:29:10,499 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:29:10,500 - __main__ - INFO - Found 17 new speeding events (last ID: 2135130310)
+2025-11-10 11:29:10,500 - __main__ - INFO - [ID_SAVED] speeding: 2135431649
+2025-11-10 11:29:10,500 - __main__ - INFO - [PROCESS] Processing 17 speeding events
+2025-11-10 11:29:10,536 - __main__ - INFO - [SCREENSHOT] Session invalid, logging in...
+2025-11-10 11:29:10,536 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 11:29:12,470 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 11:29:20,419 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 11:29:20,994 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 11:29:21,009 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 11:29:21,566 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 11:29:21,584 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 11:29:25,848 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 11:29:30,871 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 11:29:30,871 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135132470;start_time=2025-11-10T16:30:34Z
+2025-11-10 11:29:30,878 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:29:42,046 - __main__ - INFO - [SCREENSHOT] Captured successfully (61.1KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135132470_9dddf576acde4530a970e270018f1fcb.png
+2025-11-10 11:29:42,121 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 11:29:43,905 - __main__ - INFO - [SENT] Speeding event 2135132470 with screenshot
+2025-11-10 11:29:45,914 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135144107;start_time=2025-11-10T16:34:08Z
+2025-11-10 11:29:45,925 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:29:57,375 - __main__ - INFO - [SCREENSHOT] Captured successfully (2154.8KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135144107_f447c8f552e542c9bf6702f95033f0ea.png
+2025-11-10 11:29:58,819 - __main__ - INFO - [SENT] Speeding event 2135144107 with screenshot
+2025-11-10 11:30:00,831 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135157096;start_time=2025-11-10T16:39:23Z
+2025-11-10 11:30:00,844 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:30:12,307 - __main__ - INFO - [SCREENSHOT] Captured successfully (2253.8KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135157096_5bb1a402cc2647558b7857cc80be5ce8.png
+2025-11-10 11:30:13,886 - __main__ - INFO - [SENT] Speeding event 2135157096 with screenshot
+2025-11-10 11:30:15,901 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135183489;start_time=2025-11-10T16:50:25Z
+2025-11-10 11:30:15,912 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:30:27,314 - __main__ - INFO - [SCREENSHOT] Captured successfully (2742.2KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135183489_54c3daf0b0cd4d85baeca6df48b84a51.png
+2025-11-10 11:30:28,792 - __main__ - INFO - [SENT] Speeding event 2135183489 with screenshot
+2025-11-10 11:30:30,799 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135228575;start_time=2025-11-10T17:07:14Z
+2025-11-10 11:30:30,809 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:30:42,255 - __main__ - INFO - [SCREENSHOT] Captured successfully (1701.6KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135228575_ee19ba963b6f4721a4b28e64001ee419.png
+2025-11-10 11:30:43,620 - __main__ - INFO - [SENT] Speeding event 2135228575 with screenshot
+2025-11-10 11:30:45,630 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135283118;start_time=2025-11-10T17:29:59Z
+2025-11-10 11:30:45,641 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:30:57,055 - __main__ - INFO - [SCREENSHOT] Captured successfully (3100.0KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135283118_5fdeff25f4e94b88bd33ee9b46744478.png
+2025-11-10 11:30:58,793 - __main__ - INFO - [SENT] Speeding event 2135283118 with screenshot
+2025-11-10 11:31:00,800 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135302733;start_time=2025-11-10T17:37:30Z
+2025-11-10 11:31:00,810 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:31:12,297 - __main__ - INFO - [SCREENSHOT] Captured successfully (2170.0KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135302733_896760964c404d8da2f3c787fc1d990f.png
+2025-11-10 11:31:13,797 - __main__ - INFO - [SENT] Speeding event 2135302733 with screenshot
+2025-11-10 11:31:15,806 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135302979;start_time=2025-11-10T17:35:58Z
+2025-11-10 11:31:15,816 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:31:27,262 - __main__ - INFO - [SCREENSHOT] Captured successfully (1867.2KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135302979_4a09966762e1467d8ac8f94d88eecbbb.png
+2025-11-10 11:31:28,726 - __main__ - INFO - [SENT] Speeding event 2135302979 with screenshot
+2025-11-10 11:31:30,739 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135333199;start_time=2025-11-10T17:48:49Z
+2025-11-10 11:31:30,748 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:31:42,193 - __main__ - INFO - [SCREENSHOT] Captured successfully (2005.9KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135333199_17402a468ae04465a281bb96d3d51799.png
+2025-11-10 11:31:43,872 - __main__ - INFO - [SENT] Speeding event 2135333199 with screenshot
+2025-11-10 11:31:45,878 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135334354;start_time=2025-11-10T17:48:42Z
+2025-11-10 11:31:45,889 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:31:57,359 - __main__ - INFO - [SCREENSHOT] Captured successfully (1610.0KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135334354_f4114cb253374428a0acb99d424ad723.png
+2025-11-10 11:31:58,755 - __main__ - INFO - [SENT] Speeding event 2135334354 with screenshot
+2025-11-10 11:32:00,768 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135334546;start_time=2025-11-10T17:48:41Z
+2025-11-10 11:32:00,776 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:32:12,184 - __main__ - INFO - [SCREENSHOT] Captured successfully (2395.0KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135334546_6a5ceccaabfe40119557d42186b8cb39.png
+2025-11-10 11:32:13,776 - __main__ - INFO - [SENT] Speeding event 2135334546 with screenshot
+2025-11-10 11:32:15,790 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135368453;start_time=2025-11-10T18:00:44Z
+2025-11-10 11:32:15,800 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:32:27,229 - __main__ - INFO - [SCREENSHOT] Captured successfully (1896.1KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135368453_20fd2f1f54be43318e773f668e6a1ab7.png
+2025-11-10 11:32:28,737 - __main__ - INFO - [SENT] Speeding event 2135368453 with screenshot
+2025-11-10 11:32:30,741 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135372178;start_time=2025-11-10T18:01:48Z
+2025-11-10 11:32:30,750 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:32:42,191 - __main__ - INFO - [SCREENSHOT] Captured successfully (2305.0KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135372178_1a358bdd7123408589c6830967556fab.png
+2025-11-10 11:32:43,624 - __main__ - INFO - [SENT] Speeding event 2135372178 with screenshot
+2025-11-10 11:32:45,638 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135388249;start_time=2025-11-10T18:09:00Z
+2025-11-10 11:32:45,651 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:32:57,110 - __main__ - INFO - [SCREENSHOT] Captured successfully (2420.4KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135388249_6024589f7cba41cd8737ed45f66d6db1.png
+2025-11-10 11:32:58,928 - __main__ - INFO - [SENT] Speeding event 2135388249 with screenshot
+2025-11-10 11:33:00,936 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135404226;start_time=2025-11-10T18:15:00Z
+2025-11-10 11:33:00,949 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:33:12,390 - __main__ - INFO - [SCREENSHOT] Captured successfully (2212.2KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135404226_02f927ad264d43d9a884980aaaef931d.png
+2025-11-10 11:33:13,799 - __main__ - INFO - [SENT] Speeding event 2135404226 with screenshot
+2025-11-10 11:33:15,810 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135420470;start_time=2025-11-10T18:21:00Z
+2025-11-10 11:33:15,820 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:33:27,278 - __main__ - INFO - [SCREENSHOT] Captured successfully (1745.3KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135420470_a45f9863cdab4f97ac0343b6f688708a.png
+2025-11-10 11:33:28,746 - __main__ - INFO - [SENT] Speeding event 2135420470 with screenshot
+2025-11-10 11:33:30,753 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135431649;start_time=2025-11-10T18:24:27Z
+2025-11-10 11:33:30,762 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:33:42,228 - __main__ - INFO - [SCREENSHOT] Captured successfully (2151.4KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135431649_b685304d70df4de08d5144a24b885056.png
+2025-11-10 11:33:43,897 - __main__ - INFO - [SENT] Speeding event 2135431649 with screenshot
+2025-11-10 11:33:45,901 - __main__ - INFO - [FETCH] Fetching performance events...
+2025-11-10 11:33:45,901 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:33:48,939 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:33:49,940 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:33:50,275 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:33:51,276 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:33:53,178 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:33:54,179 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:33:57,749 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:33:58,750 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:33:59,274 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:34:00,275 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:34:03,224 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:34:04,225 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:34:04,225 - __main__ - INFO - Found 17 new hard_brake events (last ID: 1402008415)
+2025-11-10 11:34:04,226 - __main__ - INFO - [ID_SAVED] hard_brake: 1422640467
+2025-11-10 11:34:04,227 - __main__ - INFO - Found 2 new seat_belt_violation events (last ID: 1405521043)
+2025-11-10 11:34:04,227 - __main__ - INFO - [ID_SAVED] seat_belt_violation: 1421893983
+2025-11-10 11:34:04,228 - __main__ - INFO - Found 18 new stop_sign_violation events (last ID: 1401022003)
+2025-11-10 11:34:04,228 - __main__ - INFO - [ID_SAVED] stop_sign_violation: 1421597809
+2025-11-10 11:34:04,229 - __main__ - INFO - Found 1 new distraction events (last ID: 1406247393)
+2025-11-10 11:34:04,229 - __main__ - INFO - [ID_SAVED] distraction: 1424961285
+2025-11-10 11:34:04,229 - __main__ - INFO - Found 16 new unsafe_lane_change events (last ID: 1400954906)
+2025-11-10 11:34:04,230 - __main__ - INFO - [ID_SAVED] unsafe_lane_change: 1421098001
+2025-11-10 11:34:04,230 - __main__ - INFO - [PROCESS] Processing 54 performance events
+2025-11-10 11:34:04,594 - __main__ - INFO - [SENT] Event 1419504833 without videos
+2025-11-10 11:34:06,600 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:34:09,415 - __main__ - INFO - [VIDEO] front_facing size: 3.4MB
+2025-11-10 11:34:09,417 - __main__ - INFO - [VIDEO] front_facing (3.4MB) saved successfully
+2025-11-10 11:34:09,417 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:34:10,151 - __main__ - INFO - [VIDEO] driver_facing size: 5.1MB
+2025-11-10 11:34:10,153 - __main__ - INFO - [VIDEO] driver_facing (5.1MB) saved successfully
+2025-11-10 11:34:11,955 - __main__ - INFO - [SENT] Media group for event 1419536981
+2025-11-10 11:34:13,971 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:34:14,596 - __main__ - INFO - [VIDEO] front_facing size: 3.1MB
+2025-11-10 11:34:14,597 - __main__ - INFO - [VIDEO] front_facing (3.1MB) saved successfully
+2025-11-10 11:34:14,598 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:34:15,403 - __main__ - INFO - [VIDEO] driver_facing size: 5.3MB
+2025-11-10 11:34:15,404 - __main__ - INFO - [VIDEO] driver_facing (5.3MB) saved successfully
+2025-11-10 11:34:19,285 - __main__ - INFO - [SENT] Media group for event 1419543397
+2025-11-10 11:34:21,300 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:34:33,162 - __main__ - INFO - [VIDEO] front_facing size: 5.1MB
+2025-11-10 11:34:33,164 - __main__ - INFO - [VIDEO] front_facing (5.1MB) saved successfully
+2025-11-10 11:34:33,164 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:34:33,751 - __main__ - INFO - [VIDEO] driver_facing size: 2.3MB
+2025-11-10 11:34:33,752 - __main__ - INFO - [VIDEO] driver_facing (2.3MB) saved successfully
+2025-11-10 11:34:36,384 - __main__ - INFO - [SENT] Media group for event 1419562142
+2025-11-10 11:34:38,392 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:34:39,046 - __main__ - INFO - [VIDEO] front_facing size: 4.5MB
+2025-11-10 11:34:39,049 - __main__ - INFO - [VIDEO] front_facing (4.5MB) saved successfully
+2025-11-10 11:34:39,049 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:34:39,762 - __main__ - INFO - [VIDEO] driver_facing size: 4.8MB
+2025-11-10 11:34:39,765 - __main__ - INFO - [VIDEO] driver_facing (4.8MB) saved successfully
+2025-11-10 11:34:43,498 - __main__ - INFO - [SENT] Media group for event 1419590576
+2025-11-10 11:34:45,506 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:34:49,560 - __main__ - INFO - [VIDEO] front_facing size: 4.5MB
+2025-11-10 11:34:49,562 - __main__ - INFO - [VIDEO] front_facing (4.5MB) saved successfully
+2025-11-10 11:34:49,562 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:34:49,955 - __main__ - INFO - [VIDEO] driver_facing size: 2.0MB
+2025-11-10 11:34:49,956 - __main__ - INFO - [VIDEO] driver_facing (2.0MB) saved successfully
+2025-11-10 11:34:51,620 - __main__ - INFO - [SENT] Media group for event 1419611310
+2025-11-10 11:34:53,629 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:34:54,293 - __main__ - INFO - [VIDEO] front_facing size: 4.4MB
+2025-11-10 11:34:54,295 - __main__ - INFO - [VIDEO] front_facing (4.4MB) saved successfully
+2025-11-10 11:34:54,295 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:34:54,702 - __main__ - INFO - [VIDEO] driver_facing size: 1.4MB
+2025-11-10 11:34:54,703 - __main__ - INFO - [VIDEO] driver_facing (1.4MB) saved successfully
+2025-11-10 11:34:58,241 - __main__ - INFO - [SENT] Media group for event 1419617193
+2025-11-10 11:35:00,256 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:00,920 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 11:35:00,922 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 11:35:00,923 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:01,257 - __main__ - INFO - [VIDEO] driver_facing size: 0.5MB
+2025-11-10 11:35:01,258 - __main__ - INFO - [VIDEO] driver_facing (0.5MB) saved successfully
+2025-11-10 11:35:01,551 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 14 seconds
+2025-11-10 11:35:01,816 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 14 seconds
+2025-11-10 11:35:02,028 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 13 seconds
+2025-11-10 11:35:04,040 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:04,721 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 11:35:04,723 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 11:35:04,724 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:05,100 - __main__ - INFO - [VIDEO] driver_facing size: 1.3MB
+2025-11-10 11:35:05,101 - __main__ - INFO - [VIDEO] driver_facing (1.3MB) saved successfully
+2025-11-10 11:35:05,461 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 10 seconds
+2025-11-10 11:35:05,943 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 10 seconds
+2025-11-10 11:35:06,153 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 9 seconds
+2025-11-10 11:35:08,157 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:08,872 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 11:35:08,873 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 11:35:08,874 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:09,465 - __main__ - INFO - [VIDEO] driver_facing size: 3.3MB
+2025-11-10 11:35:09,467 - __main__ - INFO - [VIDEO] driver_facing (3.3MB) saved successfully
+2025-11-10 11:35:18,485 - __main__ - INFO - [SENT] Media group for event 1419708445
+2025-11-10 11:35:20,492 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:26,819 - __main__ - INFO - [VIDEO] front_facing size: 5.4MB
+2025-11-10 11:35:26,821 - __main__ - INFO - [VIDEO] front_facing (5.4MB) saved successfully
+2025-11-10 11:35:26,821 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:27,323 - __main__ - INFO - [VIDEO] driver_facing size: 2.8MB
+2025-11-10 11:35:27,324 - __main__ - INFO - [VIDEO] driver_facing (2.8MB) saved successfully
+2025-11-10 11:35:29,256 - __main__ - INFO - [SENT] Media group for event 1419845904
+2025-11-10 11:35:31,264 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:31,994 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 11:35:31,996 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 11:35:31,997 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:32,373 - __main__ - INFO - [VIDEO] driver_facing size: 1.3MB
+2025-11-10 11:35:32,374 - __main__ - INFO - [VIDEO] driver_facing (1.3MB) saved successfully
+2025-11-10 11:35:35,909 - __main__ - INFO - [SENT] Media group for event 1419851093
+2025-11-10 11:35:37,914 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:38,661 - __main__ - INFO - [VIDEO] front_facing size: 5.6MB
+2025-11-10 11:35:38,664 - __main__ - INFO - [VIDEO] front_facing (5.6MB) saved successfully
+2025-11-10 11:35:38,665 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:39,060 - __main__ - INFO - [VIDEO] driver_facing size: 1.7MB
+2025-11-10 11:35:39,061 - __main__ - INFO - [VIDEO] driver_facing (1.7MB) saved successfully
+2025-11-10 11:35:43,551 - __main__ - INFO - [SENT] Media group for event 1419864043
+2025-11-10 11:35:45,558 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:48,713 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 11:35:48,715 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 11:35:48,715 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:49,095 - __main__ - INFO - [VIDEO] driver_facing size: 0.6MB
+2025-11-10 11:35:49,096 - __main__ - INFO - [VIDEO] driver_facing (0.6MB) saved successfully
+2025-11-10 11:35:51,012 - __main__ - INFO - [SENT] Media group for event 1419905331
+2025-11-10 11:35:53,017 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:35:53,707 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 11:35:53,709 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 11:35:53,709 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:35:54,298 - __main__ - INFO - [VIDEO] driver_facing size: 2.9MB
+2025-11-10 11:35:54,299 - __main__ - INFO - [VIDEO] driver_facing (2.9MB) saved successfully
+2025-11-10 11:35:58,401 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 20 seconds
+2025-11-10 11:35:59,039 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 19 seconds
+2025-11-10 11:35:59,428 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 19 seconds
+2025-11-10 11:36:01,432 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:04,729 - __main__ - INFO - [VIDEO] front_facing size: 5.4MB
+2025-11-10 11:36:04,731 - __main__ - INFO - [VIDEO] front_facing (5.4MB) saved successfully
+2025-11-10 11:36:04,732 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:05,417 - __main__ - INFO - [VIDEO] driver_facing size: 2.7MB
+2025-11-10 11:36:05,418 - __main__ - INFO - [VIDEO] driver_facing (2.7MB) saved successfully
+2025-11-10 11:36:07,183 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 11 seconds
+2025-11-10 11:36:07,611 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 11 seconds
+2025-11-10 11:36:07,860 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 11 seconds
+2025-11-10 11:36:09,866 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:10,564 - __main__ - INFO - [VIDEO] front_facing size: 5.5MB
+2025-11-10 11:36:10,566 - __main__ - INFO - [VIDEO] front_facing (5.5MB) saved successfully
+2025-11-10 11:36:10,567 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:11,195 - __main__ - INFO - [VIDEO] driver_facing size: 3.9MB
+2025-11-10 11:36:11,197 - __main__ - INFO - [VIDEO] driver_facing (3.9MB) saved successfully
+2025-11-10 11:36:18,819 - __main__ - INFO - [SENT] Media group for event 1419973807
+2025-11-10 11:36:20,833 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:28,349 - __main__ - INFO - [VIDEO] front_facing size: 6.4MB
+2025-11-10 11:36:28,351 - __main__ - INFO - [VIDEO] front_facing (6.4MB) saved successfully
+2025-11-10 11:36:28,352 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:30,329 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:30,565 - __main__ - INFO - [VIDEO] driver_facing size: 4.3MB
+2025-11-10 11:36:30,567 - __main__ - INFO - [VIDEO] driver_facing (4.3MB) saved successfully
+2025-11-10 11:36:30,655 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:30,864 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:31,039 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:32,594 - __main__ - INFO - [SENT] Media group for event 1419980223
+2025-11-10 11:36:33,280 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:33,504 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,017 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,049 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,081 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,113 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,145 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,177 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,209 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,241 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,273 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,305 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,337 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,369 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,401 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,448 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,480 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,512 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,544 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,576 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,606 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:34,608 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:34,946 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:35,172 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:35,627 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:35,641 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:35,854 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:35,866 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:35,930 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,081 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,097 - __main__ - INFO - [VIDEO] front_facing size: 4.0MB
+2025-11-10 11:36:36,098 - __main__ - INFO - [VIDEO] front_facing (4.0MB) saved successfully
+2025-11-10 11:36:36,099 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:36,491 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,502 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,718 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,723 - __main__ - INFO - [VIDEO] driver_facing size: 1.0MB
+2025-11-10 11:36:36,724 - __main__ - INFO - [VIDEO] driver_facing (1.0MB) saved successfully
+2025-11-10 11:36:36,727 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,758 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,791 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,823 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,855 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,886 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,920 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:36,967 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,000 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,032 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,063 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,095 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,126 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,159 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,191 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,223 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,255 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,287 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,319 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,351 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,382 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,414 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,447 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,494 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,526 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,558 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,591 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,622 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,653 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,686 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,717 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,748 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,781 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,813 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,844 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,877 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,909 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,957 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:37,989 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:38,019 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:40,196 - __main__ - INFO - [SENT] Media group for event 1420054054
+2025-11-10 11:36:42,206 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:43,514 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 11:36:43,516 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 11:36:43,516 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:44,096 - __main__ - INFO - [VIDEO] driver_facing size: 1.7MB
+2025-11-10 11:36:44,097 - __main__ - INFO - [VIDEO] driver_facing (1.7MB) saved successfully
+2025-11-10 11:36:47,694 - __main__ - INFO - [SENT] Media group for event 1420056360
+2025-11-10 11:36:49,706 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:52,941 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 11:36:52,943 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 11:36:52,944 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:53,528 - __main__ - INFO - [VIDEO] driver_facing size: 2.6MB
+2025-11-10 11:36:53,529 - __main__ - INFO - [VIDEO] driver_facing (2.6MB) saved successfully
+2025-11-10 11:36:55,280 - __main__ - INFO - [SENT] Media group for event 1420088250
+2025-11-10 11:36:57,291 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 11:36:58,115 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 11:36:58,117 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 11:36:58,118 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 11:36:58,512 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:58,637 - __main__ - INFO - [VIDEO] driver_facing size: 3.6MB
+2025-11-10 11:36:58,639 - __main__ - INFO - [VIDEO] driver_facing (3.6MB) saved successfully
+2025-11-10 11:36:59,017 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,049 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,061 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 19 seconds
+2025-11-10 11:36:59,080 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,112 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,146 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,176 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,224 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,256 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,286 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,319 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,351 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,355 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 19 seconds
+2025-11-10 11:36:59,381 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,414 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,446 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,477 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,509 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,541 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,548 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 19 seconds
+2025-11-10 11:36:59,572 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,619 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,651 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,683 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,715 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,747 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,779 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,811 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,842 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,877 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,905 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,936 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:36:59,968 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:00,015 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:00,079 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:22,219 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 11:37:22,775 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 11:37:22,775 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 11:37:22,776 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 11:37:23,101 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 11:37:23,236 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 11:37:23,236 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 11:37:23,236 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:37:23,752 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:23,997 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:24,242 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:24,676 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:37:24,677 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:37:24,678 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:37:40,826 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 11:37:41,395 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 11:37:41,395 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 11:37:41,396 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 11:37:41,715 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 11:37:41,864 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 11:37:41,865 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 11:37:41,865 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:37:44,325 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:37:44,325 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:37:48,071 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:37:49,072 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:37:49,388 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:37:50,389 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:37:52,115 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:37:53,116 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:37:56,645 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:37:57,646 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:37:58,094 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:37:59,095 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:38:01,812 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:38:02,812 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:38:02,812 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 11:38:02,814 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 11:38:02,814 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 11:38:02,814 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 11:38:02,815 - __main__ - INFO - ============================================================
+2025-11-10 11:38:02,815 - __main__ - INFO - Starting event check cycle
+2025-11-10 11:38:02,815 - __main__ - INFO - ============================================================
+2025-11-10 11:38:02,815 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 11:38:02,816 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:38:03,199 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:38:03,199 - __main__ - INFO - Found 25 new speeding events (last ID: 0)
+2025-11-10 11:38:03,200 - __main__ - INFO - [ID_SAVED] speeding: 2135448277
+2025-11-10 11:38:03,200 - __main__ - INFO - [PROCESS] Processing 25 speeding events
+2025-11-10 11:38:03,249 - __main__ - INFO - [SCREENSHOT] Session invalid, logging in...
+2025-11-10 11:38:03,250 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 11:38:04,569 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 11:38:19,748 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 11:38:20,311 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 11:38:20,329 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 11:38:20,880 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 11:38:20,898 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 11:38:25,077 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 11:38:31,018 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 11:38:31,019 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135068024;start_time=2025-11-10T16:05:12Z
+2025-11-10 11:38:31,025 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:38:41,049 - __main__ - INFO - [SCREENSHOT] Right sidebar hidden
+2025-11-10 11:38:43,150 - __main__ - INFO - [SCREENSHOT] Captured successfully (7.5KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135068024_a9dd5db2926540d6b3613ce376bce86d.png
+2025-11-10 11:38:43,216 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 11:38:44,831 - __main__ - INFO - [SENT] Speeding event 2135068024 with screenshot
+2025-11-10 11:38:46,833 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135074740;start_time=2025-11-10T16:07:30Z
+2025-11-10 11:38:46,842 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:38:56,855 - __main__ - INFO - [SCREENSHOT] Right sidebar hidden
+2025-11-10 11:38:58,945 - __main__ - INFO - [SCREENSHOT] Captured successfully (7.5KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135074740_37d4416cdb8743699ffe5c2ff100e513.png
+2025-11-10 11:38:59,294 - __main__ - INFO - [SENT] Speeding event 2135074740 with screenshot
+2025-11-10 11:39:01,301 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135087290;start_time=2025-11-10T16:12:44Z
+2025-11-10 11:39:01,311 - __main__ - INFO - [SCREENSHOT] Waiting 10 seconds for page content to load...
+2025-11-10 11:39:02,824 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:40:37,378 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 11:40:37,898 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 11:40:37,898 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 11:40:37,899 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 11:40:38,228 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 11:40:38,383 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 11:40:38,383 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 11:40:38,384 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:40:39,835 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:40:39,835 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:40:44,041 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:40:45,042 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:40:45,361 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:40:46,361 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:40:48,389 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:40:49,389 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:40:52,274 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:40:53,275 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:40:53,723 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:40:54,724 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:40:57,796 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:40:58,797 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:40:58,797 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 11:40:58,799 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 11:40:58,799 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 11:40:58,799 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 11:40:58,800 - __main__ - INFO - ============================================================
+2025-11-10 11:40:58,800 - __main__ - INFO - Starting event check cycle
+2025-11-10 11:40:58,800 - __main__ - INFO - ============================================================
+2025-11-10 11:40:58,801 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 11:40:58,801 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:40:59,156 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:40:59,156 - __main__ - INFO - Found 25 new speeding events (last ID: 0)
+2025-11-10 11:40:59,157 - __main__ - INFO - [ID_SAVED] speeding: 2135464507
+2025-11-10 11:40:59,157 - __main__ - INFO - [PROCESS] Processing 25 speeding events
+2025-11-10 11:40:59,194 - __main__ - INFO - [SCREENSHOT] Session invalid, logging in...
+2025-11-10 11:40:59,195 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 11:41:00,396 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 11:41:08,107 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 11:41:08,679 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 11:41:08,697 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 11:41:09,258 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 11:41:09,274 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 11:41:13,589 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 11:41:18,611 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 11:41:18,611 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135074740;start_time=2025-11-10T16:07:30Z
+2025-11-10 11:41:18,618 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 11:41:23,619 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 11:41:23,630 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 11:41:23,630 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 11:41:38,639 - __main__ - INFO - [SCREENSHOT] Page ready state confirmed
+2025-11-10 11:41:38,646 - __main__ - INFO - [SCREENSHOT] Right sidebar hidden
+2025-11-10 11:41:41,741 - __main__ - INFO - [SCREENSHOT] Captured successfully (7.5KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135074740_46d6228acb324fa1b5adcd5bc1a6e9dd.png
+2025-11-10 11:41:41,808 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 11:41:43,185 - __main__ - INFO - [SENT] Speeding event 2135074740 with screenshot
+2025-11-10 11:41:45,201 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135087290;start_time=2025-11-10T16:12:44Z
+2025-11-10 11:41:45,211 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 11:41:50,216 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 11:41:50,223 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 11:41:50,223 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 11:46:58,838 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 11:46:59,425 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 11:46:59,430 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 11:46:59,431 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 11:46:59,800 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 11:46:59,963 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 11:46:59,984 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 11:46:59,985 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:47:04,498 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:47:04,498 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:47:07,765 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:47:08,769 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:47:09,120 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:47:10,121 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:47:13,182 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:47:14,183 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:47:16,910 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:47:17,911 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:47:19,791 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:47:20,792 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:47:24,206 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:47:25,207 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:47:25,207 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 11:47:25,209 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 11:47:25,209 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 11:47:25,209 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 11:47:25,210 - __main__ - INFO - ============================================================
+2025-11-10 11:47:25,210 - __main__ - INFO - Starting event check cycle
+2025-11-10 11:47:25,210 - __main__ - INFO - ============================================================
+2025-11-10 11:47:25,210 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 11:47:25,211 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:47:25,573 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:47:25,573 - __main__ - INFO - Found 3 new speeding events (last ID: 2135464507)
+2025-11-10 11:47:25,574 - __main__ - INFO - [ID_SAVED] speeding: 2135480638
+2025-11-10 11:47:25,574 - __main__ - INFO - [PROCESS] Processing 3 speeding events
+2025-11-10 11:47:25,610 - __main__ - INFO - [SCREENSHOT] Session invalid, logging in...
+2025-11-10 11:47:25,610 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 11:47:26,861 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 11:47:35,271 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 11:47:35,845 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 11:47:35,864 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 11:47:36,420 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 11:47:36,443 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 11:47:40,613 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 11:47:45,629 - __main__ - WARNING - [SCREENSHOT] Login may have failed - still on login page: https://account.gomotive.com/log-in?alert=session_expired&return_url=https%3A%2F%2Fapp.gomotive.com%2F
+2025-11-10 11:47:48,641 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 2/2)...
+2025-11-10 11:47:52,458 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 11:47:53,007 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 11:47:53,019 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 11:47:53,573 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 11:47:53,584 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 11:47:55,880 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 11:48:00,955 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 11:48:00,955 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135469300;start_time=2025-11-10T18:39:41Z
+2025-11-10 11:48:00,963 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 11:48:05,974 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 11:48:05,986 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 11:48:05,986 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 11:48:22,014 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 11:48:22,488 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1754.1KB)
+2025-11-10 11:48:22,489 - __main__ - WARNING - [SCREENSHOT] PIL not available, skipping crop - sending full screenshot
+2025-11-10 11:48:22,559 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 11:48:25,013 - __main__ - INFO - [SENT] Speeding event 2135469300 with screenshot
+2025-11-10 11:48:27,023 - __main__ - ERROR - [FORMAT_ERROR] Error formatting speeding message: 'NoneType' object has no attribute 'get'
+2025-11-10 11:48:27,023 - __main__ - WARNING - [SKIP] Speeding event 2135479325 - formatting failed
+2025-11-10 11:48:29,024 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135480638;start_time=2025-11-10T18:42:28Z
+2025-11-10 11:48:29,041 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 11:48:34,056 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 11:48:34,063 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 11:48:34,063 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 11:48:50,090 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 11:48:50,536 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2119.6KB)
+2025-11-10 11:48:50,537 - __main__ - WARNING - [SCREENSHOT] PIL not available, skipping crop - sending full screenshot
+2025-11-10 11:48:52,033 - __main__ - INFO - [SENT] Speeding event 2135480638 with screenshot
+2025-11-10 11:48:54,038 - __main__ - INFO - [FETCH] Fetching performance events...
+2025-11-10 11:48:54,038 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:48:57,642 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:48:58,644 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:48:58,947 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:48:59,949 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:49:01,792 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:49:02,793 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:49:05,044 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:49:06,045 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:49:06,600 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:49:07,601 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:49:11,007 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:49:12,008 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:49:12,008 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1422640467)
+2025-11-10 11:49:12,009 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1421893983)
+2025-11-10 11:49:12,009 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1421597809)
+2025-11-10 11:49:12,009 - __main__ - INFO - Found 0 new distraction events (last ID: 1424961285)
+2025-11-10 11:49:12,009 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1421098001)
+2025-11-10 11:49:12,009 - __main__ - INFO - [PROCESS] No new performance events
+2025-11-10 11:49:12,010 - __main__ - INFO - ============================================================
+2025-11-10 11:49:12,010 - __main__ - INFO - Event check completed in 106.8s
+2025-11-10 11:49:12,010 - __main__ - INFO - ============================================================
+2025-11-10 11:49:12,011 - __main__ - INFO - [STARTUP] SafetyBot v2.2 Enhanced is now monitoring
+2025-11-10 11:52:32,030 - __main__ - INFO - ============================================================
+2025-11-10 11:52:32,030 - __main__ - INFO - Starting event check cycle
+2025-11-10 11:52:32,030 - __main__ - INFO - ============================================================
+2025-11-10 11:52:32,031 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 11:52:32,031 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:52:32,438 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:52:32,438 - __main__ - INFO - Found 1 new speeding events (last ID: 2135480638)
+2025-11-10 11:52:32,439 - __main__ - INFO - [ID_SAVED] speeding: 2135496861
+2025-11-10 11:52:32,439 - __main__ - INFO - [PROCESS] Processing 1 speeding events
+2025-11-10 11:52:32,439 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135496861;start_time=2025-11-10T18:48:28Z
+2025-11-10 11:52:32,453 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 11:52:37,466 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 11:52:37,473 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 11:52:37,474 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 11:52:53,493 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 11:52:53,894 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2465.9KB)
+2025-11-10 11:52:53,895 - __main__ - WARNING - [SCREENSHOT] PIL not available, skipping crop - sending full screenshot
+2025-11-10 11:52:53,897 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 11:52:56,847 - __main__ - INFO - [SENT] Speeding event 2135496861 with screenshot
+2025-11-10 11:52:58,854 - __main__ - INFO - [FETCH] Fetching performance events...
+2025-11-10 11:52:58,855 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:53:02,152 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:53:03,153 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:53:03,470 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:53:04,471 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:53:06,171 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:53:07,172 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:53:11,610 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:53:12,611 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:53:13,080 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:53:14,080 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:53:19,436 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:53:20,436 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:53:20,437 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1422640467)
+2025-11-10 11:53:20,437 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1421893983)
+2025-11-10 11:53:20,437 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1421597809)
+2025-11-10 11:53:20,438 - __main__ - INFO - Found 0 new distraction events (last ID: 1424961285)
+2025-11-10 11:53:20,438 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1421098001)
+2025-11-10 11:53:20,438 - __main__ - INFO - [PROCESS] No new performance events
+2025-11-10 11:53:20,439 - __main__ - INFO - ============================================================
+2025-11-10 11:53:20,439 - __main__ - INFO - Event check completed in 48.4s
+2025-11-10 11:53:20,439 - __main__ - INFO - ============================================================
+2025-11-10 11:58:20,469 - __main__ - INFO - ============================================================
+2025-11-10 11:58:20,469 - __main__ - INFO - Starting event check cycle
+2025-11-10 11:58:20,469 - __main__ - INFO - ============================================================
+2025-11-10 11:58:20,469 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 11:58:20,470 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:58:20,915 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:58:20,915 - __main__ - INFO - Found 1 new speeding events (last ID: 2135496861)
+2025-11-10 11:58:20,916 - __main__ - INFO - [ID_SAVED] speeding: 2135512855
+2025-11-10 11:58:20,916 - __main__ - INFO - [PROCESS] Processing 1 speeding events
+2025-11-10 11:58:20,916 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135512855;start_time=2025-11-10T18:54:28Z
+2025-11-10 11:58:20,928 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 11:58:25,931 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 11:58:25,938 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 11:58:25,939 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 11:58:41,950 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 11:58:42,364 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2673.3KB)
+2025-11-10 11:58:42,364 - __main__ - WARNING - [SCREENSHOT] PIL not available, skipping crop - sending full screenshot
+2025-11-10 11:58:42,366 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 11:58:45,072 - __main__ - INFO - [SENT] Speeding event 2135512855 with screenshot
+2025-11-10 11:58:47,084 - __main__ - INFO - [FETCH] Fetching performance events...
+2025-11-10 11:58:47,085 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 11:58:50,423 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 11:58:51,424 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 11:58:51,818 - __main__ - INFO - Found 0 crash events
+2025-11-10 11:58:52,819 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 11:58:54,314 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 11:58:55,315 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 11:58:58,769 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 11:58:59,770 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 11:59:00,224 - __main__ - INFO - Found 1 distraction events
+2025-11-10 11:59:01,224 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 11:59:04,462 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 11:59:05,462 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 11:59:05,463 - __main__ - INFO - Found 0 new hard_brake events (last ID: 1422640467)
+2025-11-10 11:59:05,463 - __main__ - INFO - Found 0 new seat_belt_violation events (last ID: 1421893983)
+2025-11-10 11:59:05,463 - __main__ - INFO - Found 0 new stop_sign_violation events (last ID: 1421597809)
+2025-11-10 11:59:05,464 - __main__ - INFO - Found 0 new distraction events (last ID: 1424961285)
+2025-11-10 11:59:05,464 - __main__ - INFO - Found 0 new unsafe_lane_change events (last ID: 1421098001)
+2025-11-10 11:59:05,464 - __main__ - INFO - [PROCESS] No new performance events
+2025-11-10 11:59:05,464 - __main__ - INFO - ============================================================
+2025-11-10 11:59:05,465 - __main__ - INFO - Event check completed in 45.0s
+2025-11-10 11:59:05,465 - __main__ - INFO - ============================================================
+2025-11-10 11:59:40,463 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 11:59:55,426 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 11:59:55,946 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 11:59:55,946 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 11:59:55,947 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 11:59:56,275 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 11:59:56,415 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 11:59:56,415 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 11:59:56,415 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 11:59:57,838 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 11:59:57,838 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 12:00:01,580 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 12:00:02,581 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 12:00:02,893 - __main__ - INFO - Found 0 crash events
+2025-11-10 12:00:03,894 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 12:00:06,068 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 12:00:07,068 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 12:00:10,946 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 12:00:11,947 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 12:00:16,739 - __main__ - INFO - Found 1 distraction events
+2025-11-10 12:00:17,740 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 12:00:20,926 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 12:00:21,926 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 12:00:21,926 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 12:00:21,928 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 12:00:21,928 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 12:00:21,928 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 12:00:21,929 - __main__ - INFO - ============================================================
+2025-11-10 12:00:21,929 - __main__ - INFO - Starting event check cycle
+2025-11-10 12:00:21,929 - __main__ - INFO - ============================================================
+2025-11-10 12:00:21,929 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 12:00:21,929 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 12:00:22,338 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 12:00:22,338 - __main__ - INFO - Found 25 new speeding events to process
+2025-11-10 12:00:22,338 - __main__ - INFO - [PROCESS] Processing 25 speeding events
+2025-11-10 12:00:22,378 - __main__ - INFO - [SCREENSHOT] Session invalid, logging in...
+2025-11-10 12:00:22,378 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 12:00:23,563 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 12:00:30,938 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 12:00:31,515 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 12:00:31,532 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 12:00:32,097 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 12:00:32,118 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 12:00:36,052 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 12:00:41,072 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 12:00:41,073 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135157096;start_time=2025-11-10T16:39:23Z
+2025-11-10 12:00:41,081 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:00:46,082 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:00:46,092 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:00:46,093 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:01:02,120 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:01:02,580 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2253.8KB)
+2025-11-10 12:01:02,604 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:01:03,134 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1756.9KB)
+2025-11-10 12:01:03,210 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 12:01:05,835 - __main__ - INFO - [SENT] Speeding event 2135157096 with screenshot
+2025-11-10 12:01:05,836 - __main__ - INFO - [ID_MARKED] speeding event 2135157096 marked as processed
+2025-11-10 12:01:07,849 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135183489;start_time=2025-11-10T16:50:25Z
+2025-11-10 12:01:07,862 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:01:12,863 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:01:12,871 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:01:12,871 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:01:28,900 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:01:29,289 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2742.2KB)
+2025-11-10 12:01:29,289 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:01:29,756 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (2062.3KB)
+2025-11-10 12:01:31,695 - __main__ - INFO - [SENT] Speeding event 2135183489 with screenshot
+2025-11-10 12:01:31,696 - __main__ - INFO - [ID_MARKED] speeding event 2135183489 marked as processed
+2025-11-10 12:01:33,703 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135228575;start_time=2025-11-10T17:07:14Z
+2025-11-10 12:01:33,714 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:01:38,715 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:01:38,723 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:01:38,723 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:01:54,740 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:01:55,190 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1701.6KB)
+2025-11-10 12:01:55,190 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:01:55,745 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1410.6KB)
+2025-11-10 12:01:57,094 - __main__ - INFO - [SENT] Speeding event 2135228575 with screenshot
+2025-11-10 12:01:57,095 - __main__ - INFO - [ID_MARKED] speeding event 2135228575 marked as processed
+2025-11-10 12:01:59,097 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135283118;start_time=2025-11-10T17:29:59Z
+2025-11-10 12:01:59,117 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:02:04,122 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:02:04,129 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:02:04,129 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:02:20,159 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:02:20,591 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (3100.0KB)
+2025-11-10 12:02:20,591 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:02:20,860 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (2658.6KB)
+2025-11-10 12:02:22,594 - __main__ - INFO - [SENT] Speeding event 2135283118 with screenshot
+2025-11-10 12:02:22,594 - __main__ - INFO - [ID_MARKED] speeding event 2135283118 marked as processed
+2025-11-10 12:02:24,607 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135302733;start_time=2025-11-10T17:37:30Z
+2025-11-10 12:02:24,619 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:02:29,633 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:02:29,640 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:02:29,640 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:02:45,661 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:02:46,090 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2170.0KB)
+2025-11-10 12:02:46,091 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:02:46,610 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1792.9KB)
+2025-11-10 12:02:48,046 - __main__ - INFO - [SENT] Speeding event 2135302733 with screenshot
+2025-11-10 12:02:48,047 - __main__ - INFO - [ID_MARKED] speeding event 2135302733 marked as processed
+2025-11-10 12:02:50,063 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135302979;start_time=2025-11-10T17:35:58Z
+2025-11-10 12:02:50,076 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:02:55,076 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:02:55,083 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:02:55,083 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:03:11,100 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:03:11,542 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1867.2KB)
+2025-11-10 12:03:11,543 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:03:12,108 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1539.7KB)
+2025-11-10 12:03:13,576 - __main__ - INFO - [SENT] Speeding event 2135302979 with screenshot
+2025-11-10 12:03:13,577 - __main__ - INFO - [ID_MARKED] speeding event 2135302979 marked as processed
+2025-11-10 12:03:15,589 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135333199;start_time=2025-11-10T17:48:49Z
+2025-11-10 12:03:15,600 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:03:20,605 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:03:20,612 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:03:20,613 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:03:36,647 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:03:37,056 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2005.9KB)
+2025-11-10 12:03:37,057 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:03:37,537 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1669.6KB)
+2025-11-10 12:03:38,979 - __main__ - INFO - [SENT] Speeding event 2135333199 with screenshot
+2025-11-10 12:03:38,980 - __main__ - INFO - [ID_MARKED] speeding event 2135333199 marked as processed
+2025-11-10 12:03:40,981 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135334354;start_time=2025-11-10T17:48:42Z
+2025-11-10 12:03:40,991 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:03:45,992 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:03:45,999 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:03:45,999 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:04:02,029 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:04:02,487 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1610.0KB)
+2025-11-10 12:04:02,488 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:04:03,049 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1306.0KB)
+2025-11-10 12:04:04,474 - __main__ - INFO - [SENT] Speeding event 2135334354 with screenshot
+2025-11-10 12:04:04,475 - __main__ - INFO - [ID_MARKED] speeding event 2135334354 marked as processed
+2025-11-10 12:04:06,490 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135334546;start_time=2025-11-10T17:48:41Z
+2025-11-10 12:04:06,503 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:04:11,503 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:04:11,510 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:04:11,511 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:04:27,522 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:04:27,904 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2395.0KB)
+2025-11-10 12:04:27,904 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:04:28,247 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (2056.9KB)
+2025-11-10 12:04:29,888 - __main__ - INFO - [SENT] Speeding event 2135334546 with screenshot
+2025-11-10 12:04:29,888 - __main__ - INFO - [ID_MARKED] speeding event 2135334546 marked as processed
+2025-11-10 12:04:31,904 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135368453;start_time=2025-11-10T18:00:44Z
+2025-11-10 12:04:31,915 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:04:36,927 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:04:36,934 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:04:36,934 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:04:52,947 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:04:53,383 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1896.1KB)
+2025-11-10 12:04:53,384 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:04:53,872 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1648.8KB)
+2025-11-10 12:04:55,195 - __main__ - INFO - [SENT] Speeding event 2135368453 with screenshot
+2025-11-10 12:04:55,195 - __main__ - INFO - [ID_MARKED] speeding event 2135368453 marked as processed
+2025-11-10 12:04:57,197 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135372178;start_time=2025-11-10T18:01:48Z
+2025-11-10 12:04:57,208 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:05:02,223 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:05:02,230 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:05:02,230 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:05:18,257 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:05:18,661 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2305.0KB)
+2025-11-10 12:05:18,661 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:05:19,144 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1781.5KB)
+2025-11-10 12:05:20,474 - __main__ - INFO - [SENT] Speeding event 2135372178 with screenshot
+2025-11-10 12:05:20,475 - __main__ - INFO - [ID_MARKED] speeding event 2135372178 marked as processed
+2025-11-10 12:05:22,475 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135388249;start_time=2025-11-10T18:09:00Z
+2025-11-10 12:05:22,487 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:05:27,490 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:05:27,497 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:05:27,498 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:05:43,518 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:05:43,933 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2420.4KB)
+2025-11-10 12:05:43,934 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:05:44,455 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1744.2KB)
+2025-11-10 12:05:45,771 - __main__ - INFO - [SENT] Speeding event 2135388249 with screenshot
+2025-11-10 12:05:45,772 - __main__ - INFO - [ID_MARKED] speeding event 2135388249 marked as processed
+2025-11-10 12:05:47,784 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135404226;start_time=2025-11-10T18:15:00Z
+2025-11-10 12:05:47,794 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:05:52,801 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:05:52,809 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:05:52,809 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:06:08,831 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:06:09,270 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2212.2KB)
+2025-11-10 12:06:09,271 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:06:09,806 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1655.8KB)
+2025-11-10 12:06:11,198 - __main__ - INFO - [SENT] Speeding event 2135404226 with screenshot
+2025-11-10 12:06:11,199 - __main__ - INFO - [ID_MARKED] speeding event 2135404226 marked as processed
+2025-11-10 12:06:13,201 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135420470;start_time=2025-11-10T18:21:00Z
+2025-11-10 12:06:13,212 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:06:18,223 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:06:18,230 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:06:18,231 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:06:34,248 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:06:34,691 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1745.3KB)
+2025-11-10 12:06:34,691 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:06:35,235 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1448.3KB)
+2025-11-10 12:06:36,425 - __main__ - INFO - [SENT] Speeding event 2135420470 with screenshot
+2025-11-10 12:06:36,425 - __main__ - INFO - [ID_MARKED] speeding event 2135420470 marked as processed
+2025-11-10 12:06:38,427 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135431649;start_time=2025-11-10T18:24:27Z
+2025-11-10 12:06:38,436 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:06:43,442 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:06:43,449 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:06:43,449 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:06:59,464 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:06:59,865 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2041.7KB)
+2025-11-10 12:06:59,866 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:07:00,393 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1586.1KB)
+2025-11-10 12:07:01,741 - __main__ - INFO - [SENT] Speeding event 2135431649 with screenshot
+2025-11-10 12:07:01,742 - __main__ - INFO - [ID_MARKED] speeding event 2135431649 marked as processed
+2025-11-10 12:07:03,743 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135447807;start_time=2025-11-10T18:30:55Z
+2025-11-10 12:07:03,753 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:07:08,754 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:07:08,761 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:07:08,762 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:07:24,784 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:07:25,223 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1874.9KB)
+2025-11-10 12:07:25,224 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:07:25,778 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1423.4KB)
+2025-11-10 12:07:27,079 - __main__ - INFO - [SENT] Speeding event 2135447807 with screenshot
+2025-11-10 12:07:27,079 - __main__ - INFO - [ID_MARKED] speeding event 2135447807 marked as processed
+2025-11-10 12:07:29,087 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135448277;start_time=2025-11-10T18:30:27Z
+2025-11-10 12:07:29,099 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:07:34,113 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:07:34,120 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:07:34,120 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:07:50,138 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:07:50,550 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2294.5KB)
+2025-11-10 12:07:50,551 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:07:50,990 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1880.7KB)
+2025-11-10 12:07:52,499 - __main__ - INFO - [SENT] Speeding event 2135448277 with screenshot
+2025-11-10 12:07:52,500 - __main__ - INFO - [ID_MARKED] speeding event 2135448277 marked as processed
+2025-11-10 12:07:54,516 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135464507;start_time=2025-11-10T18:36:28Z
+2025-11-10 12:07:54,528 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:07:59,530 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:07:59,538 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:07:59,538 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:08:15,544 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:08:15,959 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2190.4KB)
+2025-11-10 12:08:15,960 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:08:16,416 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1648.6KB)
+2025-11-10 12:08:17,775 - __main__ - INFO - [SENT] Speeding event 2135464507 with screenshot
+2025-11-10 12:08:17,775 - __main__ - INFO - [ID_MARKED] speeding event 2135464507 marked as processed
+2025-11-10 12:08:19,777 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135469300;start_time=2025-11-10T18:39:41Z
+2025-11-10 12:08:19,787 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:08:24,799 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:08:24,806 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:08:24,807 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:08:40,830 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:08:41,278 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (1754.1KB)
+2025-11-10 12:08:41,278 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:08:41,793 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1283.9KB)
+2025-11-10 12:08:43,107 - __main__ - INFO - [SENT] Speeding event 2135469300 with screenshot
+2025-11-10 12:08:43,107 - __main__ - INFO - [ID_MARKED] speeding event 2135469300 marked as processed
+2025-11-10 12:08:45,109 - __main__ - ERROR - [FORMAT_ERROR] Error formatting speeding message: 'NoneType' object has no attribute 'get'
+2025-11-10 12:08:45,110 - __main__ - WARNING - [SKIP] Speeding event 2135479325 - formatting failed
+2025-11-10 12:08:47,123 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135480638;start_time=2025-11-10T18:42:28Z
+2025-11-10 12:08:47,133 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:08:52,140 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:08:52,147 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:08:52,148 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:09:08,171 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:09:08,612 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2015.8KB)
+2025-11-10 12:09:08,613 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:09:09,182 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1470.7KB)
+2025-11-10 12:09:10,655 - __main__ - INFO - [SENT] Speeding event 2135480638 with screenshot
+2025-11-10 12:09:10,656 - __main__ - INFO - [ID_MARKED] speeding event 2135480638 marked as processed
+2025-11-10 12:09:12,670 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135496861;start_time=2025-11-10T18:48:28Z
+2025-11-10 12:09:12,684 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:09:17,695 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:09:17,702 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:09:17,703 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:09:33,735 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:09:34,146 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2353.8KB)
+2025-11-10 12:09:34,146 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:09:34,685 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1758.8KB)
+2025-11-10 12:09:36,022 - __main__ - INFO - [SENT] Speeding event 2135496861 with screenshot
+2025-11-10 12:09:36,023 - __main__ - INFO - [ID_MARKED] speeding event 2135496861 marked as processed
+2025-11-10 12:09:38,031 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135512855;start_time=2025-11-10T18:54:28Z
+2025-11-10 12:09:38,044 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:09:43,050 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:09:43,057 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:09:43,057 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:09:59,077 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:09:59,461 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2550.6KB)
+2025-11-10 12:09:59,461 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:09:59,972 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (2011.0KB)
+2025-11-10 12:10:01,652 - __main__ - INFO - [SENT] Speeding event 2135512855 with screenshot
+2025-11-10 12:10:01,653 - __main__ - INFO - [ID_MARKED] speeding event 2135512855 marked as processed
+2025-11-10 12:10:03,669 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135516981;start_time=2025-11-10T18:57:08Z
+2025-11-10 12:10:03,681 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:10:08,697 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:10:08,704 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:10:08,704 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:10:24,726 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:10:25,112 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2291.4KB)
+2025-11-10 12:10:25,113 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:10:25,653 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1704.9KB)
+2025-11-10 12:10:27,094 - __main__ - INFO - [SENT] Speeding event 2135516981 with screenshot
+2025-11-10 12:10:27,095 - __main__ - INFO - [ID_MARKED] speeding event 2135516981 marked as processed
+2025-11-10 12:10:29,095 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135518973;start_time=2025-11-10T18:56:55Z
+2025-11-10 12:10:29,107 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:10:34,114 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:10:34,121 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:10:34,121 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (15 seconds)...
+2025-11-10 12:10:50,142 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:10:50,560 - __main__ - INFO - [SCREENSHOT] Full screenshot captured (2050.4KB)
+2025-11-10 12:10:50,560 - __main__ - INFO - [SCREENSHOT] Original size: 1904x985
+2025-11-10 12:10:51,103 - __main__ - INFO - [SCREENSHOT] Cropped to 1428x985 (1632.5KB)
+2025-11-10 12:10:52,498 - __main__ - INFO - [SENT] Speeding event 2135518973 with screenshot
+2025-11-10 12:10:52,499 - __main__ - INFO - [ID_MARKED] speeding event 2135518973 marked as processed
+2025-11-10 12:10:54,501 - __main__ - INFO - [FETCH] Fetching performance events...
+2025-11-10 12:10:54,502 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 12:10:59,887 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 12:11:00,888 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 12:11:01,249 - __main__ - INFO - Found 0 crash events
+2025-11-10 12:11:02,250 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 12:11:03,949 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 12:11:04,950 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 12:11:08,745 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 12:11:09,746 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 12:11:10,613 - __main__ - INFO - Found 1 distraction events
+2025-11-10 12:11:11,613 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 12:11:17,614 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 12:11:18,614 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 12:11:18,615 - __main__ - INFO - Found 54 new performance events to process
+2025-11-10 12:11:18,615 - __main__ - INFO - [PROCESS] Processing 54 performance events
+2025-11-10 12:11:18,970 - __main__ - INFO - [SENT] Event 1419504833 without videos
+2025-11-10 12:11:18,971 - __main__ - INFO - [ID_MARKED] performance event 1419504833 marked as processed
+2025-11-10 12:11:20,971 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:11:38,659 - __main__ - INFO - [VIDEO] front_facing size: 3.4MB
+2025-11-10 12:11:38,661 - __main__ - INFO - [VIDEO] front_facing (3.4MB) saved successfully
+2025-11-10 12:11:38,661 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:11:39,321 - __main__ - INFO - [VIDEO] driver_facing size: 5.1MB
+2025-11-10 12:11:39,323 - __main__ - INFO - [VIDEO] driver_facing (5.1MB) saved successfully
+2025-11-10 12:11:41,291 - __main__ - INFO - [SENT] Media group for event 1419536981
+2025-11-10 12:11:41,291 - __main__ - INFO - [ID_MARKED] performance event 1419536981 marked as processed
+2025-11-10 12:11:43,294 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:11:43,764 - __main__ - INFO - [VIDEO] front_facing size: 3.1MB
+2025-11-10 12:11:43,765 - __main__ - INFO - [VIDEO] front_facing (3.1MB) saved successfully
+2025-11-10 12:11:43,766 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:11:44,604 - __main__ - INFO - [VIDEO] driver_facing size: 5.3MB
+2025-11-10 12:11:44,606 - __main__ - INFO - [VIDEO] driver_facing (5.3MB) saved successfully
+2025-11-10 12:11:48,761 - __main__ - INFO - [SENT] Media group for event 1419543397
+2025-11-10 12:11:48,761 - __main__ - INFO - [ID_MARKED] performance event 1419543397 marked as processed
+2025-11-10 12:11:50,773 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:11:54,006 - __main__ - INFO - [VIDEO] front_facing size: 5.1MB
+2025-11-10 12:11:54,008 - __main__ - INFO - [VIDEO] front_facing (5.1MB) saved successfully
+2025-11-10 12:11:54,009 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:11:54,492 - __main__ - INFO - [VIDEO] driver_facing size: 2.3MB
+2025-11-10 12:11:54,494 - __main__ - INFO - [VIDEO] driver_facing (2.3MB) saved successfully
+2025-11-10 12:11:56,111 - __main__ - INFO - [SENT] Media group for event 1419562142
+2025-11-10 12:11:56,111 - __main__ - INFO - [ID_MARKED] performance event 1419562142 marked as processed
+2025-11-10 12:11:58,125 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:11:58,866 - __main__ - INFO - [VIDEO] front_facing size: 4.5MB
+2025-11-10 12:11:58,867 - __main__ - INFO - [VIDEO] front_facing (4.5MB) saved successfully
+2025-11-10 12:11:58,868 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:11:59,611 - __main__ - INFO - [VIDEO] driver_facing size: 4.8MB
+2025-11-10 12:11:59,613 - __main__ - INFO - [VIDEO] driver_facing (4.8MB) saved successfully
+2025-11-10 12:12:03,184 - __main__ - INFO - [SENT] Media group for event 1419590576
+2025-11-10 12:12:03,185 - __main__ - INFO - [ID_MARKED] performance event 1419590576 marked as processed
+2025-11-10 12:12:05,189 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:12:05,910 - __main__ - INFO - [VIDEO] front_facing size: 4.5MB
+2025-11-10 12:12:05,912 - __main__ - INFO - [VIDEO] front_facing (4.5MB) saved successfully
+2025-11-10 12:12:05,912 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:12:06,345 - __main__ - INFO - [VIDEO] driver_facing size: 2.0MB
+2025-11-10 12:12:06,346 - __main__ - INFO - [VIDEO] driver_facing (2.0MB) saved successfully
+2025-11-10 12:12:09,866 - __main__ - INFO - [SENT] Media group for event 1419611310
+2025-11-10 12:12:09,867 - __main__ - INFO - [ID_MARKED] performance event 1419611310 marked as processed
+2025-11-10 12:12:11,872 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:12:12,570 - __main__ - INFO - [VIDEO] front_facing size: 4.4MB
+2025-11-10 12:12:12,572 - __main__ - INFO - [VIDEO] front_facing (4.4MB) saved successfully
+2025-11-10 12:12:12,572 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:12:12,990 - __main__ - INFO - [VIDEO] driver_facing size: 1.4MB
+2025-11-10 12:12:12,991 - __main__ - INFO - [VIDEO] driver_facing (1.4MB) saved successfully
+2025-11-10 12:12:21,569 - __main__ - INFO - [SENT] Media group for event 1419617193
+2025-11-10 12:12:21,570 - __main__ - INFO - [ID_MARKED] performance event 1419617193 marked as processed
+2025-11-10 12:12:23,582 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:12:26,757 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 12:12:26,760 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 12:12:26,760 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:12:27,084 - __main__ - INFO - [VIDEO] driver_facing size: 0.5MB
+2025-11-10 12:12:27,084 - __main__ - INFO - [VIDEO] driver_facing (0.5MB) saved successfully
+2025-11-10 12:12:28,918 - __main__ - INFO - [SENT] Media group for event 1419666204
+2025-11-10 12:12:28,919 - __main__ - INFO - [ID_MARKED] performance event 1419666204 marked as processed
+2025-11-10 12:12:30,924 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:12:31,636 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 12:12:31,637 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 12:12:31,638 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:12:32,057 - __main__ - INFO - [VIDEO] driver_facing size: 1.3MB
+2025-11-10 12:12:32,058 - __main__ - INFO - [VIDEO] driver_facing (1.3MB) saved successfully
+2025-11-10 12:12:36,319 - __main__ - INFO - [SENT] Media group for event 1419672201
+2025-11-10 12:12:36,320 - __main__ - INFO - [ID_MARKED] performance event 1419672201 marked as processed
+2025-11-10 12:12:38,331 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:12:42,516 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 12:12:42,518 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 12:12:42,518 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:12:43,148 - __main__ - INFO - [VIDEO] driver_facing size: 3.3MB
+2025-11-10 12:12:43,151 - __main__ - INFO - [VIDEO] driver_facing (3.3MB) saved successfully
+2025-11-10 12:12:44,952 - __main__ - INFO - [SENT] Media group for event 1419708445
+2025-11-10 12:12:44,952 - __main__ - INFO - [ID_MARKED] performance event 1419708445 marked as processed
+2025-11-10 12:12:46,963 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:12:47,704 - __main__ - INFO - [VIDEO] front_facing size: 5.4MB
+2025-11-10 12:12:47,706 - __main__ - INFO - [VIDEO] front_facing (5.4MB) saved successfully
+2025-11-10 12:12:47,706 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:12:48,285 - __main__ - INFO - [VIDEO] driver_facing size: 2.8MB
+2025-11-10 12:12:48,286 - __main__ - INFO - [VIDEO] driver_facing (2.8MB) saved successfully
+2025-11-10 12:12:52,074 - __main__ - INFO - [SENT] Media group for event 1419845904
+2025-11-10 12:12:52,095 - __main__ - INFO - [ID_MARKED] performance event 1419845904 marked as processed
+2025-11-10 12:12:54,111 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:06,768 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 12:13:06,770 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 12:13:06,771 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:07,587 - __main__ - INFO - [VIDEO] driver_facing size: 1.3MB
+2025-11-10 12:13:07,588 - __main__ - INFO - [VIDEO] driver_facing (1.3MB) saved successfully
+2025-11-10 12:13:09,566 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 12 seconds
+2025-11-10 12:13:11,141 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 10 seconds
+2025-11-10 12:13:11,488 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 10 seconds
+2025-11-10 12:13:11,488 - __main__ - INFO - [ID_MARKED] performance event 1419851093 marked as processed
+2025-11-10 12:13:13,497 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:19,666 - __main__ - INFO - [VIDEO] front_facing size: 5.6MB
+2025-11-10 12:13:19,668 - __main__ - INFO - [VIDEO] front_facing (5.6MB) saved successfully
+2025-11-10 12:13:19,668 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:20,059 - __main__ - INFO - [VIDEO] driver_facing size: 1.7MB
+2025-11-10 12:13:20,060 - __main__ - INFO - [VIDEO] driver_facing (1.7MB) saved successfully
+2025-11-10 12:13:21,781 - __main__ - INFO - [SENT] Media group for event 1419864043
+2025-11-10 12:13:21,782 - __main__ - INFO - [ID_MARKED] performance event 1419864043 marked as processed
+2025-11-10 12:13:23,784 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:24,590 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 12:13:24,592 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 12:13:24,593 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:24,997 - __main__ - INFO - [VIDEO] driver_facing size: 0.6MB
+2025-11-10 12:13:24,998 - __main__ - INFO - [VIDEO] driver_facing (0.6MB) saved successfully
+2025-11-10 12:13:28,761 - __main__ - INFO - [SENT] Media group for event 1419905331
+2025-11-10 12:13:28,762 - __main__ - INFO - [ID_MARKED] performance event 1419905331 marked as processed
+2025-11-10 12:13:30,769 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:31,459 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 12:13:31,461 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 12:13:31,462 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:31,919 - __main__ - INFO - [VIDEO] driver_facing size: 2.9MB
+2025-11-10 12:13:31,920 - __main__ - INFO - [VIDEO] driver_facing (2.9MB) saved successfully
+2025-11-10 12:13:35,417 - __main__ - INFO - [SENT] Media group for event 1419923022
+2025-11-10 12:13:35,417 - __main__ - INFO - [ID_MARKED] performance event 1419923022 marked as processed
+2025-11-10 12:13:37,423 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:38,202 - __main__ - INFO - [VIDEO] front_facing size: 5.4MB
+2025-11-10 12:13:38,204 - __main__ - INFO - [VIDEO] front_facing (5.4MB) saved successfully
+2025-11-10 12:13:38,205 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:38,718 - __main__ - INFO - [VIDEO] driver_facing size: 2.7MB
+2025-11-10 12:13:38,720 - __main__ - INFO - [VIDEO] driver_facing (2.7MB) saved successfully
+2025-11-10 12:13:39,281 - __main__ - INFO - [SENT] Media group for event 1419965894
+2025-11-10 12:13:39,282 - __main__ - INFO - [ID_MARKED] performance event 1419965894 marked as processed
+2025-11-10 12:13:41,283 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:42,006 - __main__ - INFO - [VIDEO] front_facing size: 5.5MB
+2025-11-10 12:13:42,008 - __main__ - INFO - [VIDEO] front_facing (5.5MB) saved successfully
+2025-11-10 12:13:42,008 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:42,660 - __main__ - INFO - [VIDEO] driver_facing size: 3.9MB
+2025-11-10 12:13:42,661 - __main__ - INFO - [VIDEO] driver_facing (3.9MB) saved successfully
+2025-11-10 12:13:43,416 - __main__ - INFO - [SENT] Media group for event 1419973807
+2025-11-10 12:13:43,416 - __main__ - INFO - [ID_MARKED] performance event 1419973807 marked as processed
+2025-11-10 12:13:45,420 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:46,208 - __main__ - INFO - [VIDEO] front_facing size: 6.4MB
+2025-11-10 12:13:46,210 - __main__ - INFO - [VIDEO] front_facing (6.4MB) saved successfully
+2025-11-10 12:13:46,211 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:46,913 - __main__ - INFO - [VIDEO] driver_facing size: 4.3MB
+2025-11-10 12:13:46,915 - __main__ - INFO - [VIDEO] driver_facing (4.3MB) saved successfully
+2025-11-10 12:13:50,541 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 31 seconds
+2025-11-10 12:13:50,863 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 31 seconds
+2025-11-10 12:13:51,141 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 30 seconds
+2025-11-10 12:13:51,142 - __main__ - INFO - [ID_MARKED] performance event 1419980223 marked as processed
+2025-11-10 12:13:53,148 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:13:56,042 - __main__ - INFO - [VIDEO] front_facing size: 4.0MB
+2025-11-10 12:13:56,044 - __main__ - INFO - [VIDEO] front_facing (4.0MB) saved successfully
+2025-11-10 12:13:56,044 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:13:56,468 - __main__ - INFO - [VIDEO] driver_facing size: 1.0MB
+2025-11-10 12:13:56,469 - __main__ - INFO - [VIDEO] driver_facing (1.0MB) saved successfully
+2025-11-10 12:13:57,927 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 24 seconds
+2025-11-10 12:13:58,502 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 23 seconds
+2025-11-10 12:13:58,756 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 23 seconds
+2025-11-10 12:13:58,757 - __main__ - INFO - [ID_MARKED] performance event 1420054054 marked as processed
+2025-11-10 12:14:00,757 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:01,512 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 12:14:01,514 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 12:14:01,515 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:01,941 - __main__ - INFO - [VIDEO] driver_facing size: 1.7MB
+2025-11-10 12:14:01,942 - __main__ - INFO - [VIDEO] driver_facing (1.7MB) saved successfully
+2025-11-10 12:14:02,950 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 19 seconds
+2025-11-10 12:14:03,627 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 18 seconds
+2025-11-10 12:14:03,871 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 18 seconds
+2025-11-10 12:14:03,872 - __main__ - INFO - [ID_MARKED] performance event 1420056360 marked as processed
+2025-11-10 12:14:05,887 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:06,668 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 12:14:06,671 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 12:14:06,671 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:07,220 - __main__ - INFO - [VIDEO] driver_facing size: 2.6MB
+2025-11-10 12:14:07,221 - __main__ - INFO - [VIDEO] driver_facing (2.6MB) saved successfully
+2025-11-10 12:14:08,640 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 13 seconds
+2025-11-10 12:14:10,085 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 11 seconds
+2025-11-10 12:14:10,929 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 11 seconds
+2025-11-10 12:14:10,930 - __main__ - INFO - [ID_MARKED] performance event 1420088250 marked as processed
+2025-11-10 12:14:12,943 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:13,697 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 12:14:13,699 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 12:14:13,699 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:14,224 - __main__ - INFO - [VIDEO] driver_facing size: 3.6MB
+2025-11-10 12:14:14,225 - __main__ - INFO - [VIDEO] driver_facing (3.6MB) saved successfully
+2025-11-10 12:14:24,391 - __main__ - INFO - [SENT] Media group for event 1420090541
+2025-11-10 12:14:24,392 - __main__ - INFO - [ID_MARKED] performance event 1420090541 marked as processed
+2025-11-10 12:14:26,395 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:30,812 - __main__ - INFO - [VIDEO] front_facing size: 7.1MB
+2025-11-10 12:14:30,814 - __main__ - INFO - [VIDEO] front_facing (7.1MB) saved successfully
+2025-11-10 12:14:30,815 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:31,185 - __main__ - INFO - [VIDEO] driver_facing size: 0.7MB
+2025-11-10 12:14:31,186 - __main__ - INFO - [VIDEO] driver_facing (0.7MB) saved successfully
+2025-11-10 12:14:33,285 - __main__ - INFO - [SENT] Media group for event 1420126694
+2025-11-10 12:14:33,285 - __main__ - INFO - [ID_MARKED] performance event 1420126694 marked as processed
+2025-11-10 12:14:35,292 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:36,954 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 12:14:36,956 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 12:14:36,957 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:37,581 - __main__ - INFO - [VIDEO] driver_facing size: 1.7MB
+2025-11-10 12:14:37,582 - __main__ - INFO - [VIDEO] driver_facing (1.7MB) saved successfully
+2025-11-10 12:14:38,186 - __main__ - INFO - [SENT] Media group for event 1420312206
+2025-11-10 12:14:38,186 - __main__ - INFO - [ID_MARKED] performance event 1420312206 marked as processed
+2025-11-10 12:14:40,197 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:41,568 - __main__ - INFO - [VIDEO] front_facing size: 3.0MB
+2025-11-10 12:14:41,570 - __main__ - INFO - [VIDEO] front_facing (3.0MB) saved successfully
+2025-11-10 12:14:41,570 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:43,184 - __main__ - INFO - [VIDEO] driver_facing size: 3.9MB
+2025-11-10 12:14:43,186 - __main__ - INFO - [VIDEO] driver_facing (3.9MB) saved successfully
+2025-11-10 12:14:44,857 - __main__ - INFO - [SENT] Media group for event 1420440955
+2025-11-10 12:14:44,857 - __main__ - INFO - [ID_MARKED] performance event 1420440955 marked as processed
+2025-11-10 12:14:46,872 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:49,994 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 12:14:49,996 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 12:14:49,997 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:50,585 - __main__ - INFO - [VIDEO] driver_facing size: 0.9MB
+2025-11-10 12:14:50,586 - __main__ - INFO - [VIDEO] driver_facing (0.9MB) saved successfully
+2025-11-10 12:14:52,325 - __main__ - INFO - [SENT] Media group for event 1420453278
+2025-11-10 12:14:52,326 - __main__ - INFO - [ID_MARKED] performance event 1420453278 marked as processed
+2025-11-10 12:14:54,332 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:14:57,189 - __main__ - INFO - [VIDEO] front_facing size: 4.9MB
+2025-11-10 12:14:57,191 - __main__ - INFO - [VIDEO] front_facing (4.9MB) saved successfully
+2025-11-10 12:14:57,191 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:14:59,555 - __main__ - INFO - [VIDEO] driver_facing size: 4.1MB
+2025-11-10 12:14:59,556 - __main__ - INFO - [VIDEO] driver_facing (4.1MB) saved successfully
+2025-11-10 12:15:01,190 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 23 seconds
+2025-11-10 12:15:01,479 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 23 seconds
+2025-11-10 12:15:01,709 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 23 seconds
+2025-11-10 12:15:01,710 - __main__ - INFO - [ID_MARKED] performance event 1420462659 marked as processed
+2025-11-10 12:15:03,719 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:15:06,607 - __main__ - INFO - [VIDEO] front_facing size: 4.7MB
+2025-11-10 12:15:06,609 - __main__ - INFO - [VIDEO] front_facing (4.7MB) saved successfully
+2025-11-10 12:15:06,609 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:15:10,216 - __main__ - INFO - [VIDEO] driver_facing size: 5.1MB
+2025-11-10 12:15:10,218 - __main__ - INFO - [VIDEO] driver_facing (5.1MB) saved successfully
+2025-11-10 12:15:11,809 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 13 seconds
+2025-11-10 12:15:12,127 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 12 seconds
+2025-11-10 12:15:12,536 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 12 seconds
+2025-11-10 12:15:12,536 - __main__ - INFO - [ID_MARKED] performance event 1420495548 marked as processed
+2025-11-10 12:15:14,547 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:15:17,497 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 12:15:17,499 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 12:15:17,499 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:15:18,171 - __main__ - INFO - [VIDEO] driver_facing size: 4.9MB
+2025-11-10 12:15:18,173 - __main__ - INFO - [VIDEO] driver_facing (4.9MB) saved successfully
+2025-11-10 12:15:24,522 - __main__ - INFO - [SENT] Media group for event 1420520626
+2025-11-10 12:15:24,522 - __main__ - INFO - [ID_MARKED] performance event 1420520626 marked as processed
+2025-11-10 12:15:26,539 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:15:29,641 - __main__ - INFO - [VIDEO] front_facing size: 5.8MB
+2025-11-10 12:15:29,643 - __main__ - INFO - [VIDEO] front_facing (5.8MB) saved successfully
+2025-11-10 12:15:29,644 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:15:30,328 - __main__ - INFO - [VIDEO] driver_facing size: 5.3MB
+2025-11-10 12:15:30,330 - __main__ - INFO - [VIDEO] driver_facing (5.3MB) saved successfully
+2025-11-10 12:15:32,139 - __main__ - INFO - [SENT] Media group for event 1420605708
+2025-11-10 12:15:32,140 - __main__ - INFO - [ID_MARKED] performance event 1420605708 marked as processed
+2025-11-10 12:15:34,156 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:15:34,932 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 12:15:34,934 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 12:15:34,934 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:15:35,705 - __main__ - INFO - [VIDEO] driver_facing size: 5.7MB
+2025-11-10 12:15:35,707 - __main__ - INFO - [VIDEO] driver_facing (5.7MB) saved successfully
+2025-11-10 12:15:39,454 - __main__ - INFO - [SENT] Media group for event 1420667017
+2025-11-10 12:15:39,455 - __main__ - INFO - [ID_MARKED] performance event 1420667017 marked as processed
+2025-11-10 12:15:41,470 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:15:47,820 - __main__ - INFO - [VIDEO] front_facing size: 4.9MB
+2025-11-10 12:15:47,822 - __main__ - INFO - [VIDEO] front_facing (4.9MB) saved successfully
+2025-11-10 12:15:47,822 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:15:48,202 - __main__ - INFO - [VIDEO] driver_facing size: 1.0MB
+2025-11-10 12:15:48,203 - __main__ - INFO - [VIDEO] driver_facing (1.0MB) saved successfully
+2025-11-10 12:15:49,959 - __main__ - INFO - [SENT] Media group for event 1420694998
+2025-11-10 12:15:49,960 - __main__ - INFO - [ID_MARKED] performance event 1420694998 marked as processed
+2025-11-10 12:15:51,966 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:15:52,685 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 12:15:52,687 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 12:15:52,688 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:15:53,077 - __main__ - INFO - [VIDEO] driver_facing size: 0.5MB
+2025-11-10 12:15:53,077 - __main__ - INFO - [VIDEO] driver_facing (0.5MB) saved successfully
+2025-11-10 12:15:56,883 - __main__ - INFO - [SENT] Media group for event 1420799030
+2025-11-10 12:15:56,883 - __main__ - INFO - [ID_MARKED] performance event 1420799030 marked as processed
+2025-11-10 12:15:58,897 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:16:16,990 - __main__ - INFO - [VIDEO] front_facing size: 5.5MB
+2025-11-10 12:16:16,992 - __main__ - INFO - [VIDEO] front_facing (5.5MB) saved successfully
+2025-11-10 12:16:16,992 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:16:17,616 - __main__ - INFO - [VIDEO] driver_facing size: 4.0MB
+2025-11-10 12:16:17,617 - __main__ - INFO - [VIDEO] driver_facing (4.0MB) saved successfully
+2025-11-10 12:16:24,543 - __main__ - INFO - [SENT] Media group for event 1420824174
+2025-11-10 12:16:24,544 - __main__ - INFO - [ID_MARKED] performance event 1420824174 marked as processed
+2025-11-10 12:16:26,550 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:16:29,576 - __main__ - INFO - [VIDEO] front_facing size: 6.0MB
+2025-11-10 12:16:29,578 - __main__ - INFO - [VIDEO] front_facing (6.0MB) saved successfully
+2025-11-10 12:16:29,578 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:16:29,938 - __main__ - INFO - [VIDEO] driver_facing size: 0.7MB
+2025-11-10 12:16:29,938 - __main__ - INFO - [VIDEO] driver_facing (0.7MB) saved successfully
+2025-11-10 12:16:31,654 - __main__ - INFO - [SENT] Media group for event 1420855065
+2025-11-10 12:16:31,655 - __main__ - INFO - [ID_MARKED] performance event 1420855065 marked as processed
+2025-11-10 12:16:33,667 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:16:34,418 - __main__ - INFO - [VIDEO] front_facing size: 6.0MB
+2025-11-10 12:16:34,421 - __main__ - INFO - [VIDEO] front_facing (6.0MB) saved successfully
+2025-11-10 12:16:34,422 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:16:34,787 - __main__ - INFO - [VIDEO] driver_facing size: 0.5MB
+2025-11-10 12:16:34,788 - __main__ - INFO - [VIDEO] driver_facing (0.5MB) saved successfully
+2025-11-10 12:16:38,588 - __main__ - INFO - [SENT] Media group for event 1420908911
+2025-11-10 12:16:38,589 - __main__ - INFO - [ID_MARKED] performance event 1420908911 marked as processed
+2025-11-10 12:16:40,605 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:16:44,726 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 12:16:44,728 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 12:16:44,728 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:16:45,250 - __main__ - INFO - [VIDEO] driver_facing size: 3.5MB
+2025-11-10 12:16:45,252 - __main__ - INFO - [VIDEO] driver_facing (3.5MB) saved successfully
+2025-11-10 12:16:47,354 - __main__ - INFO - [SENT] Media group for event 1420951685
+2025-11-10 12:16:47,355 - __main__ - INFO - [ID_MARKED] performance event 1420951685 marked as processed
+2025-11-10 12:16:49,362 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:16:50,064 - __main__ - INFO - [VIDEO] front_facing size: 5.0MB
+2025-11-10 12:16:50,066 - __main__ - INFO - [VIDEO] front_facing (5.0MB) saved successfully
+2025-11-10 12:16:50,066 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:16:50,565 - __main__ - INFO - [VIDEO] driver_facing size: 3.3MB
+2025-11-10 12:16:50,566 - __main__ - INFO - [VIDEO] driver_facing (3.3MB) saved successfully
+2025-11-10 12:16:54,516 - __main__ - INFO - [SENT] Media group for event 1421000074
+2025-11-10 12:16:54,517 - __main__ - INFO - [ID_MARKED] performance event 1421000074 marked as processed
+2025-11-10 12:16:56,533 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:16:59,705 - __main__ - INFO - [VIDEO] front_facing size: 6.0MB
+2025-11-10 12:16:59,707 - __main__ - INFO - [VIDEO] front_facing (6.0MB) saved successfully
+2025-11-10 12:16:59,708 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:00,139 - __main__ - INFO - [VIDEO] driver_facing size: 1.9MB
+2025-11-10 12:17:00,140 - __main__ - INFO - [VIDEO] driver_facing (1.9MB) saved successfully
+2025-11-10 12:17:01,824 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 23 seconds
+2025-11-10 12:17:02,128 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 22 seconds
+2025-11-10 12:17:02,298 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 22 seconds
+2025-11-10 12:17:02,299 - __main__ - INFO - [ID_MARKED] performance event 1421074801 marked as processed
+2025-11-10 12:17:04,306 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:05,083 - __main__ - INFO - [VIDEO] front_facing size: 6.1MB
+2025-11-10 12:17:05,086 - __main__ - INFO - [VIDEO] front_facing (6.1MB) saved successfully
+2025-11-10 12:17:05,086 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:05,777 - __main__ - INFO - [VIDEO] driver_facing size: 3.0MB
+2025-11-10 12:17:05,779 - __main__ - INFO - [VIDEO] driver_facing (3.0MB) saved successfully
+2025-11-10 12:17:06,553 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 18 seconds
+2025-11-10 12:17:07,447 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 17 seconds
+2025-11-10 12:17:08,042 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 16 seconds
+2025-11-10 12:17:08,043 - __main__ - INFO - [ID_MARKED] performance event 1421098001 marked as processed
+2025-11-10 12:17:10,058 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:10,805 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 12:17:10,807 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 12:17:10,807 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:11,306 - __main__ - INFO - [VIDEO] driver_facing size: 3.7MB
+2025-11-10 12:17:11,308 - __main__ - INFO - [VIDEO] driver_facing (3.7MB) saved successfully
+2025-11-10 12:17:12,203 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 12 seconds
+2025-11-10 12:17:13,180 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 11 seconds
+2025-11-10 12:17:13,866 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 11 seconds
+2025-11-10 12:17:13,866 - __main__ - INFO - [ID_MARKED] performance event 1421237076 marked as processed
+2025-11-10 12:17:15,872 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:16,593 - __main__ - INFO - [VIDEO] front_facing size: 5.1MB
+2025-11-10 12:17:16,594 - __main__ - INFO - [VIDEO] front_facing (5.1MB) saved successfully
+2025-11-10 12:17:16,595 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:16,988 - __main__ - INFO - [VIDEO] driver_facing size: 1.4MB
+2025-11-10 12:17:16,988 - __main__ - INFO - [VIDEO] driver_facing (1.4MB) saved successfully
+2025-11-10 12:17:24,886 - __main__ - INFO - [SENT] Media group for event 1421288668
+2025-11-10 12:17:24,887 - __main__ - INFO - [ID_MARKED] performance event 1421288668 marked as processed
+2025-11-10 12:17:26,900 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:33,288 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 12:17:33,290 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 12:17:33,290 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:34,039 - __main__ - INFO - [VIDEO] driver_facing size: 5.3MB
+2025-11-10 12:17:34,042 - __main__ - INFO - [VIDEO] driver_facing (5.3MB) saved successfully
+2025-11-10 12:17:37,268 - __main__ - INFO - [SENT] Media group for event 1421472750
+2025-11-10 12:17:37,269 - __main__ - INFO - [ID_MARKED] performance event 1421472750 marked as processed
+2025-11-10 12:17:39,275 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:39,769 - __main__ - INFO - [VIDEO] front_facing size: 2.7MB
+2025-11-10 12:17:39,770 - __main__ - INFO - [VIDEO] front_facing (2.7MB) saved successfully
+2025-11-10 12:17:39,771 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:40,503 - __main__ - INFO - [VIDEO] driver_facing size: 4.1MB
+2025-11-10 12:17:40,505 - __main__ - INFO - [VIDEO] driver_facing (4.1MB) saved successfully
+2025-11-10 12:17:43,992 - __main__ - INFO - [SENT] Media group for event 1421565489
+2025-11-10 12:17:43,993 - __main__ - INFO - [ID_MARKED] performance event 1421565489 marked as processed
+2025-11-10 12:17:46,007 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:46,648 - __main__ - INFO - [VIDEO] front_facing size: 3.3MB
+2025-11-10 12:17:46,649 - __main__ - INFO - [VIDEO] front_facing (3.3MB) saved successfully
+2025-11-10 12:17:46,650 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:47,427 - __main__ - INFO - [VIDEO] driver_facing size: 3.5MB
+2025-11-10 12:17:47,429 - __main__ - INFO - [VIDEO] driver_facing (3.5MB) saved successfully
+2025-11-10 12:17:51,153 - __main__ - INFO - [SENT] Media group for event 1421597809
+2025-11-10 12:17:51,153 - __main__ - INFO - [ID_MARKED] performance event 1421597809 marked as processed
+2025-11-10 12:17:53,168 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:17:56,515 - __main__ - INFO - [VIDEO] front_facing size: 6.5MB
+2025-11-10 12:17:56,517 - __main__ - INFO - [VIDEO] front_facing (6.5MB) saved successfully
+2025-11-10 12:17:56,517 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:17:57,419 - __main__ - INFO - [VIDEO] driver_facing size: 7.7MB
+2025-11-10 12:17:57,422 - __main__ - INFO - [VIDEO] driver_facing (7.7MB) saved successfully
+2025-11-10 12:18:00,537 - __main__ - INFO - [SENT] Media group for event 1421699806
+2025-11-10 12:18:00,538 - __main__ - INFO - [ID_MARKED] performance event 1421699806 marked as processed
+2025-11-10 12:18:02,753 - __main__ - ERROR - [ERROR] Telegram error: Flood control exceeded. Retry in 22 seconds
+2025-11-10 12:18:04,754 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:18:07,921 - __main__ - INFO - [VIDEO] front_facing size: 5.1MB
+2025-11-10 12:18:07,923 - __main__ - INFO - [VIDEO] front_facing (5.1MB) saved successfully
+2025-11-10 12:18:07,923 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:18:08,533 - __main__ - INFO - [VIDEO] driver_facing size: 3.4MB
+2025-11-10 12:18:08,534 - __main__ - INFO - [VIDEO] driver_facing (3.4MB) saved successfully
+2025-11-10 12:18:10,100 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 14 seconds
+2025-11-10 12:18:10,390 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 14 seconds
+2025-11-10 12:18:10,586 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 14 seconds
+2025-11-10 12:18:10,587 - __main__ - INFO - [ID_MARKED] performance event 1422109130 marked as processed
+2025-11-10 12:18:12,602 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:18:13,297 - __main__ - INFO - [VIDEO] front_facing size: 5.5MB
+2025-11-10 12:18:13,299 - __main__ - INFO - [VIDEO] front_facing (5.5MB) saved successfully
+2025-11-10 12:18:13,299 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:18:13,930 - __main__ - INFO - [VIDEO] driver_facing size: 3.1MB
+2025-11-10 12:18:13,932 - __main__ - INFO - [VIDEO] driver_facing (3.1MB) saved successfully
+2025-11-10 12:18:14,470 - __main__ - WARNING - [RETRY] Media group failed, trying individual videos: Flood control exceeded. Retry in 10 seconds
+2025-11-10 12:18:14,853 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 10 seconds
+2025-11-10 12:18:15,114 - __main__ - ERROR - [ERROR] Individual video send failed: Flood control exceeded. Retry in 9 seconds
+2025-11-10 12:18:15,115 - __main__ - INFO - [ID_MARKED] performance event 1422355035 marked as processed
+2025-11-10 12:18:19,570 - __main__ - INFO - [INIT] Loaded 24 processed IDs from processed_speeding_event_ids.json
+2025-11-10 12:18:19,570 - __main__ - INFO - [INIT] Loaded 48 processed IDs from processed_performance_event_ids.json
+2025-11-10 12:18:19,570 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 12:18:20,129 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 12:18:20,129 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 12:18:20,130 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 12:18:20,452 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 12:18:25,458 - __main__ - ERROR - [TEST] Telegram connection failed: Timed out
+2025-11-10 12:18:25,459 - __main__ - ERROR - [CRITICAL] Fatal error during startup: Timed out
+2025-11-10 12:18:25,460 - __main__ - INFO - Cleanup completed successfully
+2025-11-10 12:21:01,618 - __main__ - INFO - [INIT] Loaded 24 processed IDs from processed_speeding_event_ids.json
+2025-11-10 12:21:01,618 - __main__ - INFO - [INIT] Loaded 48 processed IDs from processed_performance_event_ids.json
+2025-11-10 12:21:01,618 - __main__ - INFO - [INIT] Screenshot functionality enabled
+2025-11-10 12:21:02,159 - __main__ - INFO - SafetyBot initialized successfully
+2025-11-10 12:21:02,159 - __main__ - INFO - [STARTUP] Testing connections...
+2025-11-10 12:21:02,160 - __main__ - INFO - [TEST] Testing Telegram connection...
+2025-11-10 12:21:02,490 - __main__ - INFO - [TEST] Telegram OK: @nntexpressinc_safety_bot
+2025-11-10 12:21:02,622 - __main__ - INFO - [TEST] Startup message sent
+2025-11-10 12:21:02,622 - __main__ - INFO - [TEST] Testing API connections...
+2025-11-10 12:21:02,622 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 12:21:04,118 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 12:21:04,118 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 12:21:10,009 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 12:21:11,009 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 12:21:11,388 - __main__ - INFO - Found 0 crash events
+2025-11-10 12:21:12,389 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 12:21:15,090 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 12:21:16,090 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 12:21:18,721 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 12:21:19,722 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 12:21:20,188 - __main__ - INFO - Found 1 distraction events
+2025-11-10 12:21:21,188 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 12:21:24,272 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 12:21:25,273 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 12:21:25,274 - __main__ - INFO - [TEST] API OK: 25 speeding, 90 performance events
+2025-11-10 12:21:25,275 - __main__ - INFO - [SCHEDULER] Event check every 300s (5.0m)
+2025-11-10 12:21:25,275 - __main__ - INFO - [SCHEDULER] Health check every hour
+2025-11-10 12:21:25,276 - __main__ - INFO - [STARTUP] Running initial event check...
+2025-11-10 12:21:25,276 - __main__ - INFO - ============================================================
+2025-11-10 12:21:25,276 - __main__ - INFO - Starting event check cycle
+2025-11-10 12:21:25,277 - __main__ - INFO - ============================================================
+2025-11-10 12:21:25,277 - __main__ - INFO - [FETCH] Fetching speeding events...
+2025-11-10 12:21:25,277 - __main__ - INFO - Fetching speeding events (attempt 1/3)
+2025-11-10 12:21:25,755 - __main__ - INFO - Successfully fetched 25 speeding events
+2025-11-10 12:21:25,756 - __main__ - INFO - Found 4 new speeding events to process
+2025-11-10 12:21:25,756 - __main__ - INFO - [PROCESS] Processing 4 speeding events
+2025-11-10 12:21:25,756 - __main__ - ERROR - [FORMAT_ERROR] Error formatting speeding message: 'NoneType' object has no attribute 'get'
+2025-11-10 12:21:25,757 - __main__ - WARNING - [SKIP] Speeding event 2135479325 - formatting failed
+2025-11-10 12:21:27,797 - __main__ - INFO - [SCREENSHOT] Session invalid, logging in...
+2025-11-10 12:21:27,797 - __main__ - INFO - [SCREENSHOT] Logging in (attempt 1/2)...
+2025-11-10 12:21:29,062 - __main__ - INFO - [SCREENSHOT] Chrome driver initialized
+2025-11-10 12:21:36,939 - __main__ - INFO - [SCREENSHOT] Email field found using: id=user_email
+2025-11-10 12:21:37,513 - __main__ - INFO - [SCREENSHOT] Email entered
+2025-11-10 12:21:37,529 - __main__ - INFO - [SCREENSHOT] Password field found using: id=user_password
+2025-11-10 12:21:38,085 - __main__ - INFO - [SCREENSHOT] Password entered
+2025-11-10 12:21:38,102 - __main__ - INFO - [SCREENSHOT] Login button found using: id=sign-in-button
+2025-11-10 12:21:43,123 - __main__ - INFO - [SCREENSHOT] Login button clicked
+2025-11-10 12:21:48,140 - __main__ - INFO - [SCREENSHOT] Login successful - Current URL: https://app.gomotive.com/en-US/
+2025-11-10 12:21:48,140 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135536338;start_time=2025-11-10T19:04:36Z
+2025-11-10 12:21:48,146 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:21:53,155 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:21:53,205 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:21:53,205 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (8 seconds)...
+2025-11-10 12:22:02,230 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:22:02,692 - __main__ - INFO - [SCREENSHOT] Screenshot captured (1694.4KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135536338_dc68b130b5324f78ab04091fb83ff975.png
+2025-11-10 12:22:02,759 - __main__ - WARNING - [RETRY] Network error (attempt 1/3): Unknown error in HTTP implementation: RuntimeError('Event loop is closed')
+2025-11-10 12:22:05,139 - __main__ - INFO - [SENT] Speeding event 2135536338 with screenshot
+2025-11-10 12:22:05,140 - __main__ - INFO - [ID_MARKED] speeding event 2135536338 marked as processed
+2025-11-10 12:22:07,149 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135553610;start_time=2025-11-10T19:09:45Z
+2025-11-10 12:22:07,163 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:22:12,169 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:22:12,176 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:22:12,177 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (8 seconds)...
+2025-11-10 12:22:21,188 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:22:21,612 - __main__ - INFO - [SCREENSHOT] Screenshot captured (1830.6KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135553610_0bba792ff4554442bea70bb81008c738.png
+2025-11-10 12:22:23,325 - __main__ - INFO - [SENT] Speeding event 2135553610 with screenshot
+2025-11-10 12:22:23,326 - __main__ - INFO - [ID_MARKED] speeding event 2135553610 marked as processed
+2025-11-10 12:22:25,332 - __main__ - INFO - [SCREENSHOT] Navigating to: https://app.gomotive.com/en-US/#/safety/speeding/2135576264;start_time=2025-11-10T19:17:56Z
+2025-11-10 12:22:25,345 - __main__ - INFO - [SCREENSHOT] Waiting for page to load...
+2025-11-10 12:22:30,349 - __main__ - INFO - [SCREENSHOT] Waiting for content to render...
+2025-11-10 12:22:30,356 - __main__ - INFO - [SCREENSHOT] Map/content detected
+2025-11-10 12:22:30,357 - __main__ - INFO - [SCREENSHOT] Waiting for data to populate (8 seconds)...
+2025-11-10 12:22:39,373 - __main__ - INFO - [SCREENSHOT] Capturing screenshot...
+2025-11-10 12:22:39,807 - __main__ - INFO - [SCREENSHOT] Screenshot captured (2112.7KB): C:\Users\Xolmirza\AppData\Local\Temp\speeding_event_2135576264_519a5b9ecf184af19bd2a51fa0149d63.png
+2025-11-10 12:22:41,304 - __main__ - INFO - [SENT] Speeding event 2135576264 with screenshot
+2025-11-10 12:22:41,304 - __main__ - INFO - [ID_MARKED] speeding event 2135576264 marked as processed
+2025-11-10 12:22:43,305 - __main__ - INFO - [FETCH] Fetching performance events...
+2025-11-10 12:22:43,306 - __main__ - INFO - Fetching hard_brake events (attempt 1/3)
+2025-11-10 12:22:45,814 - __main__ - INFO - Found 25 hard_brake events
+2025-11-10 12:22:46,814 - __main__ - INFO - Fetching crash events (attempt 1/3)
+2025-11-10 12:22:47,129 - __main__ - INFO - Found 0 crash events
+2025-11-10 12:22:48,130 - __main__ - INFO - Fetching seat_belt_violation events (attempt 1/3)
+2025-11-10 12:22:49,919 - __main__ - INFO - Found 14 seat_belt_violation events
+2025-11-10 12:22:50,919 - __main__ - INFO - Fetching stop_sign_violation events (attempt 1/3)
+2025-11-10 12:22:53,948 - __main__ - INFO - Found 25 stop_sign_violation events
+2025-11-10 12:22:54,949 - __main__ - INFO - Fetching distraction events (attempt 1/3)
+2025-11-10 12:22:55,387 - __main__ - INFO - Found 1 distraction events
+2025-11-10 12:22:56,387 - __main__ - INFO - Fetching unsafe_lane_change events (attempt 1/3)
+2025-11-10 12:22:59,305 - __main__ - INFO - Found 25 unsafe_lane_change events
+2025-11-10 12:23:00,305 - __main__ - INFO - Successfully fetched 90 total performance events
+2025-11-10 12:23:00,306 - __main__ - INFO - Found 6 new performance events to process
+2025-11-10 12:23:00,306 - __main__ - INFO - [PROCESS] Processing 6 performance events
+2025-11-10 12:23:00,721 - __main__ - INFO - [SENT] Event 1421893983 without videos
+2025-11-10 12:23:00,721 - __main__ - INFO - [ID_MARKED] performance event 1421893983 marked as processed
+2025-11-10 12:23:02,727 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:23:05,709 - __main__ - INFO - [VIDEO] front_facing size: 5.7MB
+2025-11-10 12:23:05,711 - __main__ - INFO - [VIDEO] front_facing (5.7MB) saved successfully
+2025-11-10 12:23:05,711 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:23:06,377 - __main__ - INFO - [VIDEO] driver_facing size: 4.8MB
+2025-11-10 12:23:06,379 - __main__ - INFO - [VIDEO] driver_facing (4.8MB) saved successfully
+2025-11-10 12:23:09,639 - __main__ - INFO - [SENT] Media group for event 1422399863
+2025-11-10 12:23:09,640 - __main__ - INFO - [ID_MARKED] performance event 1422399863 marked as processed
+2025-11-10 12:23:09,640 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\front_facing_c95f67a68a5845d084f6860c2e21ab8c.mp4'
+2025-11-10 12:23:09,640 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\driver_facing_3b25a2c103ef499b9dc1fb7bdec5417e.mp4'
+2025-11-10 12:23:11,657 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:23:12,352 - __main__ - INFO - [VIDEO] front_facing size: 5.3MB
+2025-11-10 12:23:12,354 - __main__ - INFO - [VIDEO] front_facing (5.3MB) saved successfully
+2025-11-10 12:23:12,355 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:23:12,840 - __main__ - INFO - [VIDEO] driver_facing size: 3.3MB
+2025-11-10 12:23:12,841 - __main__ - INFO - [VIDEO] driver_facing (3.3MB) saved successfully
+2025-11-10 12:23:14,960 - __main__ - INFO - [SENT] Media group for event 1422447554
+2025-11-10 12:23:14,961 - __main__ - INFO - [ID_MARKED] performance event 1422447554 marked as processed
+2025-11-10 12:23:14,961 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\front_facing_78a8103ed8b84597b4b3bfbf714b52c4.mp4'
+2025-11-10 12:23:14,961 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\driver_facing_e818e424b7fe439caae40f53b1daeb68.mp4'
+2025-11-10 12:23:16,968 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:23:17,465 - __main__ - INFO - [VIDEO] front_facing size: 3.4MB
+2025-11-10 12:23:17,467 - __main__ - INFO - [VIDEO] front_facing (3.4MB) saved successfully
+2025-11-10 12:23:17,467 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:23:18,131 - __main__ - INFO - [VIDEO] driver_facing size: 5.1MB
+2025-11-10 12:23:18,134 - __main__ - INFO - [VIDEO] driver_facing (5.1MB) saved successfully
+2025-11-10 12:23:20,336 - __main__ - INFO - [SENT] Media group for event 1422518592
+2025-11-10 12:23:20,337 - __main__ - INFO - [ID_MARKED] performance event 1422518592 marked as processed
+2025-11-10 12:23:20,337 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\front_facing_83b380c1cfb44257966cea9ada8d516b.mp4'
+2025-11-10 12:23:20,337 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\driver_facing_95c03264feef4f7a9796877f9bb1f6ac.mp4'
+2025-11-10 12:23:22,338 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:23:22,942 - __main__ - INFO - [VIDEO] front_facing size: 3.9MB
+2025-11-10 12:23:22,944 - __main__ - INFO - [VIDEO] front_facing (3.9MB) saved successfully
+2025-11-10 12:23:22,944 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:23:23,652 - __main__ - INFO - [VIDEO] driver_facing size: 4.9MB
+2025-11-10 12:23:23,654 - __main__ - INFO - [VIDEO] driver_facing (4.9MB) saved successfully
+2025-11-10 12:23:27,442 - __main__ - INFO - [SENT] Media group for event 1422640467
+2025-11-10 12:23:27,443 - __main__ - INFO - [ID_MARKED] performance event 1422640467 marked as processed
+2025-11-10 12:23:27,443 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\front_facing_adbee7c1090f44e89f8fe04e0a2b29b9.mp4'
+2025-11-10 12:23:27,444 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\driver_facing_99d220b4b72848fa962f3bfce2c5c1f9.mp4'
+2025-11-10 12:23:29,455 - __main__ - INFO - Downloading front_facing (attempt 1/2)
+2025-11-10 12:23:32,604 - __main__ - INFO - [VIDEO] front_facing size: 4.0MB
+2025-11-10 12:23:32,606 - __main__ - INFO - [VIDEO] front_facing (4.0MB) saved successfully
+2025-11-10 12:23:32,606 - __main__ - INFO - Downloading driver_facing (attempt 1/2)
+2025-11-10 12:23:33,079 - __main__ - INFO - [VIDEO] driver_facing size: 2.2MB
+2025-11-10 12:23:33,080 - __main__ - INFO - [VIDEO] driver_facing (2.2MB) saved successfully
+2025-11-10 12:23:34,723 - __main__ - INFO - [SENT] Media group for event 1424961285
+2025-11-10 12:23:34,724 - __main__ - INFO - [ID_MARKED] performance event 1424961285 marked as processed
+2025-11-10 12:23:34,724 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\front_facing_43bf837f2c7c4a37963c5c8c0e2f87ef.mp4'
+2025-11-10 12:23:34,725 - __main__ - ERROR - [CLEANUP] Error removing file: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Xolmirza\\AppData\\Local\\Temp\\driver_facing_99f8e4374174422d8bc3a470a05b40c4.mp4'
+2025-11-10 12:23:36,729 - __main__ - INFO - ============================================================
+2025-11-10 12:23:36,730 - __main__ - INFO - Event check completed in 131.5s
+2025-11-10 12:23:36,730 - __main__ - INFO - ============================================================
+2025-11-10 12:23:36,731 - __main__ - INFO - [STARTUP] SafetyBot v2.2 Enhanced is now monitoring
+2025-11-10 12:25:10,015 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 12:25:10,711 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 12:25:11,943 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-10 12:25:12,246 - __main__ - INFO - Received signal 2, initiating graceful shutdown...

@@ -136,23 +136,121 @@ class GoMotiveScreenshotManager:
                 
                 # Navigate to login page
                 self.driver.get(self.LOGIN_URL)
-                await asyncio.sleep(2)
+                await asyncio.sleep(3)  # Wait for page to fully load
                 
-                # Wait for email field and enter credentials
-                email_field = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.ID, "email"))
-                )
-                email_field.clear()
-                email_field.send_keys(self.email)
+                # Wait for email field to be clickable (not just present)
+                # Based on actual GoMotive HTML: id="user_email", name="user[email]"
+                email_field = None
+                selectors = [
+                    (By.ID, "user_email"),
+                    (By.NAME, "user[email]"),
+                    (By.CSS_SELECTOR, "input[name='user[email]']")
+                ]
                 
-                # Enter password
-                password_field = self.driver.find_element(By.ID, "password")
-                password_field.clear()
-                password_field.send_keys(self.password)
+                for by, selector in selectors:
+                    try:
+                        email_field = WebDriverWait(self.driver, 10).until(
+                            EC.element_to_be_clickable((by, selector))
+                        )
+                        logger.info(f"[SCREENSHOT] Email field found using: {by}={selector}")
+                        break
+                    except TimeoutException:
+                        continue
                 
-                # Click login button
-                login_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
-                login_button.click()
+                if not email_field:
+                    logger.error("[SCREENSHOT] Could not find email field")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                        continue
+                    return False
+                
+                # Scroll to element and enter email
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", email_field)
+                await asyncio.sleep(0.5)
+                
+                try:
+                    email_field.clear()
+                    email_field.send_keys(self.email)
+                except:
+                    # Fallback to JavaScript
+                    self.driver.execute_script(f"arguments[0].value = '{self.email}';", email_field)
+                
+                logger.info("[SCREENSHOT] Email entered")
+                
+                # Find password field - Based on actual HTML: id="user_password", name="user[password]"
+                password_field = None
+                password_selectors = [
+                    (By.ID, "user_password"),
+                    (By.NAME, "user[password]"),
+                    (By.CSS_SELECTOR, "input[name='user[password]']")
+                ]
+                
+                for by, selector in password_selectors:
+                    try:
+                        password_field = WebDriverWait(self.driver, 10).until(
+                            EC.element_to_be_clickable((by, selector))
+                        )
+                        logger.info(f"[SCREENSHOT] Password field found using: {by}={selector}")
+                        break
+                    except TimeoutException:
+                        continue
+                
+                if not password_field:
+                    logger.error("[SCREENSHOT] Could not find password field")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                        continue
+                    return False
+                
+                # Scroll and enter password
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", password_field)
+                await asyncio.sleep(0.5)
+                
+                try:
+                    password_field.clear()
+                    password_field.send_keys(self.password)
+                except:
+                    # Fallback to JavaScript
+                    self.driver.execute_script(f"arguments[0].value = '{self.password}';", password_field)
+                
+                logger.info("[SCREENSHOT] Password entered")
+                
+                # Find and click login button - Based on actual HTML: id="sign-in-button"
+                login_button = None
+                button_selectors = [
+                    (By.ID, "sign-in-button"),
+                    (By.CSS_SELECTOR, "button[type='submit']"),
+                    (By.XPATH, "//button[@id='sign-in-button']")
+                ]
+                
+                for by, selector in button_selectors:
+                    try:
+                        login_button = WebDriverWait(self.driver, 10).until(
+                            EC.element_to_be_clickable((by, selector))
+                        )
+                        logger.info(f"[SCREENSHOT] Login button found using: {by}={selector}")
+                        break
+                    except TimeoutException:
+                        continue
+                
+                if not login_button:
+                    logger.error("[SCREENSHOT] Could not find login button")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(3)
+                        continue
+                    return False
+                
+                # Scroll to button and click
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", login_button)
+                await asyncio.sleep(0.5)
+                
+                try:
+                    login_button.click()
+                except:
+                    # Fallback to JavaScript click
+                    self.driver.execute_script("arguments[0].click();", login_button)
+                
+                logger.info("[SCREENSHOT] Login button clicked")
                 
                 # Wait for successful login (dashboard or main page)
                 await asyncio.sleep(5)
@@ -161,10 +259,10 @@ class GoMotiveScreenshotManager:
                 if "log-in" not in self.driver.current_url.lower():
                     self.is_logged_in = True
                     self.last_login_time = datetime.now()
-                    logger.info("[SCREENSHOT] Login successful")
+                    logger.info(f"[SCREENSHOT] Login successful - Current URL: {self.driver.current_url}")
                     return True
                 else:
-                    logger.warning("[SCREENSHOT] Login may have failed - still on login page")
+                    logger.warning(f"[SCREENSHOT] Login may have failed - still on login page: {self.driver.current_url}")
                     if attempt < max_retries - 1:
                         await asyncio.sleep(3)
                         continue
@@ -175,6 +273,8 @@ class GoMotiveScreenshotManager:
                     await asyncio.sleep(3)
             except Exception as e:
                 logger.error(f"[SCREENSHOT] Error during login: {e}")
+                import traceback
+                logger.error(traceback.format_exc())
                 if attempt < max_retries - 1:
                     await asyncio.sleep(3)
         
@@ -201,17 +301,24 @@ class GoMotiveScreenshotManager:
             # Navigate to speeding event page
             self.driver.get(url)
             
-            # Wait for page to load (adjust selector based on actual page structure)
-            # Wait for main content to load
-            await asyncio.sleep(5)  # Give time for Angular app to load
+            # Wait for initial page load
+            logger.info("[SCREENSHOT] Waiting for page to load...")
+            await asyncio.sleep(5)
             
-            # Additional wait for specific elements if needed
+            # Wait for map/content to be visible - Angular app takes time to render
+            logger.info("[SCREENSHOT] Waiting for content to render...")
             try:
-                WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.TAG_NAME, "body"))
+                # Wait for map container or main content
+                WebDriverWait(self.driver, 20).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "div[class*='map'], canvas, svg"))
                 )
+                logger.info("[SCREENSHOT] Map/content detected")
             except TimeoutException:
-                logger.warning("[SCREENSHOT] Timeout waiting for page elements")
+                logger.warning("[SCREENSHOT] Map/content not found, continuing anyway...")
+            
+            # Additional wait for Angular to finish rendering
+            logger.info("[SCREENSHOT] Waiting for data to populate (8 seconds)...")
+            await asyncio.sleep(8)
             
             # Scroll to top to ensure we capture from beginning
             self.driver.execute_script("window.scrollTo(0, 0);")
@@ -221,13 +328,14 @@ class GoMotiveScreenshotManager:
             screenshot_filename = f"speeding_event_{event_id}_{uuid.uuid4().hex}.png"
             screenshot_path = os.path.join(tempfile.gettempdir(), screenshot_filename)
             
-            # Capture full page screenshot
+            # Capture full page screenshot (no JavaScript manipulation)
+            logger.info("[SCREENSHOT] Capturing screenshot...")
             self.driver.save_screenshot(screenshot_path)
             
             # Verify screenshot was created
             if os.path.exists(screenshot_path) and os.path.getsize(screenshot_path) > 0:
                 size_kb = os.path.getsize(screenshot_path) / 1024
-                logger.info(f"[SCREENSHOT] Captured successfully ({size_kb:.1f}KB): {screenshot_path}")
+                logger.info(f"[SCREENSHOT] Screenshot captured ({size_kb:.1f}KB): {screenshot_path}")
                 return screenshot_path
             else:
                 logger.error("[SCREENSHOT] Screenshot file is empty or not created")
@@ -235,6 +343,8 @@ class GoMotiveScreenshotManager:
                 
         except Exception as e:
             logger.error(f"[SCREENSHOT] Error capturing screenshot: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
             return None
     
     def cleanup(self):
@@ -283,13 +393,12 @@ class SafetyBot:
         self.critical_alert_sent = False
         
         # Event tracking files
-        self.last_performance_event_file = 'last_performance_event_id.txt'
-        self.last_speeding_event_file = 'last_speeding_event_id.txt'
+        self.processed_speeding_ids_file = 'processed_speeding_event_ids.json'
+        self.processed_performance_ids_file = 'processed_performance_event_ids.json'
         
-        self.performance_event_files = {
-            event_type: f'last_{event_type}_event_id.txt'
-            for event_type in self.ALLOWED_EVENT_TYPES
-        }
+        # Load processed IDs from files
+        self.processed_speeding_ids = self._load_processed_ids(self.processed_speeding_ids_file)
+        self.processed_performance_ids = self._load_processed_ids(self.processed_performance_ids_file)
         
         # Deduplication within current cycle
         self.processed_event_ids: Set[int] = set()
@@ -373,18 +482,64 @@ class SafetyBot:
         if missing_vars:
             raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
     
+    def _load_processed_ids(self, filename: str) -> Set[int]:
+        """Load processed event IDs from JSON file"""
+        try:
+            if os.path.exists(filename):
+                with open(filename, 'r') as f:
+                    data = json.load(f)
+                    # Keep only recent IDs (last 1000 to prevent file from growing too large)
+                    ids = set(data) if isinstance(data, list) else set()
+                    if len(ids) > 1000:
+                        # Keep only the highest 1000 IDs
+                        ids = set(sorted(ids, reverse=True)[:1000])
+                    logger.info(f"[INIT] Loaded {len(ids)} processed IDs from {filename}")
+                    return ids
+        except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
+            logger.warning(f"Could not read processed IDs from {filename}: {e}")
+        return set()
+    
+    def _save_processed_ids(self, ids: Set[int], filename: str):
+        """Save processed event IDs to JSON file"""
+        try:
+            # Keep only recent IDs (last 1000)
+            ids_to_save = sorted(ids, reverse=True)[:1000]
+            with open(filename, 'w') as f:
+                json.dump(ids_to_save, f)
+            logger.debug(f"[ID_SAVED] Saved {len(ids_to_save)} IDs to {filename}")
+        except Exception as e:
+            logger.error(f"Could not save processed IDs to {filename}: {e}")
+    
     def _has_allowed_severity(self, event: Dict[str, Any]) -> bool:
         """Check if event has allowed severity"""
         metadata = event.get('metadata', {})
         severity = metadata.get('severity')
         return severity in ['medium', 'high', 'critical']
     
+    def _is_event_processed(self, event_id: int, event_type: str = 'speeding') -> bool:
+        """Check if event was already processed and sent"""
+        if event_type == 'speeding':
+            return event_id in self.processed_speeding_ids
+        else:
+            return event_id in self.processed_performance_ids
+    
+    def _mark_event_processed(self, event_id: int, event_type: str = 'speeding'):
+        """Mark event as processed and save to file"""
+        if event_type == 'speeding':
+            self.processed_speeding_ids.add(event_id)
+            self._save_processed_ids(self.processed_speeding_ids, self.processed_speeding_ids_file)
+        else:
+            self.processed_performance_ids.add(event_id)
+            self._save_processed_ids(self.processed_performance_ids, self.processed_performance_ids_file)
+        
+        logger.info(f"[ID_MARKED] {event_type} event {event_id} marked as processed")
+    
     def _is_already_processed(self, event_id: int) -> bool:
-        """Check if event was already processed in this cycle"""
+        """Check if event was already processed in this cycle (legacy method for compatibility)"""
         return event_id in self.processed_event_ids
     
     def _mark_processed(self, event_id: int):
-        """Mark event as processed in this cycle"""
+        """Mark event as processed in this cycle (legacy method for compatibility)"""
         self.processed_event_ids.add(event_id)
     
     def _reset_cycle_tracking(self):
@@ -557,60 +712,40 @@ class SafetyBot:
         return all_events, first_error
     
     def filter_new_speeding_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Filter new speeding events with allowed severity. Saves ID immediately."""
-        last_event_id = self.get_last_processed_event_id('speeding')
+        """Filter speeding events that haven't been processed yet"""
         new_events = []
         
         for event_data in events:
             event = event_data.get('speeding_event', {})
             event_id = event.get('id', 0)
             
-            if event_id > last_event_id and self._has_allowed_severity(event):
-                if not self._is_already_processed(event_id):
-                    new_events.append(event)
+            # Check if event has allowed severity and hasn't been processed
+            if self._has_allowed_severity(event) and not self._is_event_processed(event_id, 'speeding'):
+                new_events.append(event)
         
         new_events.sort(key=lambda x: x.get('id', 0))
-        logger.info(f"Found {len(new_events)} new speeding events (last ID: {last_event_id})")
-        
-        if new_events:
-            max_id = max([e.get('id', 0) for e in new_events])
-            self.save_last_processed_event_id(max_id, 'speeding')
+        logger.info(f"Found {len(new_events)} new speeding events to process")
         
         return new_events
     
     def filter_new_performance_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Filter new performance events per event type. Saves IDs immediately."""
+        """Filter performance events that haven't been processed yet"""
         new_events = []
-        events_by_type = {}
         
         for event_data in events:
             event = event_data.get('driver_performance_event', {})
+            event_id = event.get('id', 0)
             event_type = event.get('type', '')
-            if event_type in self.ALLOWED_EVENT_TYPES:
-                if event_type not in events_by_type:
-                    events_by_type[event_type] = []
-                events_by_type[event_type].append(event)
-        
-        for event_type, type_events in events_by_type.items():
-            last_event_id = self.get_last_processed_event_id_for_type(event_type)
-            type_new_events = []
             
-            for event in type_events:
-                event_id = event.get('id', 0)
-                if event_id > last_event_id and self._has_allowed_severity(event):
-                    if not self._is_already_processed(event_id):
-                        type_new_events.append(event)
-            
-            type_new_events.sort(key=lambda x: x.get('id', 0))
-            logger.info(f"Found {len(type_new_events)} new {event_type} events (last ID: {last_event_id})")
-            
-            if type_new_events:
-                max_id_for_type = max([e.get('id', 0) for e in type_new_events])
-                self.save_last_processed_event_id_for_type(max_id_for_type, event_type)
-            
-            new_events.extend(type_new_events)
+            # Check if event type is allowed, has allowed severity, and hasn't been processed
+            if (event_type in self.ALLOWED_EVENT_TYPES and 
+                self._has_allowed_severity(event) and 
+                not self._is_event_processed(event_id, 'performance')):
+                new_events.append(event)
         
         new_events.sort(key=lambda x: x.get('id', 0))
+        logger.info(f"Found {len(new_events)} new performance events to process")
+        
         return new_events
     
     def format_time(self, time_str: str, latitude: Optional[float] = None, longitude: Optional[float] = None) -> str:
@@ -797,6 +932,17 @@ Severity: {severity}"""
                                 write_timeout=self.TELEGRAM_SEND_TIMEOUT
                             )
                         logger.info(f"[SENT] Speeding event {event_id} with screenshot")
+                        self._mark_event_processed(event_id, 'speeding')
+                        
+                        # Clean up screenshot immediately after successful send
+                        if screenshot_path and os.path.exists(screenshot_path):
+                            try:
+                                os.remove(screenshot_path)
+                                logger.debug(f"[CLEANUP] Removed screenshot: {screenshot_path}")
+                                screenshot_path = None  # Mark as cleaned
+                            except Exception as e:
+                                logger.error(f"[CLEANUP] Error removing screenshot: {e}")
+                        
                         return True
                     except (NetworkError, TimedOut) as e:
                         logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
@@ -817,6 +963,7 @@ Severity: {severity}"""
                             write_timeout=self.TELEGRAM_SEND_TIMEOUT
                         )
                         logger.info(f"[SENT] Speeding event {event_id} (no screenshot)")
+                        self._mark_event_processed(event_id, 'speeding')
                         return True
                     except (NetworkError, TimedOut) as e:
                         logger.warning(f"[RETRY] Network error (attempt {attempt + 1}/{max_retries}): {e}")
@@ -900,6 +1047,17 @@ Severity: {severity}"""
                                 write_timeout=self.TELEGRAM_SEND_TIMEOUT * 2
                             )
                             logger.info(f"[SENT] Media group for event {event_id}")
+                            self._mark_event_processed(event_id, 'performance')
+                            
+                            # Clean up video files immediately after successful send
+                            for temp_file in temp_files:
+                                try:
+                                    if os.path.exists(temp_file):
+                                        os.remove(temp_file)
+                                        logger.debug(f"[CLEANUP] Removed temp file: {temp_file}")
+                                except Exception as e:
+                                    logger.error(f"[CLEANUP] Error removing file: {e}")
+                            temp_files.clear()  # Mark as cleaned
                             
                             for vf in video_files:
                                 try:
@@ -935,6 +1093,17 @@ Severity: {severity}"""
                                 except Exception as e:
                                     logger.error(f"[ERROR] Individual video send failed: {e}")
                             
+                            # Clean up video files after individual sends
+                            for temp_file in temp_files:
+                                try:
+                                    if os.path.exists(temp_file):
+                                        os.remove(temp_file)
+                                        logger.debug(f"[CLEANUP] Removed temp file: {temp_file}")
+                                except Exception as e:
+                                    logger.error(f"[CLEANUP] Error removing file: {e}")
+                            temp_files.clear()
+                            
+                            self._mark_event_processed(event_id, 'performance')
                             return True
                     
                     elif videos_for_group:
@@ -955,6 +1124,17 @@ Severity: {severity}"""
                             except Exception as e:
                                 logger.error(f"[ERROR] Video send failed: {e}")
                         
+                        # Clean up video files after sending
+                        for temp_file in temp_files:
+                            try:
+                                if os.path.exists(temp_file):
+                                    os.remove(temp_file)
+                                    logger.debug(f"[CLEANUP] Removed temp file: {temp_file}")
+                            except Exception as e:
+                                logger.error(f"[CLEANUP] Error removing file: {e}")
+                        temp_files.clear()
+                        
+                        self._mark_event_processed(event_id, 'performance')
                         return True
                     else:
                         await self.telegram_bot.send_message(
@@ -965,6 +1145,7 @@ Severity: {severity}"""
                             write_timeout=self.TELEGRAM_SEND_TIMEOUT
                         )
                         logger.info(f"[SENT] Event {event_id} without videos")
+                        self._mark_event_processed(event_id, 'performance')
                         return True
                 else:
                     await self.telegram_bot.send_message(
@@ -975,6 +1156,7 @@ Severity: {severity}"""
                         write_timeout=self.TELEGRAM_SEND_TIMEOUT
                     )
                     logger.info(f"[SENT] Event {event_id} without camera")
+                    self._mark_event_processed(event_id, 'performance')
                     return True
                 
             except (NetworkError, TimedOut) as e:
@@ -993,6 +1175,7 @@ Severity: {severity}"""
                             write_timeout=self.TELEGRAM_SEND_TIMEOUT
                         )
                         logger.info(f"[SENT] Event {event_id} with fallback (files too large)")
+                        self._mark_event_processed(event_id, 'performance')
                         return True
                     except Exception as e2:
                         logger.error(f"[ERROR] Fallback message failed: {e2}")
@@ -1066,7 +1249,6 @@ Severity: {severity}"""
                 if new_speeding:
                     logger.info(f"[PROCESS] Processing {len(new_speeding)} speeding events")
                     for event in new_speeding:
-                        self._mark_processed(event.get('id', 0))
                         await self.send_speeding_event_to_telegram(event)
                         await asyncio.sleep(2)
                 else:
@@ -1098,7 +1280,6 @@ Severity: {severity}"""
                 if new_performance:
                     logger.info(f"[PROCESS] Processing {len(new_performance)} performance events")
                     for event in new_performance:
-                        self._mark_processed(event.get('id', 0))
                         await self.send_performance_event_to_telegram(event)
                         await asyncio.sleep(2)
                 else:
