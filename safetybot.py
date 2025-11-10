@@ -317,8 +317,8 @@ class GoMotiveScreenshotManager:
                 logger.warning("[SCREENSHOT] Map/content not found, continuing anyway...")
             
             # Additional wait for Angular to finish rendering
-            logger.info("[SCREENSHOT] Waiting for data to populate (8 seconds)...")
-            await asyncio.sleep(8)
+            logger.info("[SCREENSHOT] Waiting for data to populate (15 seconds)...")
+            await asyncio.sleep(15)
             
             # Scroll to top to ensure we capture from beginning
             self.driver.execute_script("window.scrollTo(0, 0);")
